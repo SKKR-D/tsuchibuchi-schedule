@@ -79,9 +79,14 @@
   .badge-event   {background:#e5eeff;color:#2555a0}
   .badge-other      {background:#f5e8ee;color:#8a3055}
   .badge-scrimmage  {background:#fff8dc;color:#8a6000}
-  .target-badge{font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:4px;background:#f0f4ff;color:#3555a0;white-space:nowrap;flex-shrink:0;margin-top:1px}
+  .target-badge{font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:1px}
+  .target-all    {background:#e8f5e9;color:#2e7d32}
+  .target-female {background:#fce4ec;color:#ad1457}
+  .target-male   {background:#e3f2fd;color:#1565c0}
+  .target-limit  {background:#fff3e0;color:#e65100}
   .card-title{font-size:.95rem;font-weight:700;color:var(--text)}
   .card-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
+  .meta-label{font-weight:700;color:var(--navy);margin-right:2px}
   .meta-pill{font-size:.73rem;color:var(--gray);display:flex;align-items:center;gap:3px}
   .card-detail{margin-top:7px;padding:7px 10px;background:var(--light);border-radius:7px;font-size:.78rem;color:#4a5a6a;line-height:1.6}
 
@@ -305,12 +310,19 @@ function buildCard(item, idx) {
   const type = detectType(item.type);
   const delay = Math.min(idx*0.06, 0.5);
 
-  const timeStr = [item.startTime, item.endTime].filter(Boolean).join("〜");
-  const metas = [];
-  if (timeStr)       metas.push(`🕗 ${timeStr}`);
-  if (item.location) metas.push(`📍 ${esc(item.location)}`);
+  // 対象バッジのクラス判定
+  const targetCls = {
+    "全員":"target-all","女子のみ":"target-female",
+    "男子のみ":"target-male","限定対象":"target-limit"
+  }[item.target] || "target-all";
 
-  // 詳細テキストの改行をbrに変換して表示
+  // 時間表記
+  const metas = [];
+  if (item.startTime) metas.push(`<span class="meta-pill"><span class="meta-label">【集合時間】</span>${esc(item.startTime)}</span>`);
+  if (item.endTime)   metas.push(`<span class="meta-pill"><span class="meta-label">【解散時間】</span>${esc(item.endTime)}</span>`);
+  if (item.location)  metas.push(`<span class="meta-pill"><span class="meta-label">【場所】</span>${esc(item.location)}</span>`);
+
+  // 詳細テキストの改行をbrに変換
   const detailHtml = item.detail
     ? esc(item.detail).replace(/\n/g, "<br>")
     : "";
@@ -326,9 +338,9 @@ function buildCard(item, idx) {
     <div class="card-info">
       <div class="card-top">
         <span class="type-badge ${TYPE_BADGE[type]}">${TYPE_LABEL[type]}</span>
-        ${item.target ? `<span class="target-badge">${esc(item.target)}</span>` : ""}
+        ${item.target ? `<span class="target-badge ${targetCls}">${esc(item.target)}</span>` : ""}
       </div>
-      ${metas.length ? `<div class="card-meta" style="margin-top:4px">${metas.map(m=>`<span class="meta-pill">${m}</span>`).join("")}</div>` : ""}
+      ${metas.length ? `<div class="card-meta" style="margin-top:6px">${metas.join("")}</div>` : ""}
       ${detailHtml ? `<div class="card-detail">${detailHtml}</div>` : ""}
     </div>
   </div>`;
