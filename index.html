@@ -55,7 +55,8 @@
   .card.type-practice{border-left-color:#3a9e6a}
   .card.type-rest    {border-left-color:var(--gray)}
   .card.type-event   {border-left-color:#4a7fd4}
-  .card.type-other   {border-left-color:#b0768a}
+  .card.type-other      {border-left-color:#b0768a}
+  .card.type-scrimmage  {border-left-color:#d4a017}
   @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
   /* DATE BLOCK */
@@ -76,7 +77,8 @@
   .badge-practice{background:#e6f7ee;color:#227a4a}
   .badge-rest    {background:#f0f0f0;color:#666}
   .badge-event   {background:#e5eeff;color:#2555a0}
-  .badge-other   {background:#f5e8ee;color:#8a3055}
+  .badge-other      {background:#f5e8ee;color:#8a3055}
+  .badge-scrimmage  {background:#fff8dc;color:#8a6000}
   .target-badge{font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:4px;background:#f0f4ff;color:#3555a0;white-space:nowrap;flex-shrink:0;margin-top:1px}
   .card-title{font-size:.95rem;font-weight:700;color:var(--text)}
   .card-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
@@ -243,20 +245,26 @@ const DOW_CLS = ["dow-sun","dow-wk","dow-wk","dow-wk","dow-wk","dow-wk","dow-sat
 // F列「内容」（＝種別）の値を直接判定
 // スプレッドシートに入力する値: 大会 / 練習 / 合同練習 / 休養 / その他
 const TYPE_MAP = {
-  "大会":"match","練習":"practice","合同練習":"event","休養":"rest","その他":"other"
+  // 実際のF列の値に合わせた定義
+  "部活動":       "practice",
+  "大会":         "match",
+  "練習試合":     "scrimmage",
+  "保護者会練習": "event",
+  "部活動休養日": "rest",
 };
 function detectType(typeVal) {
   const t = (typeVal||"").trim();
   if (TYPE_MAP[t]) return TYPE_MAP[t];
-  // フォールバック（入力ゆれ対策）
-  if (/大会|試合|選手権|地区大|春季|秋季|新人戦/.test(t)) return "match";
-  if (/合同|交流|招待/.test(t)) return "event";
-  if (/練習/.test(t)) return "practice";
-  if (/休|オフ/.test(t)) return "rest";
+  // フォールバック（表記ゆれ対策）
+  if (/大会|選手権|地区大|春季|秋季|新人戦/.test(t)) return "match";
+  if (/練習試合|試合/.test(t)) return "scrimmage";
+  if (/保護者|合同|交流|招待/.test(t)) return "event";
+  if (/休養|休み|オフ/.test(t)) return "rest";
+  if (/部活|練習/.test(t)) return "practice";
   return "other";
 }
-const TYPE_LABEL = { match:"大会", practice:"練習", event:"合同練習", rest:"休養", other:"その他" };
-const TYPE_BADGE = { match:"badge-match", practice:"badge-practice", event:"badge-event", rest:"badge-rest", other:"badge-other" };
+const TYPE_LABEL = { match:"大会", practice:"練習", event:"合同練習", rest:"休養", other:"その他", scrimmage:"練習試合" };
+const TYPE_BADGE = { match:"badge-match", practice:"badge-practice", event:"badge-event", rest:"badge-rest", other:"badge-other", scrimmage:"badge-scrimmage" };
 
 function parseCSV(text) {
   const rows = [];
@@ -422,18 +430,7 @@ async function fetchData() {
         detail:    r[COL.detail]    || "",
       }));
 
-    // ★ デバッグパネル（問題解決後に削除してください）
-    const dbg = document.createElement("div");
-    dbg.id = "debugPanel";
-    dbg.style.cssText = "background:#0d1b2a;color:#7ec8e3;font-family:monospace;font-size:11px;padding:14px 16px;border-radius:10px;margin-bottom:16px;white-space:pre-wrap;word-break:break-all;line-height:1.7";
-    const sample = allItems.slice(0,3).map((it,i) => {
-      const parsed = parseDate(it.date);
-      return `[行${i+2}] 日付:"${it.date}" → ${parsed ? parsed.toLocaleDateString("ja-JP") : "❌パース失敗"}  種別:"${it.type}"  今日以降:${parsed && parsed >= today ? "✅" : "❌"}`;
-    }).join("\n");
-    dbg.textContent = `■ デバッグ情報（確認後に開発者へ共有）\n取得:${allItems.length}件  今日:${today.toLocaleDateString("ja-JP")}\nヘッダー: ${rows[0].slice(0,9).join(" | ")}\n\n${sample}`;
-    list.before(dbg);
-
-    const items = allItems
+        const items = allItems
       .filter(item => { const d = parseDate(item.date); return d && d >= today; })
       .sort((a,b) => (parseDate(a.date)||0) - (parseDate(b.date)||0));
 
