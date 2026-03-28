@@ -121,6 +121,94 @@
   .setup-card code{background:#f0e0b0;padding:1px 6px;border-radius:4px;font-size:.78rem;word-break:break-all}
 
   footer{text-align:center;padding:20px;font-size:.7rem;color:var(--gray);border-top:1px solid var(--border)}
+
+  /* ── CALENDAR ── */
+  .cal-wrap{background:var(--white);border-radius:14px;box-shadow:0 2px 10px rgba(10,22,40,.07);overflow:hidden;margin-bottom:20px}
+  .cal-dow-row{display:grid;grid-template-columns:repeat(7,1fr);background:var(--navy)}
+  .cal-dow{text-align:center;font-size:.68rem;font-weight:700;color:rgba(255,255,255,.6);padding:8px 0;letter-spacing:.04em}
+  .cal-dow.sun{color:#ff8a8a}
+  .cal-dow.sat{color:#8ab4ff}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border)}
+  .cal-cell{background:var(--white);min-height:54px;padding:5px 4px 4px;cursor:pointer;position:relative;transition:background .12s}
+  .cal-cell:hover{background:#f8f9ff}
+  .cal-cell.empty{background:var(--light);cursor:default;pointer-events:none}
+  .cal-cell.today .cal-date-num{background:var(--accent);color:var(--navy);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-weight:700}
+  .cal-cell.selected{background:#fffbf0}
+  .cal-cell.selected::after{content:'';position:absolute;inset:0;border:2px solid var(--accent);pointer-events:none}
+  .cal-cell.sun .cal-date-num{color:#c0392b}
+  .cal-cell.sat .cal-date-num{color:#2563b0}
+  .cal-date-num{font-family:'Oswald',sans-serif;font-size:.85rem;font-weight:600;color:var(--navy);line-height:1;margin-bottom:3px;width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+  .cal-badges{display:flex;flex-wrap:wrap;gap:2px;margin-top:1px}
+  .cal-badge{height:5px;border-radius:3px;flex:1;min-width:4px}
+  .cal-badge.match    {background:#e05252}
+  .cal-badge.scrimmage{background:#d4a017}
+  .cal-badge.practice {background:#3a9e6a}
+  .cal-badge.event    {background:#4a7fd4}
+  .cal-badge.rest     {background:var(--gray)}
+  .cal-badge.other    {background:#b0768a}
+  .cal-detail{background:var(--white);border-radius:12px;padding:0;margin-bottom:24px;display:none;box-shadow:0 2px 10px rgba(10,22,40,.07)}
+  .cal-detail.show{display:block;animation:fadeUp .25s ease both}
+  .cal-detail-date{font-family:'Oswald',sans-serif;font-size:.95rem;color:var(--navy);padding:14px 16px 0;font-weight:600}
+
+  /* ── PC LIST VIEW ── */
+  .list-view{display:none;flex-direction:column;gap:0;margin-bottom:32px;background:var(--white);border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(10,22,40,.07)}
+  .list-row{display:flex;align-items:stretch;border-bottom:1px solid var(--border);transition:background .12s}
+  .list-row:last-child{border-bottom:none}
+  .list-row:hover{background:#fafbff}
+  .list-date-col{min-width:72px;padding:14px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:3px solid transparent;flex-shrink:0}
+  .list-date-col.match    {border-right-color:#e05252}
+  .list-date-col.scrimmage{border-right-color:#d4a017}
+  .list-date-col.practice {border-right-color:#3a9e6a}
+  .list-date-col.event    {border-right-color:#4a7fd4}
+  .list-date-col.rest     {border-right-color:var(--gray)}
+  .list-date-col.other    {border-right-color:#b0768a}
+  .list-day{font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700;color:var(--navy);line-height:1}
+  .list-dow{font-size:.68rem;font-weight:700;padding:2px 5px;border-radius:4px;margin-top:3px;display:inline-block}
+  .list-content{flex:1;padding:14px 16px;min-width:0}
+  .list-content-top{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;margin-bottom:6px}
+  .list-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  .list-detail{margin-top:6px;padding:6px 10px;background:var(--light);border-radius:6px;font-size:.78rem;color:#4a5a6a;line-height:1.6}
+  .list-today .list-date-col{background:#fffbf0}
+  .list-today .list-day{color:var(--accent)}
+
+  @media(min-width:769px){
+    .cal-wrap{display:none}
+    .cal-detail{display:none!important}
+    .list-view{display:flex}
+  }
+  @media(max-width:768px){
+    .list-view{display:none!important}
+  }
+
+  /* ── CALENDAR ── */
+  .cal-wrap{background:var(--white);border-radius:14px;box-shadow:0 2px 10px rgba(10,22,40,.07);overflow:hidden;margin-bottom:20px}
+  .cal-dow-row{display:grid;grid-template-columns:repeat(7,1fr);background:var(--navy)}
+  .cal-dow{text-align:center;font-size:.68rem;font-weight:700;color:rgba(255,255,255,.6);padding:8px 0;letter-spacing:.04em}
+  .cal-dow.sun{color:#ff8a8a}
+  .cal-dow.sat{color:#8ab4ff}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border)}
+  .cal-cell{background:var(--white);min-height:52px;padding:5px 4px 4px;cursor:pointer;position:relative;transition:background .12s}
+  .cal-cell:hover{background:#f8f9ff}
+  .cal-cell.empty{background:var(--light);cursor:default}
+  .cal-cell.today .cal-date{background:var(--accent);color:var(--navy);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-weight:700}
+  .cal-cell.selected{background:#fffbf0}
+  .cal-cell.selected::after{content:'';position:absolute;inset:0;border:2px solid var(--accent);border-radius:0;pointer-events:none}
+  .cal-cell.sun .cal-date{color:#c0392b}
+  .cal-cell.sat .cal-date{color:#2563b0}
+  .cal-date{font-family:'Oswald',sans-serif;font-size:.85rem;font-weight:600;color:var(--navy);line-height:1;margin-bottom:3px}
+  .cal-badges{display:flex;flex-wrap:wrap;gap:2px;margin-top:2px}
+  .cal-badge{height:5px;border-radius:3px;flex:1;min-width:5px;max-width:100%}
+  .cal-badge.match    {background:#e05252}
+  .cal-badge.scrimmage{background:#d4a017}
+  .cal-badge.practice {background:#3a9e6a}
+  .cal-badge.event    {background:#4a7fd4}
+  .cal-badge.rest     {background:var(--gray)}
+  .cal-badge.other    {background:#b0768a}
+
+  /* 選択日の詳細パネル */
+  .cal-detail{background:var(--light);border-radius:12px;padding:14px 16px;margin-bottom:24px;display:none}
+  .cal-detail.show{display:block;animation:fadeUp .25s ease both}
+  .cal-detail-date{font-family:'Oswald',sans-serif;font-size:1rem;color:var(--navy);margin-bottom:10px;font-weight:600}
   #monthSelector option{background:var(--navy);color:var(--white)}
 
   @media(max-width:480px){
@@ -228,9 +316,30 @@ const COL = {
       <div class="sec-title">SCHEDULE — 今後の予定</div>
     </div>
     <div class="updated" id="updated"></div>
-    <div class="schedule-list" id="scheduleList">
-      <div class="status-box"><div class="spinner"></div><div>データを読み込んでいます…</div></div>
+    <!-- カレンダーグリッド -->
+    <div class="cal-wrap" id="calWrap">
+      <div class="cal-dow-row">
+        <div class="cal-dow sun">日</div>
+        <div class="cal-dow">月</div>
+        <div class="cal-dow">火</div>
+        <div class="cal-dow">水</div>
+        <div class="cal-dow">木</div>
+        <div class="cal-dow">金</div>
+        <div class="cal-dow sat">土</div>
+      </div>
+      <div class="cal-grid" id="calGrid">
+        <div class="status-box" style="grid-column:1/-1;border-radius:0">
+          <div class="spinner"></div><div>データを読み込んでいます…</div>
+        </div>
+      </div>
     </div>
+    <!-- 選択日の詳細（スマホ用） -->
+    <div class="cal-detail" id="calDetail">
+      <div class="cal-detail-date" id="calDetailDate"></div>
+      <div class="schedule-list" id="scheduleList" style="padding:10px 0 4px;margin-bottom:0"></div>
+    </div>
+    <!-- リスト型（PC用） -->
+    <div class="list-view" id="listView"></div>
   </div>
 
   <!-- 連絡事項 -->
@@ -502,43 +611,172 @@ async function fetchData() {
       </div>`;
   }
 }
-// 月別フィルタ表示
+// 月別カレンダー描画
 function renderMonth(monthKey) {
   const [y, mo] = monthKey.split("-").map(Number);
-  const list    = document.getElementById("scheduleList");
-  const items   = (window._allItems || [])
+  const today   = new Date(); today.setHours(0,0,0,0);
+
+  const items = (window._allItems || [])
     .filter(item => {
       const d = parseDate(item.date);
       return d && d.getFullYear() === y && (d.getMonth()+1) === mo;
-    })
-    .sort((a,b) => (parseDate(a.date)||0) - (parseDate(b.date)||0));
+    });
 
-  // ③ ヒーロータイトル
+  // ヒーロー・統計
   document.getElementById("heroTitle").innerHTML = `<span>${mo}</span>月予定`;
-
-  // ④ 4種類のカウント
   document.getElementById("statPractice").textContent  = items.filter(i=>detectType(i.type)==="practice").length;
   document.getElementById("statMatch").textContent     = items.filter(i=>detectType(i.type)==="match").length;
   document.getElementById("statScrimmage").textContent = items.filter(i=>detectType(i.type)==="scrimmage").length;
   document.getElementById("statParents").textContent   = items.filter(i=>detectType(i.type)==="event").length;
 
-  // お知らせ：選択月の次の大会
-  const nextMatch = items.find(i => detectType(i.type)==="match" || detectType(i.type)==="scrimmage");
-  if (nextMatch) {
-    const d  = parseDate(nextMatch.date);
-    const ds = d ? `${d.getMonth()+1}月${d.getDate()}日（${DOW_JP[d.getDay()]}）` : nextMatch.date;
+  // お知らせ
+  const nextEvent = items
+    .filter(i => detectType(i.type)==="match" || detectType(i.type)==="scrimmage")
+    .sort((a,b)=>(parseDate(a.date)||0)-(parseDate(b.date)||0))[0];
+  if (nextEvent) {
+    const d  = parseDate(nextEvent.date);
+    const ds = d ? `${d.getMonth()+1}月${d.getDate()}日（${DOW_JP[d.getDay()]}）` : nextEvent.date;
     document.getElementById("noticeText").textContent =
-      `📅 ${TYPE_LABEL[detectType(nextMatch.type)]}：${ds}${nextMatch.startTime?" 集合 "+nextMatch.startTime:""}`;
+      `📅 ${TYPE_LABEL[detectType(nextEvent.type)]}：${ds}${nextEvent.startTime?" 集合 "+nextEvent.startTime:""}`;
     document.getElementById("noticeWrap").style.display = "block";
   } else {
     document.getElementById("noticeWrap").style.display = "none";
   }
 
+  // 日付→予定のマップ
+  const dayMap = {};
+  items.forEach(item => {
+    const d = parseDate(item.date);
+    if (!d) return;
+    const key = d.getDate();
+    if (!dayMap[key]) dayMap[key] = [];
+    dayMap[key].push(item);
+  });
+
+  // カレンダーグリッド生成
+  const firstDay = new Date(y, mo-1, 1).getDay(); // 0=日
+  const lastDate = new Date(y, mo, 0).getDate();
+  const grid = document.getElementById("calGrid");
+  let html = "";
+
+  // 月初の空白セル
+  for (let i=0; i<firstDay; i++) html += `<div class="cal-cell empty"></div>`;
+
+  for (let d=1; d<=lastDate; d++) {
+    const date  = new Date(y, mo-1, d);
+    const dow   = date.getDay();
+    const isToday = date.getTime() === today.getTime();
+    const events  = dayMap[d] || [];
+    const dowCls  = dow===0 ? "sun" : dow===6 ? "sat" : "";
+    const todayCls = isToday ? " today" : "";
+    const badges  = events.map(ev =>
+      `<div class="cal-badge ${detectType(ev.type)}"></div>`
+    ).join("");
+
+    html += `<div class="cal-cell${todayCls} ${dowCls}" onclick="selectDay(${y},${mo},${d})">
+      <div class="cal-date-num">${d}</div>
+      <div class="cal-badges">${badges}</div>
+    </div>`;
+  }
+
+  // 末尾の空白
+  const total = firstDay + lastDate;
+  const remainder = total % 7;
+  if (remainder > 0) {
+    for (let i=0; i<7-remainder; i++) html += `<div class="cal-cell empty"></div>`;
+  }
+
+  grid.innerHTML = html;
+
+  // 詳細パネルを閉じる
+  document.getElementById("calDetail").classList.remove("show");
+  document.getElementById("scheduleList").innerHTML = "";
+
+  // PC用リストビューを描画
+  renderListView(y, mo, items);
+}
+
+function renderListView(y, mo, items) {
+  const listView = document.getElementById("listView");
+  if (!listView) return;
+  const today = new Date(); today.setHours(0,0,0,0);
+
   if (items.length === 0) {
-    list.innerHTML = `<div class="status-box">この月の予定はありません</div>`;
+    listView.innerHTML = `<div class="status-box" style="border-radius:14px">この月の予定はありません</div>`;
     return;
   }
-  list.innerHTML = items.map((item,i) => buildCard(item,i)).join("");
+
+  const sorted = [...items].sort((a,b)=>(parseDate(a.date)||0)-(parseDate(b.date)||0));
+  listView.innerHTML = sorted.map(item => {
+    const date    = parseDate(item.date);
+    const day     = date ? date.getDate() : "?";
+    const mon     = date ? (date.getMonth()+1)+"月" : "";
+    const dow     = date ? DOW_JP[date.getDay()] : "?";
+    const dowCls  = date ? (date.getDay()===0?"dow-sun":date.getDay()===6?"dow-sat":"dow-wk") : "dow-wk";
+    const isToday = date && date.getTime()===today.getTime();
+    const type    = detectType(item.type);
+
+    const targetCls = {"全員":"target-all","女子のみ":"target-female","男子のみ":"target-male","限定対象":"target-limit"}[item.target]||"target-all";
+
+    const metas = [];
+    if (item.startTime) metas.push(`<span class="meta-pill"><span class="meta-label">【集合時間】</span>${esc(item.startTime)}</span>`);
+    if (item.endTime)   metas.push(`<span class="meta-pill"><span class="meta-label">【解散時間】</span>${esc(item.endTime)}</span>`);
+    if (item.location)  metas.push(`<span class="meta-pill"><span class="meta-label">【場所】</span>${esc(item.location)}</span>`);
+    const detailHtml = item.detail ? esc(item.detail).replace(/
+/g,"<br>") : "";
+
+    return `<div class="list-row${isToday?" list-today":""}">
+      <div class="list-date-col ${type}">
+        <div class="list-day">${day}</div>
+        <div class="list-dow ${dowCls}">${dow}</div>
+      </div>
+      <div class="list-content">
+        <div class="list-content-top">
+          <span class="type-badge ${TYPE_BADGE[type]}">${TYPE_LABEL[type]}</span>
+          ${item.target?`<span class="target-badge ${targetCls}">${esc(item.target)}</span>`:""}
+        </div>
+        ${metas.length?`<div class="list-meta">${metas.join("")}</div>`:""}
+        ${detailHtml?`<div class="list-detail">${detailHtml}</div>`:""}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+// 日付タップ → 詳細表示
+function selectDay(y, mo, d) {
+  // 選択状態のリセット
+  document.querySelectorAll(".cal-cell.selected").forEach(el => el.classList.remove("selected"));
+  // クリックしたセルを選択
+  event.currentTarget.classList.add("selected");
+
+  const date    = new Date(y, mo-1, d);
+  const dow     = DOW_JP[date.getDay()];
+  const dayMap  = {};
+  (window._allItems || []).forEach(item => {
+    const dd = parseDate(item.date);
+    if (!dd) return;
+    const key = `${dd.getFullYear()}-${dd.getMonth()+1}-${dd.getDate()}`;
+    if (!dayMap[key]) dayMap[key] = [];
+    dayMap[key].push(item);
+  });
+
+  const key    = `${y}-${mo}-${d}`;
+  const events = dayMap[key] || [];
+  const detail = document.getElementById("calDetail");
+  const list   = document.getElementById("scheduleList");
+
+  document.getElementById("calDetailDate").textContent =
+    `${mo}月${d}日（${dow}）の予定`;
+
+  if (events.length === 0) {
+    list.innerHTML = `<div style="padding:12px 16px 16px;font-size:.85rem;color:var(--gray)">この日の予定はありません</div>`;
+  } else {
+    list.innerHTML = events.map((item,i) => buildCard(item,i)).join("");
+  }
+
+  detail.classList.add("show");
+  // スクロールして詳細を見せる
+  setTimeout(() => detail.scrollIntoView({ behavior:"smooth", block:"nearest" }), 50);
 }
 
 function applyMonthFilter() {
