@@ -491,33 +491,23 @@ function init() {
 }
 
 async function fetchData() {
-  const list = document.getElementById("scheduleList");
 
-  // タイムアウト付きfetchヘルパー
   async function fetchWithTimeout(url, ms) {
     const ctrl = new AbortController();
     const tid  = setTimeout(() => ctrl.abort(), ms);
     try {
       const r = await fetch(url, { signal: ctrl.signal });
-      clearTimeout(tid);
-      return r;
-    } catch(e) {
-      clearTimeout(tid);
-      throw e;
-    }
+      clearTimeout(tid); return r;
+    } catch(e) { clearTimeout(tid); throw e; }
   }
 
   async function getCSV() {
-    // 1. まず直接取得（Google公開CSVはCORS対応済み）
+    // 1. 直接取得
     try {
       const r = await fetchWithTimeout(SHEET_CSV_URL, 8000);
-      if (r.ok) {
-        const t = await r.text();
-        if (t && t.includes(",")) return t;
-      }
-    } catch(e) { console.warn("direct fetch failed:", e.message); }
-
-    // 2. プロキシ経由（直接取得が失敗した場合のみ）
+      if (r.ok) { const t = await r.text(); if (t && t.includes(",")) return t; }
+    } catch(e) { console.warn("direct:", e.message); }
+    // 2. プロキシ
     const proxies = [
       `https://corsproxy.io/?${encodeURIComponent(SHEET_CSV_URL)}`,
       `https://api.allorigins.win/get?url=${encodeURIComponent(SHEET_CSV_URL)}`,
@@ -527,23 +517,29 @@ async function fetchData() {
         const r = await fetchWithTimeout(url, 8000);
         if (!r.ok) continue;
         const t = await r.text();
-        // allorigins は JSON で返す
-        try {
-          const j = JSON.parse(t);
-          if (j.contents && j.contents.includes(",")) return j.contents;
-        } catch { }
+        try { const j=JSON.parse(t); if(j.contents&&j.contents.includes(",")) return j.contents; } catch{}
         if (t && t.includes(",")) return t;
-      } catch(e) { console.warn("proxy failed:", url, e.message); }
+      } catch(e) { console.warn("proxy:", e.message); }
     }
-    throw new Error("データを取得できませんでした。ネットワーク環境をご確認ください。");
+    throw new Error("データを取得できませんでした");
+  }
+
+  // エラー表示（calGridとlistViewの両方に出す）
+  function showError(msg) {
+    const html = `<div class="status-box" style="grid-column:1/-1;border-radius:0">
+      <div style="font-size:1.4rem;margin-bottom:8px">⚠️</div>
+      <div style="margin-bottom:4px">データの取得に失敗しました</div>
+      <div style="font-size:.75rem;margin-bottom:12px;color:#e05252">${msg}</div>
+      <button onclick="fetchData()" style="padding:8px 20px;border-radius:8px;border:none;background:var(--accent);color:var(--navy);font-weight:700;cursor:pointer;font-size:.85rem">再試行</button>
+    </div>`;
+    document.getElementById("calGrid").innerHTML = html;
+    document.getElementById("listView").innerHTML = html.replace('grid-column:1/-1;border-radius:0','border-radius:14px');
   }
 
   try {
     const csv  = await getCSV();
     const rows = parseCSV(csv);
     if (rows.length < 2) throw new Error("シートにデータがありません");
-
-    const today = new Date(); today.setHours(0,0,0,0);
 
     const allItems = rows.slice(1)
       .filter(r => r.length > COL.date && r[COL.date])
@@ -557,26 +553,12 @@ async function fetchData() {
         detail:    r[COL.detail]    || "",
       }));
 
-        const items = allItems
-      .filter(item => { const d = parseDate(item.date); return d && d >= today; })
-      .sort((a,b) => (parseDate(a.date)||0) - (parseDate(b.date)||0));
-
-    if (items.length === 0) {
-      const hint = allItems.length > 0
-        ? `今後の予定はありません<br><small style="color:var(--gray)">取得済み ${allItems.length}件 ／ 上のデバッグ情報をご確認ください</small>`
-        : "データが空です";
-      list.innerHTML = `<div class="status-box">${hint}</div>`;
-      document.getElementById("heroTitle").innerHTML = `<span>予定なし</span>`;
-      document.getElementById("headerBadge").textContent = "予定0件";
-      return;
-    }
+    if (allItems.length === 0) { showError("データが空です"); return; }
 
     // 月リストを生成してselectorにセット
     const months = [...new Set(
-      allItems.map(i => {
-        const d = parseDate(i.date);
-        return d ? `${d.getFullYear()}-${d.getMonth()+1}` : null;
-      }).filter(Boolean)
+      allItems.map(i => { const d=parseDate(i.date); return d?`${d.getFullYear()}-${d.getMonth()+1}`:null; })
+        .filter(Boolean)
     )].sort();
 
     const sel = document.getElementById("monthSelector");
@@ -586,29 +568,18 @@ async function fetchData() {
     }).join("");
 
     // 今月 or 直近の月をデフォルト選択
+    const today  = new Date(); today.setHours(0,0,0,0);
     const todayM = `${today.getFullYear()}-${today.getMonth()+1}`;
-    const defaultM = months.includes(todayM) ? todayM : months[0];
-    sel.value = defaultM;
+    sel.value = months.includes(todayM) ? todayM : months[0];
 
-    // グローバルにallItemsを保持して月フィルタで使う
     window._allItems = allItems;
-    renderMonth(defaultM);
+    renderMonth(sel.value);
 
-    // 初回レンダリングはrenderMonth側で行う
     document.getElementById("updated").textContent = `最終取得：${new Date().toLocaleString("ja-JP")}`;
 
   } catch(e) {
     console.error(e);
-    list.innerHTML = `
-      <div class="status-box">
-        <div style="font-size:1.4rem;margin-bottom:8px">⚠️</div>
-        <div style="margin-bottom:4px">データの取得に失敗しました</div>
-        <div style="font-size:.75rem;margin-bottom:12px;color:#e05252">${e.message}</div>
-        <button onclick="fetchData()"
-          style="padding:8px 20px;border-radius:8px;border:none;background:var(--accent);color:var(--navy);font-weight:700;cursor:pointer;font-size:.85rem">
-          再試行
-        </button>
-      </div>`;
+    showError(e.message);
   }
 }
 // 月別カレンダー描画
