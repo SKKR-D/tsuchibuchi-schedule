@@ -268,7 +268,7 @@ function detectType(typeVal) {
   if (/部活|練習/.test(t)) return "practice";
   return "other";
 }
-const TYPE_LABEL = { match:"大会", practice:"練習", event:"合同練習", rest:"休養", other:"その他", scrimmage:"練習試合" };
+const TYPE_LABEL = { match:"大会", practice:"練習", event:"保護者会練習", rest:"休養", other:"その他", scrimmage:"練習試合" };
 const TYPE_BADGE = { match:"badge-match", practice:"badge-practice", event:"badge-event", rest:"badge-rest", other:"badge-other", scrimmage:"badge-scrimmage" };
 
 function parseCSV(text) {
