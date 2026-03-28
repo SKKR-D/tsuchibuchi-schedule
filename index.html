@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>部活動予定</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0a1628; --blue:#1a3a6b; --accent:#e8a020;
+    --white:#fff; --light:#f4f6f9; --gray:#8a96a8;
+    --border:#dde3ed; --text:#1e2a3a;
+    --shadow:0 4px 24px rgba(10,22,40,.12);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Noto Sans JP',sans-serif;background:var(--light);color:var(--text);min-height:100vh}
+
+  /* HEADER */
+  header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.4)}
+  .header-inner{max-width:900px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:14px}
+  .header-icon{width:36px;height:36px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
+  .header-title{font-family:'Oswald',sans-serif;font-size:1.15rem;color:var(--white);letter-spacing:.06em}
+  .header-sub{font-size:.72rem;color:var(--gray);letter-spacing:.04em;display:block;margin-top:1px}
+  .header-badge{margin-left:auto;background:var(--accent);color:var(--navy);font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);padding:36px 20px 44px;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(60deg,transparent,transparent 28px,rgba(255,255,255,.025) 28px,rgba(255,255,255,.025) 29px)}
+  .hero-title{font-family:'Oswald',sans-serif;font-size:clamp(1.6rem,6vw,2.6rem);font-weight:700;color:var(--white);line-height:1.2;position:relative}
+  .hero-title span{color:var(--accent)}
+  .hero-label{font-size:.78rem;color:rgba(255,255,255,.55);letter-spacing:.1em;margin-top:6px;position:relative}
+  .hero-stats{display:flex;justify-content:center;gap:24px;margin-top:24px;position:relative}
+  .stat{text-align:center}
+  .stat-num{font-family:'Oswald',sans-serif;font-size:1.9rem;font-weight:600;color:var(--accent);line-height:1}
+  .stat-label{font-size:.68rem;color:rgba(255,255,255,.5);margin-top:3px;letter-spacing:.05em}
+  .stat-div{width:1px;background:rgba(255,255,255,.15);align-self:stretch}
+
+  /* NOTICE */
+  .notice-wrap{max-width:900px;margin:-16px auto 0;padding:0 20px;position:relative;z-index:10}
+  .notice-card{background:var(--accent);color:var(--navy);border-radius:10px;padding:11px 16px;font-size:.82rem;font-weight:700;display:flex;align-items:flex-start;gap:10px;box-shadow:0 6px 20px rgba(232,160,32,.35);animation:slideDown .4s ease both}
+  @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+  /* MAIN */
+  .main{max-width:900px;margin:0 auto;padding:28px 20px 60px}
+  .sec-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .sec-line{width:4px;height:20px;background:var(--accent);border-radius:2px}
+  .sec-title{font-family:'Oswald',sans-serif;font-size:.95rem;letter-spacing:.08em;color:var(--navy)}
+
+  /* CARDS */
+  .schedule-list{display:flex;flex-direction:column;gap:10px;margin-bottom:32px}
+  .card{background:var(--white);border-radius:12px;padding:15px 16px;display:flex;gap:14px;align-items:flex-start;box-shadow:0 2px 10px rgba(10,22,40,.07);border-left:4px solid transparent;transition:transform .15s,box-shadow .15s;animation:fadeUp .4s ease both}
+  .card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+  .card.type-match   {border-left-color:#e05252}
+  .card.type-practice{border-left-color:#3a9e6a}
+  .card.type-rest    {border-left-color:var(--gray)}
+  .card.type-event   {border-left-color:#4a7fd4}
+  .card.type-other   {border-left-color:#b0768a}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  /* DATE BLOCK */
+  .date-block{min-width:46px;text-align:center;flex-shrink:0}
+  .date-day{font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700;color:var(--navy);line-height:1}
+  .date-mon{font-size:.68rem;color:var(--gray);margin-bottom:3px}
+  .date-dow{font-size:.68rem;font-weight:700;padding:2px 5px;border-radius:4px;display:inline-block}
+  .dow-sun{background:#ffe5e5;color:#c0392b}
+  .dow-sat{background:#e5eeff;color:#2563b0}
+  .dow-wk {background:var(--light);color:var(--gray)}
+  .div-v{width:1px;min-height:44px;background:var(--border);flex-shrink:0;align-self:stretch}
+
+  /* INFO */
+  .card-info{flex:1;min-width:0}
+  .card-top{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;margin-bottom:5px}
+  .type-badge{font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:1px}
+  .badge-match   {background:#fdeaea;color:#b33030}
+  .badge-practice{background:#e6f7ee;color:#227a4a}
+  .badge-rest    {background:#f0f0f0;color:#666}
+  .badge-event   {background:#e5eeff;color:#2555a0}
+  .badge-other   {background:#f5e8ee;color:#8a3055}
+  .target-badge{font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:4px;background:#f0f4ff;color:#3555a0;white-space:nowrap;flex-shrink:0;margin-top:1px}
+  .card-title{font-size:.95rem;font-weight:700;color:var(--text)}
+  .card-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
+  .meta-pill{font-size:.73rem;color:var(--gray);display:flex;align-items:center;gap:3px}
+  .card-detail{margin-top:7px;padding:7px 10px;background:var(--light);border-radius:7px;font-size:.78rem;color:#4a5a6a;line-height:1.6}
+
+  /* BUTTONS */
+  .btn-wrap{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:10px;font-size:.85rem;font-weight:700;text-decoration:none;transition:opacity .15s;flex:1;min-width:180px;justify-content:center}
+  .btn:hover{opacity:.85}
+  .btn-absent{background:#e05252;color:#fff}
+  .btn-car   {background:#4a7fd4;color:#fff}
+
+  /* NOTES */
+  .notes-card{background:var(--white);border-radius:12px;padding:18px 20px;box-shadow:0 2px 10px rgba(10,22,40,.07);margin-bottom:32px}
+  .notes-list{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:4px}
+  .notes-list li{display:flex;gap:9px;font-size:.84rem;line-height:1.6;color:#3a4a5a}
+  .notes-list li::before{content:'●';color:var(--accent);font-size:.58rem;margin-top:6px;flex-shrink:0}
+
+  /* CONTACT */
+  .contact-card{background:var(--navy);border-radius:12px;padding:18px 20px;color:var(--white)}
+  .contact-row{display:flex;align-items:flex-start;gap:10px;font-size:.82rem;color:rgba(255,255,255,.75);margin-top:9px}
+
+  /* STATUS */
+  .status-box{background:var(--white);border-radius:12px;padding:40px 20px;text-align:center;color:var(--gray);font-size:.88rem;box-shadow:0 2px 10px rgba(10,22,40,.07)}
+  .spinner{display:inline-block;width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:10px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .updated{font-size:.7rem;color:var(--gray);text-align:right;margin-bottom:6px}
+
+  /* SETUP */
+  .setup-card{background:#fff8e1;border:2px dashed var(--accent);border-radius:12px;padding:18px 20px;margin-bottom:20px}
+  .setup-card h3{font-size:.92rem;color:var(--navy);margin-bottom:8px}
+  .setup-card p{font-size:.82rem;color:#555;line-height:1.7}
+  .setup-card code{background:#f0e0b0;padding:1px 6px;border-radius:4px;font-size:.78rem;word-break:break-all}
+
+  footer{text-align:center;padding:20px;font-size:.7rem;color:var(--gray);border-top:1px solid var(--border)}
+
+  @media(max-width:480px){
+    .hero{padding:26px 14px 36px}
+    .hero-stats{gap:16px}
+    .card{gap:10px;padding:13px}
+    .date-day{font-size:1.35rem}
+    .btn{min-width:140px;font-size:.8rem;padding:11px 14px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ★★★ ここを編集してください ★★★ -->
+<script>
+// 1. スプレッドシートの公開CSV URL
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHN9gczb9ynaiPe_yfZXXumYbHj_5jZQMQ0sAIXq_O_jPlTcuxUE1xHC6jLbkYuBX1sZk34y-8ots4/pub?gid=0&single=true&output=csv";
+
+// 2. 固定設定
+const CONFIG = {
+  clubName:    "ソフトテニス部",
+  schoolName:  "○○中学校",
+  coachName:   "○○ ○○ 先生",
+  lineGroup:   "ソフトテニス部2026",
+  email:       "softtennis@○○-jh.ed.jp",
+  // 欠席・配車フォームのURL（Googleフォームの「回答を送信」のURL）
+  absentFormUrl: "",   // 欠席連絡フォームURL
+  carFormUrl:    "",   // 配車連絡フォームURL
+  notes: [
+    "練習への参加・欠席は、前日の18時までに顧問へ連絡してください。",
+    "大会当日は弁当・飲み物・着替えを持参すること。",
+    "ラケット・シューズの点検を各自で行い、不具合がある場合は早めに報告してください。",
+    "雨天の場合は顧問のLINEにてお知らせします。必ず通知をオンにしておいてください。"
+  ]
+};
+
+// 3. スプレッドシートの列番号（0始まり）
+//    A列は非表示のためCSV上は0列目に存在するが使用しない
+const COL = {
+  target:    1,   // B列: 対象者
+  date:      2,   // C列: 日付
+  startTime: 3,   // D列: 集合時間
+  endTime:   4,   // E列: 解散時間
+  type:      5,   // F列: 内容（＝種別）「大会」「練習」「合同練習」「休養」など
+  location:  6,   // G列: 場所
+                  // H列: ステータス（非表示・使用しない）
+  detail:    8,   // I列: 詳細・持ち物
+};
+</script>
+<!-- ★★★ 編集ここまで ★★★ -->
+
+<header>
+  <div class="header-inner">
+    <div class="header-icon">🎾</div>
+    <div>
+      <div class="header-title" id="clubNameHeader"></div>
+      <span class="header-sub" id="schoolNameSub"></span>
+    </div>
+    <div class="header-badge" id="headerBadge">読み込み中</div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-title" id="heroTitle"><span>…</span></div>
+  <div class="hero-label">UPCOMING SCHEDULE</div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num" id="statMatch">-</div><div class="stat-label">大会</div></div>
+    <div class="stat-div"></div>
+    <div class="stat"><div class="stat-num" id="statPractice">-</div><div class="stat-label">練習日</div></div>
+    <div class="stat-div"></div>
+    <div class="stat"><div class="stat-num" id="statTotal">-</div><div class="stat-label">件</div></div>
+  </div>
+</div>
+
+<div class="notice-wrap" id="noticeWrap" style="display:none">
+  <div class="notice-card">
+    <span>📢</span>
+    <span id="noticeText"></span>
+  </div>
+</div>
+
+<div class="main">
+  <div id="setupGuide" style="display:none;margin-top:20px">
+    <div class="setup-card">
+      <h3>⚙️ スプレッドシートのURLを設定してください</h3>
+      <p>HTMLファイル先頭の <code>SHEET_CSV_URL</code> にGoogleスプレッドシートの公開CSV URLを貼り付けてください。</p>
+    </div>
+  </div>
+
+  <!-- 欠席・配車ボタン -->
+  <div class="btn-wrap" id="btnWrap" style="margin-top:24px;display:none">
+    <a class="btn btn-absent" id="btnAbsent" href="#" target="_blank">📝 欠席・遅刻連絡</a>
+    <a class="btn btn-car"    id="btnCar"    href="#" target="_blank">🚗 配車連絡</a>
+  </div>
+
+  <!-- 予定リスト -->
+  <div style="margin-top:24px">
+    <div class="sec-head">
+      <div class="sec-line"></div>
+      <div class="sec-title">SCHEDULE — 今後の予定</div>
+    </div>
+    <div class="updated" id="updated"></div>
+    <div class="schedule-list" id="scheduleList">
+      <div class="status-box"><div class="spinner"></div><div>データを読み込んでいます…</div></div>
+    </div>
+  </div>
+
+  <!-- 連絡事項 -->
+  <div class="sec-head"><div class="sec-line"></div><div class="sec-title">NOTES — 連絡事項</div></div>
+  <div class="notes-card"><ul class="notes-list" id="notesList"></ul></div>
+
+  <!-- 問い合わせ -->
+  <div class="sec-head"><div class="sec-line"></div><div class="sec-title">CONTACT — 問い合わせ</div></div>
+  <div class="contact-card">
+    <div style="font-size:.75rem;color:rgba(255,255,255,.45);letter-spacing:.06em">顧問 / COACH</div>
+    <div style="font-size:1rem;font-weight:700;margin-top:3px" id="coachName"></div>
+    <div class="contact-row"><span>📱</span><span id="lineInfo"></span></div>
+    <div class="contact-row"><span>✉️</span><span id="emailInfo"></span></div>
+  </div>
+</div>
+
+<footer id="footer"></footer>
+
+<script>
+const DOW_JP  = ["日","月","火","水","木","金","土"];
+const DOW_CLS = ["dow-sun","dow-wk","dow-wk","dow-wk","dow-wk","dow-wk","dow-sat"];
+
+// F列「内容」（＝種別）の値を直接判定
+// スプレッドシートに入力する値: 大会 / 練習 / 合同練習 / 休養 / その他
+const TYPE_MAP = {
+  "大会":"match","練習":"practice","合同練習":"event","休養":"rest","その他":"other"
+};
+function detectType(typeVal) {
+  const t = (typeVal||"").trim();
+  if (TYPE_MAP[t]) return TYPE_MAP[t];
+  // フォールバック（入力ゆれ対策）
+  if (/大会|試合|選手権|地区大|春季|秋季|新人戦/.test(t)) return "match";
+  if (/合同|交流|招待/.test(t)) return "event";
+  if (/練習/.test(t)) return "practice";
+  if (/休|オフ/.test(t)) return "rest";
+  return "other";
+}
+const TYPE_LABEL = { match:"大会", practice:"練習", event:"合同練習", rest:"休養", other:"その他" };
+const TYPE_BADGE = { match:"badge-match", practice:"badge-practice", event:"badge-event", rest:"badge-rest", other:"badge-other" };
+
+function parseCSV(text) {
+  const rows = [];
+  const lines = text.replace(/\r\n/g,"\n").replace(/\r/g,"\n").split("\n");
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    const cols = []; let cur="", inQ=false;
+    for (let i=0;i<line.length;i++) {
+      const c=line[i];
+      if (c==='"'&&!inQ) inQ=true;
+      else if (c==='"'&&inQ) { if(line[i+1]==='"'){cur+='"';i++}else inQ=false; }
+      else if (c===','&&!inQ){cols.push(cur.trim());cur="";}
+      else cur+=c;
+    }
+    cols.push(cur.trim()); rows.push(cols);
+  }
+  return rows;
+}
+
+function parseDate(str) {
+  if (!str) return null;
+  // 2026/04/05, 2026-04-05, 2026年4月5日 すべて対応
+  // new Date("2026-04-05") はUTC解釈でタイムゾーンずれが起きるため
+  // 年・月・日を取り出してローカル時刻で生成する
+  const m = str.match(/(\d{4})[\/\-年](\d{1,2})[\/\-月](\d{1,2})/);
+  if (!m) return null;
+  const d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]));
+  return isNaN(d.getTime()) ? null : d;
+}
+
+function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;") }
+
+function buildCard(item, idx) {
+  const date = parseDate(item.date);
+  const day  = date ? date.getDate()  : "?";
+  const mon  = date ? (date.getMonth()+1)+"月" : "";
+  const dow  = date ? { t: DOW_JP[date.getDay()], c: DOW_CLS[date.getDay()] } : {t:"?",c:"dow-wk"};
+  const type = detectType(item.type);
+  const delay = Math.min(idx*0.06, 0.5);
+
+  const timeStr = [item.startTime, item.endTime].filter(Boolean).join("〜");
+  const metas = [];
+  if (timeStr)       metas.push(`🕗 ${timeStr}`);
+  if (item.location) metas.push(`📍 ${esc(item.location)}`);
+
+  // 詳細テキストの改行をbrに変換して表示
+  const detailHtml = item.detail
+    ? esc(item.detail).replace(/\n/g, "<br>")
+    : "";
+
+  return `
+  <div class="card type-${type}" style="animation-delay:${delay}s">
+    <div class="date-block">
+      <div class="date-mon">${mon}</div>
+      <div class="date-day">${day}</div>
+      <div class="date-dow ${dow.c}">${dow.t}</div>
+    </div>
+    <div class="div-v"></div>
+    <div class="card-info">
+      <div class="card-top">
+        <span class="type-badge ${TYPE_BADGE[type]}">${TYPE_LABEL[type]}</span>
+        ${item.target ? `<span class="target-badge">${esc(item.target)}</span>` : ""}
+      </div>
+      ${metas.length ? `<div class="card-meta" style="margin-top:4px">${metas.map(m=>`<span class="meta-pill">${m}</span>`).join("")}</div>` : ""}
+      ${detailHtml ? `<div class="card-detail">${detailHtml}</div>` : ""}
+    </div>
+  </div>`;
+}
+
+function init() {
+  document.getElementById("clubNameHeader").textContent = CONFIG.clubName;
+  document.getElementById("schoolNameSub").textContent  = CONFIG.schoolName + " — 活動予定";
+  document.getElementById("coachName").textContent = CONFIG.coachName;
+  document.getElementById("lineInfo").textContent  = `LINE グループ「${CONFIG.lineGroup}」にてお知らせ`;
+  document.getElementById("emailInfo").textContent = CONFIG.email;
+  document.getElementById("footer").textContent    = `© ${CONFIG.schoolName} ${CONFIG.clubName}`;
+  CONFIG.notes.forEach(n => {
+    const li = document.createElement("li");
+    li.textContent = n;
+    document.getElementById("notesList").appendChild(li);
+  });
+  // フォームボタン
+  if (CONFIG.absentFormUrl || CONFIG.carFormUrl) {
+    document.getElementById("btnWrap").style.display = "flex";
+    if (CONFIG.absentFormUrl) document.getElementById("btnAbsent").href = CONFIG.absentFormUrl;
+    if (CONFIG.carFormUrl)    document.getElementById("btnCar").href    = CONFIG.carFormUrl;
+  }
+  if (!SHEET_CSV_URL || SHEET_CSV_URL.includes("ここに")) {
+    document.getElementById("setupGuide").style.display = "block";
+    document.getElementById("scheduleList").innerHTML =
+      `<div class="status-box">スプレッドシートのURLを設定するとここに予定が表示されます</div>`;
+    document.getElementById("heroTitle").innerHTML = `<span style="font-size:1.2rem">設定待ち</span>`;
+    document.getElementById("headerBadge").textContent = "未設定";
+    return;
+  }
+  fetchData();
+}
+
+async function fetchData() {
+  const list = document.getElementById("scheduleList");
+
+  // タイムアウト付きfetchヘルパー
+  async function fetchWithTimeout(url, ms) {
+    const ctrl = new AbortController();
+    const tid  = setTimeout(() => ctrl.abort(), ms);
+    try {
+      const r = await fetch(url, { signal: ctrl.signal });
+      clearTimeout(tid);
+      return r;
+    } catch(e) {
+      clearTimeout(tid);
+      throw e;
+    }
+  }
+
+  async function getCSV() {
+    // 1. まず直接取得（Google公開CSVはCORS対応済み）
+    try {
+      const r = await fetchWithTimeout(SHEET_CSV_URL, 8000);
+      if (r.ok) {
+        const t = await r.text();
+        if (t && t.includes(",")) return t;
+      }
+    } catch(e) { console.warn("direct fetch failed:", e.message); }
+
+    // 2. プロキシ経由（直接取得が失敗した場合のみ）
+    const proxies = [
+      `https://corsproxy.io/?${encodeURIComponent(SHEET_CSV_URL)}`,
+      `https://api.allorigins.win/get?url=${encodeURIComponent(SHEET_CSV_URL)}`,
+    ];
+    for (const url of proxies) {
+      try {
+        const r = await fetchWithTimeout(url, 8000);
+        if (!r.ok) continue;
+        const t = await r.text();
+        // allorigins は JSON で返す
+        try {
+          const j = JSON.parse(t);
+          if (j.contents && j.contents.includes(",")) return j.contents;
+        } catch { }
+        if (t && t.includes(",")) return t;
+      } catch(e) { console.warn("proxy failed:", url, e.message); }
+    }
+    throw new Error("データを取得できませんでした。ネットワーク環境をご確認ください。");
+  }
+
+  try {
+    const csv  = await getCSV();
+    const rows = parseCSV(csv);
+    if (rows.length < 2) throw new Error("シートにデータがありません");
+
+    const today = new Date(); today.setHours(0,0,0,0);
+
+    const allItems = rows.slice(1)
+      .filter(r => r.length > COL.date && r[COL.date])
+      .map(r => ({
+        target:    r[COL.target]    || "",
+        date:      r[COL.date]      || "",
+        startTime: r[COL.startTime] || "",
+        endTime:   r[COL.endTime]   || "",
+        type:      r[COL.type]      || "",
+        location:  r[COL.location]  || "",
+        detail:    r[COL.detail]    || "",
+      }));
+
+    // ★ デバッグパネル（問題解決後に削除してください）
+    const dbg = document.createElement("div");
+    dbg.id = "debugPanel";
+    dbg.style.cssText = "background:#0d1b2a;color:#7ec8e3;font-family:monospace;font-size:11px;padding:14px 16px;border-radius:10px;margin-bottom:16px;white-space:pre-wrap;word-break:break-all;line-height:1.7";
+    const sample = allItems.slice(0,3).map((it,i) => {
+      const parsed = parseDate(it.date);
+      return `[行${i+2}] 日付:"${it.date}" → ${parsed ? parsed.toLocaleDateString("ja-JP") : "❌パース失敗"}  種別:"${it.type}"  今日以降:${parsed && parsed >= today ? "✅" : "❌"}`;
+    }).join("\n");
+    dbg.textContent = `■ デバッグ情報（確認後に開発者へ共有）\n取得:${allItems.length}件  今日:${today.toLocaleDateString("ja-JP")}\nヘッダー: ${rows[0].slice(0,9).join(" | ")}\n\n${sample}`;
+    list.before(dbg);
+
+    const items = allItems
+      .filter(item => { const d = parseDate(item.date); return d && d >= today; })
+      .sort((a,b) => (parseDate(a.date)||0) - (parseDate(b.date)||0));
+
+    if (items.length === 0) {
+      const hint = allItems.length > 0
+        ? `今後の予定はありません<br><small style="color:var(--gray)">取得済み ${allItems.length}件 ／ 上のデバッグ情報をご確認ください</small>`
+        : "データが空です";
+      list.innerHTML = `<div class="status-box">${hint}</div>`;
+      document.getElementById("heroTitle").innerHTML = `<span>予定なし</span>`;
+      document.getElementById("headerBadge").textContent = "予定0件";
+      return;
+    }
+
+    const matchCount    = items.filter(i => detectType(i.type) === "match").length;
+    const practiceCount = items.filter(i => detectType(i.type) === "practice").length;
+    document.getElementById("statMatch").textContent    = matchCount;
+    document.getElementById("statPractice").textContent = practiceCount;
+    document.getElementById("statTotal").textContent    = items.length;
+
+    const first = parseDate(items[0].date);
+    if (first) {
+      document.getElementById("heroTitle").innerHTML =
+        `<span>${first.getMonth()+1}</span>月〜 今後の予定`;
+      document.getElementById("headerBadge").textContent =
+        `${first.getFullYear()}年 ${items.length}件`;
+    }
+
+    const nextMatch = items.find(i => detectType(i.type) === "match");
+    if (nextMatch) {
+      const d  = parseDate(nextMatch.date);
+      const ds = d ? `${d.getMonth()+1}月${d.getDate()}日（${DOW_JP[d.getDay()]}）` : nextMatch.date;
+      document.getElementById("noticeText").textContent =
+        `📅 次の大会：${ds}${nextMatch.startTime ? " 集合 "+nextMatch.startTime : ""}`;
+      document.getElementById("noticeWrap").style.display = "block";
+    }
+
+    list.innerHTML = items.map((item,i) => buildCard(item,i)).join("");
+    document.getElementById("updated").textContent = `最終取得：${new Date().toLocaleString("ja-JP")}`;
+
+  } catch(e) {
+    console.error(e);
+    list.innerHTML = `
+      <div class="status-box">
+        <div style="font-size:1.4rem;margin-bottom:8px">⚠️</div>
+        <div style="margin-bottom:4px">データの取得に失敗しました</div>
+        <div style="font-size:.75rem;margin-bottom:12px;color:#e05252">${e.message}</div>
+        <button onclick="fetchData()"
+          style="padding:8px 20px;border-radius:8px;border:none;background:var(--accent);color:var(--navy);font-weight:700;cursor:pointer;font-size:.85rem">
+          再試行
+        </button>
+      </div>`;
+  }
+}
+window.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
