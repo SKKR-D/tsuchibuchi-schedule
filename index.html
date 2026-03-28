@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -42,7 +43,7 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 .sec-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:28px}
 .sec-line{width:4px;height:20px;background:var(--accent);border-radius:2px}
 .sec-title{font-family:'Oswald',sans-serif;font-size:.95rem;letter-spacing:.08em;color:var(--navy)}
-.updated{font-size:.7rem;color:var(--gray);text-align:right;margin-bottom:8px}
+.updated{display:none}
 
 /* BUTTONS */
 .btn-wrap{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
@@ -84,11 +85,12 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 .cal-dow{text-align:center;font-size:.68rem;font-weight:700;color:rgba(255,255,255,.6);padding:8px 0}
 .cal-dow.sun{color:#ff8a8a}.cal-dow.sat{color:#8ab4ff}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border)}
-.cal-cell{background:var(--white);min-height:54px;padding:5px 4px 4px;cursor:pointer;position:relative;transition:background .12s}
-.cal-cell:hover{background:#f8f9ff}
-.cal-cell.empty{background:var(--light);cursor:default;pointer-events:none}
-.cal-cell.today .cal-dn{background:var(--accent);color:var(--navy);border-radius:50%;font-weight:700}
-.cal-cell.selected{background:#fffbf0}
+.cal-cell{background:var(--white);min-height:54px;padding:5px 4px 4px;cursor:default;position:relative;transition:background .12s}
+.cal-cell.has-event{cursor:pointer}
+.cal-cell.has-event:hover{background:#f0f4ff}
+.cal-cell.empty{background:#f8f9fb;cursor:default;pointer-events:none}
+.cal-cell.today{background:#fff8e6}.cal-cell.today .cal-dn{color:#8a5a00;font-weight:700}
+.cal-cell.selected{background:#fff3d0}
 .cal-cell.selected::after{content:'';position:absolute;inset:0;border:2px solid var(--accent);pointer-events:none}
 .cal-cell.sun .cal-dn{color:#c0392b}
 .cal-cell.sat .cal-dn{color:#2563b0}
@@ -164,9 +166,9 @@ const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHN9gczb
 const CONFIG = {
   clubName:      "土淵中ソフトテニス部",
   schoolName:    "部活動予定",
-  coachName:     "○○ ○○ 先生",
-  lineGroup:     "ソフトテニス部2026",
-  email:         "softtennis@○○-jh.ed.jp",
+  coachName:     "顧問 先生",
+  lineGroup:     "土淵中ソフトテニス部",
+  email:         "（メールアドレスを入力）",
   absentFormUrl: "https://forms.gle/6E1xasgJGUYhdnDa7",
   carFormUrl:    "https://forms.gle/JTFdHq1Ct47sanJ96",
   notes: [
@@ -221,6 +223,13 @@ const COL = { target:1, date:2, startTime:3, endTime:4, type:5, location:6, deta
   <div class="updated" id="updated"></div>
 
   <!-- スマホ：カレンダー -->
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:.72rem;font-weight:700">
+    <span style="display:flex;align-items:center;gap:4px"><span style="width:16px;height:5px;border-radius:3px;background:#3a9e6a;display:inline-block"></span>部活動</span>
+    <span style="display:flex;align-items:center;gap:4px"><span style="width:16px;height:5px;border-radius:3px;background:#e05252;display:inline-block"></span>大会</span>
+    <span style="display:flex;align-items:center;gap:4px"><span style="width:16px;height:5px;border-radius:3px;background:#d4a017;display:inline-block"></span>練習試合</span>
+    <span style="display:flex;align-items:center;gap:4px"><span style="width:16px;height:5px;border-radius:3px;background:#4a7fd4;display:inline-block"></span>保護者会練習</span>
+    <span style="display:flex;align-items:center;gap:4px"><span style="width:16px;height:5px;border-radius:3px;background:#8a96a8;display:inline-block"></span>休養</span>
+  </div>
   <div class="cal-wrap">
     <div class="cal-dow-row">
       <div class="cal-dow sun">日</div><div class="cal-dow">月</div><div class="cal-dow">火</div>
@@ -325,29 +334,31 @@ function parseCSV(text) {
 
 /* ── HTML生成 ── */
 function buildBadgesHtml(item) {
-  const type = detectType(item.type);
-  const tcls = TARGET_CLS[item.target] || "target-all";
-  return `<span class="type-badge ${TYPE_BADGE[type]}">${TYPE_LABEL[type]}</span>`
-    + (item.target ? `<span class="target-badge ${tcls}">${esc(item.target)}</span>` : "");
+  var type = detectType(item.type);
+  var tcls = TARGET_CLS[item.target] || "target-all";
+  var html = '<span class="type-badge ' + TYPE_BADGE[type] + '">' + TYPE_LABEL[type] + '</span>';
+  if (item.target) html += '<span class="target-badge ' + tcls + '">' + esc(item.target) + '</span>';
+  return html;
 }
 
 function buildMetaHtml(item) {
-  const parts = [];
-  if (item.startTime) parts.push(`<span class="meta-pill"><span class="meta-label">【集合時間】</span>${esc(item.startTime)}</span>`);
-  if (item.endTime)   parts.push(`<span class="meta-pill"><span class="meta-label">【解散時間】</span>${esc(item.endTime)}</span>`);
-  if (item.location)  parts.push(`<span class="meta-pill"><span class="meta-label">【場所】</span>${esc(item.location)}</span>`);
-  return parts.length ? `<div class="card-meta">${parts.join("")}</div>` : "";
+  var parts = [];
+  if (item.startTime) parts.push('<span class="meta-pill"><span class="meta-label">【集合時間】</span>' + esc(item.startTime) + '</span>');
+  if (item.endTime)   parts.push('<span class="meta-pill"><span class="meta-label">【解散時間】</span>' + esc(item.endTime) + '</span>');
+  if (item.location)  parts.push('<span class="meta-pill"><span class="meta-label">【場所】</span>' + esc(item.location) + '</span>');
+  return parts.length ? '<div class="card-meta">' + parts.join("") + '</div>' : "";
 }
 
 function buildCardHtml(item) {
-  const type   = detectType(item.type);
-  const detail = item.detail
-    ? `<div class="card-detail">${esc(item.detail).replace(/\n/g, "<br>")}</div>` : "";
-  return `<div class="card ${type}">
-    <div class="card-top">${buildBadgesHtml(item)}</div>
-    ${buildMetaHtml(item)}
-    ${detail}
-  </div>`;
+  var type   = detectType(item.type);
+  var detail = item.detail
+    ? '<div class="card-detail">' + esc(item.detail).replace(/
+/g, "<br>") + '</div>' : "";
+  return '<div class="card ' + type + '">'
+    + '<div class="card-top">' + buildBadgesHtml(item) + '</div>'
+    + buildMetaHtml(item)
+    + detail
+    + '</div>';
 }
 
 /* ── FETCH ── */
@@ -456,7 +467,8 @@ function renderCalendar(y, mo, items, today) {
     const badges = evs.map(function(ev) {
       return '<div class="cal-badge ' + detectType(ev.type) + '"></div>';
     }).join("");
-    html += '<div class="cal-cell ' + dowCls + todCls + '" onclick="selectDay(' + y + ',' + mo + ',' + d + ',this)">'
+    var hasEv = (evs.length > 0) ? " has-event" : "";
+    html += '<div class="cal-cell ' + dowCls + todCls + hasEv + '" ' + (evs.length > 0 ? 'onclick="selectDay(' + y + ',' + mo + ',' + d + ',this)"' : '') + '>'
       + '<div class="cal-dn">' + d + '</div>'
       + '<div class="cal-badges">' + badges + '</div>'
       + '</div>';
