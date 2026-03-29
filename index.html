@@ -293,7 +293,7 @@ function buildCardHtml(item) {
     const d = parseDate(item.date);
     if (d) {
       const key = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
-      detailBtn = '<a href="tournament.html?date=' + key + '" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:var(--red);color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 大会詳細を見る</a>';
+      detailBtn = '<a href="tournament.html?date=' + key + '" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:var(--red);color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 参加計画を見る</a>';
     }
   }
   return '<div class="card ' + type + '"><div class="card-top">' + buildBadgesHtml(item) + '</div>' + buildMetaHtml(item,"card-meta") + detail + detailBtn + '</div>';
@@ -411,7 +411,16 @@ function renderList(items,today) {
     const dow=date?DOW_JP[date.getDay()]:"?", dcls=date?DOW_CLS[date.getDay()]:"dow-wk";
     const type=detectType(item.type), isT=date&&date.getTime()===today.getTime();
     const detail=item.detail?'<div class="card-detail">'+esc(item.detail).replace(/\n/g,"<br>")+'</div>':"";
-    return '<div class="list-row'+(isT?" list-today":"")+'"><div class="list-date-col '+type+'"><div class="list-day">'+day+'</div><div class="list-dow '+dcls+'">'+dow+'</div></div><div class="list-content"><div class="list-top">'+buildBadgesHtml(item)+'</div>'+buildMetaHtml(item,"list-meta")+detail+'</div></div>';
+    // 大会・練習試合は「参加計画を見る」ボタンを追加
+    var listBtn="";
+    if(type==="match"||type==="scrimmage"){
+      var ld=parseDate(item.date);
+      if(ld){
+        var lkey=ld.getFullYear()+"-"+(ld.getMonth()+1)+"-"+ld.getDate();
+        listBtn='<a href="tournament.html?date='+lkey+'" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:#e05252;color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 参加計画を見る</a>';
+      }
+    }
+    return '<div class="list-row'+(isT?" list-today":"")+'"><div class="list-date-col '+type+'"><div class="list-day">'+day+'</div><div class="list-dow '+dcls+'">'+dow+'</div></div><div class="list-content"><div class="list-top">'+buildBadgesHtml(item)+'</div>'+buildMetaHtml(item,"list-meta")+detail+listBtn+'</div></div>';
   }).join("");
 }
 
