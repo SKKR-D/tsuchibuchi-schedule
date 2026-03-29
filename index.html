@@ -146,13 +146,6 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 .list-today .list-date-col{background:#fff8e6}
 .list-today .list-day{color:var(--accent)}
 
-/* NOTES / CONTACT */
-.notes-card{background:var(--white);border-radius:12px;padding:18px 20px;box-shadow:0 2px 10px rgba(10,22,40,.07);margin-bottom:28px}
-.notes-list{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:4px}
-.notes-list li{display:flex;gap:9px;font-size:.84rem;line-height:1.6;color:#3a4a5a}
-.notes-list li::before{content:'●';color:var(--accent);font-size:.58rem;margin-top:6px;flex-shrink:0}
-.contact-card{background:var(--navy);border-radius:12px;padding:18px 20px;color:var(--white)}
-.contact-row{display:flex;align-items:flex-start;gap:10px;font-size:.82rem;color:rgba(255,255,255,.75);margin-top:9px}
 footer{text-align:center;padding:20px;font-size:.7rem;color:var(--gray);border-top:1px solid var(--border)}
 
 /* RESPONSIVE */
@@ -176,18 +169,8 @@ const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHN9gczb
 const CONFIG = {
   clubName:      "土淵中ソフトテニス部",
   schoolName:    "部活動予定",
-  coachName:     "○○ ○○ 先生",
-  lineGroup:     "土淵中ソフトテニス部",
-  email:         "（メールアドレスを入力）",
   absentFormUrl: "https://forms.gle/6E1xasgJGUYhdnDa7",
-  carFormUrl:    "https://forms.gle/JTFdHq1Ct47sanJ96",
-  notes: [
-    "練習への参加・欠席は、前日の18時までに顧問へ連絡してください。",
-    "大会当日は弁当・飲み物・着替えを持参すること。",
-    "ラケット・シューズの点検を各自で行い、不具合がある場合は早めに報告してください。",
-    "雨天の場合は顧問のLINEにてお知らせします。必ず通知をオンにしておいてください。"
-  ]
-};
+  carFormUrl:    "https://forms.gle/JTFdHq1Ct47sanJ96",};
 
 const COL = { target:1, date:2, startTime:3, endTime:4, type:5, location:6, detail:8 };
 </script>
@@ -264,19 +247,9 @@ const COL = { target:1, date:2, startTime:3, endTime:4, type:5, location:6, deta
   <div class="list-view" id="listView">
     <div class="status-box" style="border-radius:14px"><div class="spinner"></div><div>データを読み込んでいます…</div></div>
   </div>
-
-  <div class="sec-head"><div class="sec-line"></div><div class="sec-title">NOTES — 連絡事項</div></div>
-  <div class="notes-card"><ul class="notes-list" id="notesList"></ul></div>
-
-  <div class="sec-head"><div class="sec-line"></div><div class="sec-title">CONTACT — 問い合わせ</div></div>
-  <div class="contact-card">
-    <div style="font-size:.75rem;color:rgba(255,255,255,.45);letter-spacing:.06em">顧問 / COACH</div>
-    <div style="font-size:1rem;font-weight:700;margin-top:3px" id="coachName"></div>
-    <div class="contact-row"><span>📱</span><span id="lineInfo"></span></div>
-    <div class="contact-row"><span>✉️</span><span id="emailInfo"></span></div>
-  </div>
 </div>
-<footer id="footer"></footer>
+</div>
+<footer style="text-align:center;padding:16px;font-size:.7rem;color:var(--gray);border-top:1px solid var(--border)">© 土淵中ソフトテニス部</footer>
 
 <script>
 const DOW_JP  = ["日","月","火","水","木","金","土"];
@@ -543,15 +516,6 @@ function renderList(items, today) {
 function init() {
   document.getElementById("clubNameHeader").textContent = CONFIG.clubName;
   document.getElementById("schoolNameSub").textContent  = CONFIG.schoolName;
-  document.getElementById("coachName").textContent      = CONFIG.coachName;
-  document.getElementById("lineInfo").textContent       = "LINE グループ「" + CONFIG.lineGroup + "」にてお知らせ";
-  document.getElementById("emailInfo").textContent      = CONFIG.email;
-  document.getElementById("footer").textContent         = "© " + CONFIG.schoolName + " " + CONFIG.clubName;
-  CONFIG.notes.forEach(function(n) {
-    const li = document.createElement("li");
-    li.textContent = n;
-    document.getElementById("notesList").appendChild(li);
-  });
   if (CONFIG.absentFormUrl || CONFIG.carFormUrl) {
     document.getElementById("btnWrap").style.display = "flex";
     if (CONFIG.absentFormUrl) document.getElementById("btnAbsent").href = CONFIG.absentFormUrl;
