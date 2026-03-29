@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大会詳細</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0a1628;--blue:#1a3a6b;--accent:#e8a020;--red:#e05252;--white:#fff;--light:#f4f6f9;--gray:#8a96a8;--border:#dde3ed;--text:#1e2a3a}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--light);color:var(--text);min-height:100vh}
+header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.4)}
+.header-inner{max-width:760px;margin:0 auto;padding:0 16px;height:56px;display:flex;align-items:center;gap:12px}
+.header-back{display:flex;align-items:center;gap:6px;color:var(--accent);font-size:.85rem;font-weight:700;text-decoration:none;flex-shrink:0}
+.header-back:hover{opacity:.8}
+.header-title{font-family:'Oswald',sans-serif;font-size:1rem;color:var(--white);letter-spacing:.05em;flex:1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,#2a1a3a 100%);padding:28px 20px 36px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(60deg,transparent,transparent 28px,rgba(255,255,255,.02) 28px,rgba(255,255,255,.02) 29px)}
+.hero-badge{display:inline-block;background:var(--red);color:var(--white);font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.06em;margin-bottom:12px;position:relative}
+.hero-name{font-family:'Oswald',sans-serif;font-size:clamp(1.4rem,5vw,2.2rem);font-weight:700;color:var(--white);line-height:1.2;position:relative}
+.hero-date{font-size:.85rem;color:rgba(255,255,255,.65);margin-top:8px;position:relative}
+.main{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+.section{background:var(--white);border-radius:14px;box-shadow:0 2px 10px rgba(10,22,40,.07);overflow:hidden;margin-bottom:16px}
+.section-header{display:flex;align-items:center;gap:10px;padding:14px 18px 10px;border-bottom:1px solid var(--border)}
+.section-icon{font-size:1.1rem;flex-shrink:0}
+.section-title{font-family:'Oswald',sans-serif;font-size:.95rem;letter-spacing:.06em;color:var(--navy)}
+.section-body{padding:14px 18px}
+.info-row{display:flex;align-items:flex-start;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-label{font-size:.75rem;font-weight:700;color:var(--gray);min-width:80px;flex-shrink:0;padding-top:2px}
+.info-value{font-size:.88rem;color:var(--text);flex:1;line-height:1.6}
+.info-value.accent{color:var(--red);font-weight:700}
+.info-value.notice{font-size:.8rem;color:var(--gray);font-style:italic}
+.checklist{display:flex;flex-direction:column;gap:6px;padding:4px 0}
+.check-item{display:flex;align-items:flex-start;gap:10px;font-size:.86rem;color:var(--text);line-height:1.5}
+.check-item::before{content:'□';font-size:1rem;color:var(--accent);flex-shrink:0;margin-top:1px}
+.map-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;background:var(--navy);color:var(--white);border-radius:10px;font-size:.88rem;font-weight:700;text-decoration:none;transition:opacity .15s;margin-top:4px}
+.map-btn:hover{opacity:.85}
+.emergency-card{background:#fff5f5;border:1.5px solid #fca5a5;border-radius:10px;padding:14px 16px}
+.emergency-title{font-size:.75rem;font-weight:700;color:#b33030;margin-bottom:6px;letter-spacing:.04em}
+.emergency-value{font-size:.92rem;font-weight:700;color:var(--text)}
+.not-found{text-align:center;padding:60px 20px;color:var(--gray)}
+.not-found-icon{font-size:2.5rem;margin-bottom:12px}
+.not-found-title{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:8px}
+.not-found-text{font-size:.84rem;line-height:1.7}
+.status-box{background:var(--white);border-radius:12px;padding:40px 20px;text-align:center;color:var(--gray);font-size:.88rem;box-shadow:0 2px 10px rgba(10,22,40,.07)}
+.spinner{display:inline-block;width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+footer{text-align:center;padding:16px;font-size:.7rem;color:var(--gray);border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<script>
+// ★ 大会詳細シートのCSV公開URL（スプレッドシートの「大会詳細」シートのgidで公開してください）
+const DETAIL_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHN9gczb9ynaiPe_yfZXXumYbHj_5jZQMQ0sAIXq_O_jPlTcuxUE1xHC6jLbkYuBX1sZk34y-8ots4/pub?gid=2871714&single=true&output=csv";
+
+const DCOL = {
+  date:          0,
+  name:          1,
+  venue:         2,
+  meetPlace:     3,
+  meetTime:      4,
+  itemsPersonal: 5,
+  itemsTeam:     6,
+  car:           7,
+  fee:           8,
+  emergency:     9,
+  mapUrl:        10,
+};
+</script>
+
+<header>
+  <div class="header-inner">
+    <a class="header-back" href="index.html">← 予定表</a>
+    <div class="header-title">大会詳細</div>
+  </div>
+</header>
+
+<div id="heroArea"></div>
+<div class="main" id="mainArea">
+  <div class="status-box"><div class="spinner"></div><div>読み込んでいます…</div></div>
+</div>
+<footer>© 土淵中ソフトテニス部</footer>
+
+<script>
+const DOW_JP = ["日","月","火","水","木","金","土"];
+
+function parseDate(str) {
+  if (!str) return null;
+  const m = str.match(/(\d{4}).(\d{1,2}).(\d{1,2})/);
+  if (!m) return null;
+  const d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]));
+  return isNaN(d.getTime()) ? null : d;
+}
+
+function esc(s) {
+  return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function parseCSV(text) {
+  const rows = [];
+  const lines = text.replace(/\r\n/g,"\n").replace(/\r/g,"\n").split("\n");
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    const cols = []; let cur = "", inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c==='"'&&!inQ){inQ=true;}
+      else if(c==='"'&&inQ){if(line[i+1]==='"'){cur+='"';i++;}else inQ=false;}
+      else if(c===','&&!inQ){cols.push(cur.trim());cur="";}
+      else{cur+=c;}
+    }
+    cols.push(cur.trim());
+    rows.push(cols);
+  }
+  return rows;
+}
+
+async function fetchWithTimeout(url, ms) {
+  const ctrl = new AbortController();
+  const tid = setTimeout(function(){ctrl.abort();}, ms);
+  try { const r = await fetch(url,{signal:ctrl.signal}); clearTimeout(tid); return r; }
+  catch(e) { clearTimeout(tid); throw e; }
+}
+
+async function getCSV(url) {
+  try {
+    const r = await fetchWithTimeout(url, 8000);
+    if (r.ok) { const t = await r.text(); if (t&&t.includes(",")) return t; }
+  } catch(e) { console.warn("direct:",e.message); }
+  const proxies = [
+    "https://corsproxy.io/?" + encodeURIComponent(url),
+    "https://api.allorigins.win/get?url=" + encodeURIComponent(url),
+  ];
+  for (const pu of proxies) {
+    try {
+      const r = await fetchWithTimeout(pu, 8000);
+      if (!r.ok) continue;
+      const t = await r.text();
+      try { const j=JSON.parse(t); if(j.contents&&j.contents.includes(",")) return j.contents; } catch(e){}
+      if (t&&t.includes(",")) return t;
+    } catch(e) { console.warn("proxy:",e.message); }
+  }
+  throw new Error("データを取得できませんでした");
+}
+
+function buildChecklist(text) {
+  if (!text) return "";
+  const items = text.split(/[、,，\n]/).map(function(s){return s.trim();}).filter(Boolean);
+  return '<div class="checklist">' + items.map(function(item){
+    return '<div class="check-item">' + esc(item) + '</div>';
+  }).join("") + '</div>';
+}
+
+function renderDetail(row) {
+  const date      = parseDate(row[DCOL.date]);
+  const dateStr   = date ? date.getFullYear() + "年" + (date.getMonth()+1) + "月" + date.getDate() + "日（" + DOW_JP[date.getDay()] + "）" : row[DCOL.date];
+  const name      = row[DCOL.name]          || "大会詳細";
+  const venue     = row[DCOL.venue]         || "";
+  const meetPlace = row[DCOL.meetPlace]     || "";
+  const meetTime  = row[DCOL.meetTime]      || "";
+  const itemsP    = row[DCOL.itemsPersonal] || "";
+  const itemsT    = row[DCOL.itemsTeam]     || "";
+  const car       = row[DCOL.car]           || "";
+  const fee       = row[DCOL.fee]           || "";
+  const emergency = row[DCOL.emergency]     || "";
+  const mapUrl    = row[DCOL.mapUrl]        || "";
+
+  document.getElementById("heroArea").innerHTML =
+    '<div class="hero">'
+    + '<div class="hero-badge">🏆 大会</div>'
+    + '<div class="hero-name">' + esc(name) + '</div>'
+    + '<div class="hero-date">📅 ' + esc(dateStr) + '</div>'
+    + '</div>';
+
+  let html = "";
+
+  // 集合・会場
+  html += '<div class="section"><div class="section-header"><span class="section-icon">📍</span><span class="section-title">集合・会場</span></div><div class="section-body">';
+  if (venue)     html += '<div class="info-row"><div class="info-label">会場</div><div class="info-value">' + esc(venue) + '</div></div>';
+  if (meetPlace) html += '<div class="info-row"><div class="info-label">集合場所</div><div class="info-value">' + esc(meetPlace) + '</div></div>';
+  if (meetTime)  html += '<div class="info-row"><div class="info-label">集合時間</div><div class="info-value accent">' + esc(meetTime) + '</div></div>';
+  html += '<div class="info-row"><div class="info-label">解散時間</div><div class="info-value notice">終了次第、保護者LINEにてご連絡します</div></div>';
+  if (mapUrl)    html += '<a class="map-btn" href="' + esc(mapUrl) + '" target="_blank">🗺️ Googleマップで開く</a>';
+  html += '</div></div>';
+
+  // 持ち物
+  if (itemsP || itemsT) {
+    html += '<div class="section"><div class="section-header"><span class="section-icon">🎒</span><span class="section-title">持ち物</span></div><div class="section-body">';
+    if (itemsP) html += '<div class="info-row"><div class="info-label">個人</div><div class="info-value">' + buildChecklist(itemsP) + '</div></div>';
+    if (itemsT) html += '<div class="info-row"><div class="info-label">チーム</div><div class="info-value">' + buildChecklist(itemsT) + '</div></div>';
+    html += '</div></div>';
+  }
+
+  // 配車・費用
+  if (car || fee) {
+    html += '<div class="section"><div class="section-header"><span class="section-icon">🚗</span><span class="section-title">配車・費用</span></div><div class="section-body">';
+    if (car) html += '<div class="info-row"><div class="info-label">配車</div><div class="info-value">' + esc(car).replace(/\n/g,"<br>") + '</div></div>';
+    if (fee) html += '<div class="info-row"><div class="info-label">集金額</div><div class="info-value accent">' + esc(fee) + '</div></div>';
+    html += '</div></div>';
+  }
+
+  // 緊急連絡先
+  if (emergency) {
+    html += '<div class="section"><div class="section-header"><span class="section-icon">📞</span><span class="section-title">緊急連絡先</span></div><div class="section-body"><div class="emergency-card"><div class="emergency-title">⚠️ 緊急時のみ</div><div class="emergency-value">' + esc(emergency).replace(/\n/g,"<br>") + '</div></div></div></div>';
+  }
+
+  document.getElementById("mainArea").innerHTML = html;
+}
+
+function showNotFound(dateStr) {
+  document.getElementById("heroArea").innerHTML = "";
+  document.getElementById("mainArea").innerHTML =
+    '<div class="not-found"><div class="not-found-icon">📋</div><div class="not-found-title">詳細情報がまだ登録されていません</div><div class="not-found-text">' + esc(dateStr) + ' の大会詳細は準備中です。<br>しばらくお待ちください。</div></div>';
+}
+
+async function init() {
+  const params  = new URLSearchParams(window.location.search);
+  const dateKey = params.get("date") || "";
+
+  if (!dateKey) {
+    document.getElementById("mainArea").innerHTML =
+      '<div class="not-found"><div class="not-found-icon">❓</div><div class="not-found-title">大会が指定されていません</div><div class="not-found-text"><a href="index.html" style="color:var(--accent)">予定表に戻る</a></div></div>';
+    return;
+  }
+
+  if (!DETAIL_CSV_URL || DETAIL_CSV_URL.includes("ここに")) {
+    document.getElementById("mainArea").innerHTML =
+      '<div class="not-found"><div class="not-found-icon">⚙️</div><div class="not-found-title">DETAIL_CSV_URLを設定してください</div></div>';
+    return;
+  }
+
+  try {
+    const csv  = await getCSV(DETAIL_CSV_URL);
+    const rows = parseCSV(csv);
+    if (rows.length < 2) { showNotFound(dateKey); return; }
+
+    const found = rows.slice(1).find(function(r) {
+      const d = parseDate(r[DCOL.date]);
+      if (!d) return false;
+      const key = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+      return key === dateKey;
+    });
+
+    if (found) { renderDetail(found); }
+    else { showNotFound(dateKey); }
+
+  } catch(e) {
+    console.error(e);
+    document.getElementById("mainArea").innerHTML =
+      '<div class="status-box"><div style="font-size:1.4rem;margin-bottom:8px">⚠️</div><div>データの取得に失敗しました</div><div style="font-size:.75rem;margin-top:8px;color:#e05252">' + esc(e.message) + '</div></div>';
+  }
+}
+
+window.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
