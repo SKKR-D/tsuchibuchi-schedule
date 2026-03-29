@@ -126,35 +126,14 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 .card.other    {border-left-color:#b0768a}
 .card-top{display:flex;gap:7px;align-items:flex-start;flex-wrap:wrap;margin-bottom:5px}
 
-/* LIST VIEW（PC） */
-.list-view{display:none;flex-direction:column;background:var(--white);border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(10,22,40,.07)}
-.list-row{display:flex;align-items:stretch;border-bottom:1px solid var(--border);transition:background .12s}
-.list-row:last-child{border-bottom:none}
-.list-row:hover{background:#fafbff}
-.list-date-col{min-width:72px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:3px solid var(--border);flex-shrink:0}
-.list-date-col.match    {border-right-color:#e05252}
-.list-date-col.scrimmage{border-right-color:#d4a017}
-.list-date-col.practice {border-right-color:#3a9e6a}
-.list-date-col.event    {border-right-color:#4a7fd4}
-.list-date-col.rest     {border-right-color:var(--gray)}
-.list-date-col.other    {border-right-color:#b0768a}
-.list-day{font-family:'Oswald',sans-serif;font-size:1.55rem;font-weight:700;color:var(--navy);line-height:1}
-.list-dow{font-size:.67rem;font-weight:700;padding:2px 5px;border-radius:4px;margin-top:3px;display:inline-block}
-.list-content{flex:1;padding:14px 16px;min-width:0}
-.list-top{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;margin-bottom:5px}
-.list-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:5px}
-.list-today .list-date-col{background:#fff8e6}
-.list-today .list-day{color:var(--accent)}
-
 footer{text-align:center;padding:20px;font-size:.7rem;color:var(--gray);border-top:1px solid var(--border)}
 
 /* RESPONSIVE */
 @media(min-width:769px){
-  .cal-wrap{display:none}.cal-detail{display:none!important}.legend{display:none}
-  .list-view{display:flex}
+  .cal-wrap{max-width:640px;margin:0 auto}
+  .legend{display:none}
 }
 @media(max-width:768px){
-  .list-view{display:none!important}
   .stat{padding:0 10px}
   .stat-label{font-size:.58rem}
 }
@@ -204,9 +183,16 @@ const COL = { target:1, date:2, startTime:3, endTime:4, type:5, location:6, deta
 </div>
 
 <div class="main">
-  <div class="btn-wrap" id="btnWrap" style="display:none">
-    <a class="btn btn-absent" id="btnAbsent" href="#" target="_blank">📝 欠席・遅刻連絡</a>
-    <a class="btn btn-car"    id="btnCar"    href="#" target="_blank">🚗 配車連絡</a>
+  <!-- 準備中ボタン -->
+  <div class="btn-wrap" style="margin-top:20px">
+    <span style="display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border-radius:10px;font-size:.88rem;font-weight:700;flex:1;min-width:160px;justify-content:center;background:#c8cdd6;color:#fff;cursor:not-allowed;opacity:.75;pointer-events:none">
+      📝 欠席・遅刻連絡
+      <span style="font-size:.68rem;background:rgba(255,255,255,.3);padding:2px 7px;border-radius:4px">準備中</span>
+    </span>
+    <span style="display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border-radius:10px;font-size:.88rem;font-weight:700;flex:1;min-width:160px;justify-content:center;background:#c8cdd6;color:#fff;cursor:not-allowed;opacity:.75;pointer-events:none">
+      🚗 配車連絡
+      <span style="font-size:.68rem;background:rgba(255,255,255,.3);padding:2px 7px;border-radius:4px">準備中</span>
+    </span>
   </div>
 
   <div class="sec-head">
@@ -241,11 +227,7 @@ const COL = { target:1, date:2, startTime:3, endTime:4, type:5, location:6, deta
       <button class="cal-detail-close" onclick="closeDetail()">✕</button>
     </div>
     <div class="detail-cards" id="detailCards"></div>
-  </div>
-
-  <!-- PC：リスト -->
-  <div class="list-view" id="listView">
-    <div class="status-box" style="border-radius:14px"><div class="spinner"></div><div>データを読み込んでいます…</div></div>
+  </div><div>データを読み込んでいます…</div></div>
   </div>
 </div>
 </div>
@@ -328,13 +310,12 @@ function buildBadgesHtml(item) {
     + (item.target ? '<span class="target-badge ' + tcls + '">' + esc(item.target) + '</span>' : "");
 }
 
-function buildMetaHtml(item, cls) {
-  const c = cls || "card-meta";
+function buildMetaHtml(item) {
   const parts = [];
   if (item.startTime) parts.push('<span class="meta-pill"><span class="meta-label">【集合時間】</span>' + esc(item.startTime) + '</span>');
   if (item.endTime)   parts.push('<span class="meta-pill"><span class="meta-label">【解散時間】</span>' + esc(item.endTime) + '</span>');
   if (item.location)  parts.push('<span class="meta-pill"><span class="meta-label">【場所】</span>' + esc(item.location) + '</span>');
-  return parts.length ? '<div class="' + c + '">' + parts.join("") + '</div>' : "";
+  return parts.length ? '<div class="card-meta">' + parts.join("") + '</div>' : "";
 }
 
 function buildCardHtml(item) {
@@ -343,7 +324,7 @@ function buildCardHtml(item) {
     ? '<div class="card-detail">' + esc(item.detail).replace(/\n/g, "<br>") + '</div>' : "";
   return '<div class="card ' + type + '">'
     + '<div class="card-top">' + buildBadgesHtml(item) + '</div>'
-    + buildMetaHtml(item, "card-meta")
+    + buildMetaHtml(item)
     + detail
     + '</div>';
 }
@@ -410,7 +391,6 @@ function renderMonth(monthKey) {
   }
 
   renderCalendar(y, mo, items, today);
-  renderList(items, today);
   closeDetail();
 }
 
@@ -488,37 +468,6 @@ function closeDetail() {
   document.querySelectorAll(".cal-cell.selected").forEach(function(c) { c.classList.remove("selected"); });
 }
 
-function renderList(items, today) {
-  const listView = document.getElementById("listView");
-  if (items.length === 0) {
-    listView.innerHTML = '<div class="status-box" style="border-radius:14px">この月の予定はありません</div>';
-    return;
-  }
-  const sorted = items.slice().sort(function(a, b) {
-    return (parseDate(a.date) || 0) - (parseDate(b.date) || 0);
-  });
-  listView.innerHTML = sorted.map(function(item) {
-    const date  = parseDate(item.date);
-    const day   = date ? date.getDate() : "?";
-    const dow   = date ? DOW_JP[date.getDay()] : "?";
-    const dcls  = date ? DOW_CLS[date.getDay()] : "dow-wk";
-    const type  = detectType(item.type);
-    const isT   = date && date.getTime() === today.getTime();
-    const detail = item.detail
-      ? '<div class="card-detail">' + esc(item.detail).replace(/\n/g, "<br>") + '</div>' : "";
-    return '<div class="list-row' + (isT ? " list-today" : "") + '">'
-      + '<div class="list-date-col ' + type + '">'
-      + '<div class="list-day">' + day + '</div>'
-      + '<div class="list-dow ' + dcls + '">' + dow + '</div>'
-      + '</div>'
-      + '<div class="list-content">'
-      + '<div class="list-top">' + buildBadgesHtml(item) + '</div>'
-      + buildMetaHtml(item, "list-meta")
-      + detail
-      + '</div></div>';
-  }).join("");
-}
-
 function init() {
   document.getElementById("clubNameHeader").textContent = CONFIG.clubName;
   document.getElementById("schoolNameSub").textContent  = CONFIG.schoolName;
@@ -581,7 +530,6 @@ async function fetchData() {
       + '<button onclick="fetchData()" style="padding:8px 20px;border-radius:8px;border:none;background:var(--accent);color:var(--navy);font-weight:700;cursor:pointer">再試行</button>'
       + '</div>';
     document.getElementById("calGrid").innerHTML = '<div style="grid-column:1/-1">' + errHtml + '</div>';
-    document.getElementById("listView").innerHTML = errHtml;
   }
 }
 
