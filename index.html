@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#0a1628;--blue:#1a3a6b;--accent:#e8a020;--white:#fff;--light:#f4f6f9;--gray:#8a96a8;--border:#dde3ed;--text:#1e2a3a}
+:root{--navy:#0a1628;--blue:#1a3a6b;--accent:#e8a020;--red:#e05252;--white:#fff;--light:#f4f6f9;--gray:#8a96a8;--border:#dde3ed;--text:#1e2a3a}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans JP',sans-serif;background:var(--light);color:var(--text);min-height:100vh}
 header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.4)}
@@ -287,7 +287,16 @@ function buildMetaHtml(item, cls) {
 function buildCardHtml(item) {
   const type = detectType(item.type);
   const detail = item.detail ? '<div class="card-detail">' + esc(item.detail).replace(/\n/g,"<br>") + '</div>' : "";
-  return '<div class="card ' + type + '"><div class="card-top">' + buildBadgesHtml(item) + '</div>' + buildMetaHtml(item,"card-meta") + detail + '</div>';
+  // 大会・練習試合のとき「詳細を見る」ボタンを追加
+  let detailBtn = "";
+  if (type === "match" || type === "scrimmage") {
+    const d = parseDate(item.date);
+    if (d) {
+      const key = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+      detailBtn = '<a href="tournament.html?date=' + key + '" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:var(--red);color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 大会詳細を見る</a>';
+    }
+  }
+  return '<div class="card ' + type + '"><div class="card-top">' + buildBadgesHtml(item) + '</div>' + buildMetaHtml(item,"card-meta") + detail + detailBtn + '</div>';
 }
 
 async function fetchWithTimeout(url, ms) {
