@@ -10,8 +10,6 @@
 :root{--navy:#0a1628;--blue:#1a3a6b;--accent:#e8a020;--white:#fff;--light:#f4f6f9;--gray:#8a96a8;--border:#dde3ed;--text:#1e2a3a}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Noto Sans JP',sans-serif;background:var(--light);color:var(--text);min-height:100vh}
-
-/* HEADER */
 header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.4)}
 .header-inner{max-width:960px;margin:0 auto;padding:0 16px;height:56px;display:flex;align-items:center;gap:12px}
 .header-icon{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
@@ -20,8 +18,6 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 .header-sub{font-size:.68rem;color:var(--gray);display:block;margin-top:1px}
 #monthSelector{background:var(--accent);color:var(--navy);font-size:.75rem;font-weight:700;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;outline:none;flex-shrink:0;min-width:110px;text-align:center}
 #monthSelector option{background:var(--navy);color:var(--white)}
-
-/* HERO */
 .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);padding:28px 20px 36px;text-align:center;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(60deg,transparent,transparent 28px,rgba(255,255,255,.025) 28px,rgba(255,255,255,.025) 29px)}
 .hero-title{font-family:'Oswald',sans-serif;font-size:clamp(1.8rem,7vw,3rem);font-weight:700;color:var(--white);line-height:1.1;position:relative}
@@ -32,57 +28,41 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 .stat:last-child{border-right:none}
 .stat-num{font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:600;color:var(--accent);line-height:1}
 .stat-label{font-size:.6rem;color:rgba(255,255,255,.5);margin-top:2px;letter-spacing:.04em}
-
-/* NOTICE */
 .notice-wrap{max-width:960px;margin:-14px auto 0;padding:0 16px;position:relative;z-index:10}
 .notice-card{background:var(--accent);color:var(--navy);border-radius:10px;padding:10px 16px;font-size:.82rem;font-weight:700;display:flex;align-items:flex-start;gap:10px;box-shadow:0 6px 20px rgba(232,160,32,.35)}
-
-/* MAIN */
 .main{max-width:960px;margin:0 auto;padding:20px 16px 60px}
 .sec-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;margin-top:24px}
 .sec-line{width:4px;height:20px;background:var(--accent);border-radius:2px}
 .sec-title{font-family:'Oswald',sans-serif;font-size:.95rem;letter-spacing:.08em;color:var(--navy)}
-
-/* BUTTONS */
 .btn-wrap{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border-radius:10px;font-size:.88rem;font-weight:700;text-decoration:none;transition:opacity .15s;flex:1;min-width:160px;justify-content:center}
-.btn:hover{opacity:.85}
-.btn-absent{background:#e05252;color:#fff}
-.btn-car{background:#4a7fd4;color:#fff}
-
-/* STATUS */
+.btn-disabled{display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border-radius:10px;font-size:.88rem;font-weight:700;flex:1;min-width:160px;justify-content:center;background:#c8cdd6;color:#fff;cursor:not-allowed;pointer-events:none}
+.btn-disabled-tag{font-size:.68rem;background:rgba(255,255,255,.3);padding:2px 7px;border-radius:4px}
 .status-box{background:var(--white);border-radius:12px;padding:40px 20px;text-align:center;color:var(--gray);font-size:.88rem;box-shadow:0 2px 10px rgba(10,22,40,.07)}
 .spinner{display:inline-block;width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:10px}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-/* BADGES */
 .type-badge{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:5px;white-space:nowrap;flex-shrink:0}
-.badge-match    {background:#fdeaea;color:#b33030}
+.badge-match{background:#fdeaea;color:#b33030}
 .badge-scrimmage{background:#fff8dc;color:#8a6000}
-.badge-practice {background:#e6f7ee;color:#227a4a}
-.badge-event    {background:#e5eeff;color:#2555a0}
-.badge-rest     {background:#f0f0f0;color:#666}
-.badge-other    {background:#f5e8ee;color:#8a3055}
+.badge-practice{background:#e6f7ee;color:#227a4a}
+.badge-event{background:#e5eeff;color:#2555a0}
+.badge-rest{background:#f0f0f0;color:#666}
+.badge-other{background:#f5e8ee;color:#8a3055}
 .target-badge{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:5px;white-space:nowrap;flex-shrink:0}
-.target-all   {background:#e8f5e9;color:#2e7d32}
+.target-all{background:#e8f5e9;color:#2e7d32}
 .target-female{background:#fce4ec;color:#ad1457}
-.target-male  {background:#e3f2fd;color:#1565c0}
-.target-limit {background:#fff3e0;color:#e65100}
+.target-male{background:#e3f2fd;color:#1565c0}
+.target-limit{background:#fff3e0;color:#e65100}
 .meta-label{font-weight:700;color:var(--navy);margin-right:2px;font-size:.72rem}
 .meta-pill{font-size:.73rem;color:var(--gray);display:inline-flex;align-items:center}
 .card-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .card-detail{margin-top:8px;padding:8px 11px;background:var(--white);border-radius:7px;font-size:.79rem;color:#4a5a6a;line-height:1.65;border:1px solid var(--border)}
 .dow-sun{background:#ffe5e5;color:#c0392b}
 .dow-sat{background:#e5eeff;color:#2563b0}
-.dow-wk {background:var(--light);color:var(--gray)}
-
-/* 凡例 */
+.dow-wk{background:var(--light);color:var(--gray)}
 .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
 .legend-item{display:flex;align-items:center;gap:5px;font-size:.72rem;font-weight:700;color:var(--text)}
 .legend-dot{width:14px;height:6px;border-radius:3px;flex-shrink:0}
-
-/* CALENDAR */
 .cal-wrap{background:var(--white);border-radius:14px;box-shadow:0 2px 10px rgba(10,22,40,.07);overflow:hidden}
 .cal-dow-row{display:grid;grid-template-columns:repeat(7,1fr);background:var(--navy)}
 .cal-dow{text-align:center;font-size:.68rem;font-weight:700;color:rgba(255,255,255,.6);padding:9px 0}
@@ -98,19 +78,16 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 .cal-cell.selected::after{content:'';position:absolute;inset:0;border:2px solid var(--accent);pointer-events:none}
 .cal-cell.sun .cal-dn{color:#c0392b}
 .cal-cell.sat .cal-dn{color:#2563b0}
-.cal-cell.today.sun .cal-dn{color:#8a5a00}
-.cal-cell.today.sat .cal-dn{color:#8a5a00}
+.cal-cell.today.sun .cal-dn,.cal-cell.today.sat .cal-dn{color:#8a5a00}
 .cal-dn{font-family:'Oswald',sans-serif;font-size:.88rem;font-weight:600;color:var(--navy);width:22px;height:22px;display:flex;align-items:center;justify-content:center}
 .cal-badges{display:flex;flex-wrap:wrap;gap:2px;margin-top:3px}
 .cal-badge{height:6px;border-radius:3px;flex:1;min-width:5px}
-.cal-badge.match    {background:#e05252}
+.cal-badge.match{background:#e05252}
 .cal-badge.scrimmage{background:#d4a017}
-.cal-badge.practice {background:#3a9e6a}
-.cal-badge.event    {background:#4a7fd4}
-.cal-badge.rest     {background:var(--gray)}
-.cal-badge.other    {background:#b0768a}
-
-/* 詳細パネル */
+.cal-badge.practice{background:#3a9e6a}
+.cal-badge.event{background:#4a7fd4}
+.cal-badge.rest{background:var(--gray)}
+.cal-badge.other{background:#b0768a}
 .cal-detail{background:var(--white);border-radius:12px;margin-top:10px;display:none;box-shadow:0 2px 10px rgba(10,22,40,.07);overflow:hidden}
 .cal-detail.show{display:block;animation:fadeUp .22s ease both}
 .cal-detail-date{font-family:'Oswald',sans-serif;font-size:.95rem;color:var(--navy);padding:13px 16px 8px;font-weight:600;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
@@ -118,39 +95,50 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 .cal-detail-close:hover{color:var(--text)}
 .detail-cards{padding:8px 12px 12px;display:flex;flex-direction:column;gap:8px}
 .card{background:var(--light);border-radius:10px;padding:12px 14px;border-left:4px solid var(--border)}
-.card.match    {border-left-color:#e05252}
+.card.match{border-left-color:#e05252}
 .card.scrimmage{border-left-color:#d4a017}
-.card.practice {border-left-color:#3a9e6a}
-.card.event    {border-left-color:#4a7fd4}
-.card.rest     {border-left-color:var(--gray)}
-.card.other    {border-left-color:#b0768a}
+.card.practice{border-left-color:#3a9e6a}
+.card.event{border-left-color:#4a7fd4}
+.card.rest{border-left-color:var(--gray)}
+.card.other{border-left-color:#b0768a}
 .card-top{display:flex;gap:7px;align-items:flex-start;flex-wrap:wrap;margin-bottom:5px}
-
-footer{text-align:center;padding:20px;font-size:.7rem;color:var(--gray);border-top:1px solid var(--border)}
-
-/* RESPONSIVE */
+.list-view{display:none;flex-direction:column;background:var(--white);border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(10,22,40,.07)}
+.list-row{display:flex;align-items:stretch;border-bottom:1px solid var(--border);transition:background .12s}
+.list-row:last-child{border-bottom:none}
+.list-row:hover{background:#fafbff}
+.list-date-col{min-width:72px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:3px solid var(--border);flex-shrink:0}
+.list-date-col.match{border-right-color:#e05252}
+.list-date-col.scrimmage{border-right-color:#d4a017}
+.list-date-col.practice{border-right-color:#3a9e6a}
+.list-date-col.event{border-right-color:#4a7fd4}
+.list-date-col.rest{border-right-color:var(--gray)}
+.list-date-col.other{border-right-color:#b0768a}
+.list-day{font-family:'Oswald',sans-serif;font-size:1.55rem;font-weight:700;color:var(--navy);line-height:1}
+.list-dow{font-size:.67rem;font-weight:700;padding:2px 5px;border-radius:4px;margin-top:3px;display:inline-block}
+.list-content{flex:1;padding:14px 16px;min-width:0}
+.list-top{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;margin-bottom:5px}
+.list-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:5px}
+.list-today .list-date-col{background:#fff8e6}
+.list-today .list-day{color:var(--accent)}
+footer{text-align:center;padding:16px;font-size:.7rem;color:var(--gray);border-top:1px solid var(--border)}
 @media(min-width:769px){
-  .cal-wrap{max-width:640px;margin:0 auto}
-  .legend{display:none}
+  .cal-wrap{display:none}.cal-detail{display:none!important}.legend{display:none}
+  .list-view{display:flex}
 }
 @media(max-width:768px){
+  .list-view{display:none!important}
   .stat{padding:0 10px}
   .stat-label{font-size:.58rem}
 }
 </style>
 </head>
 <body>
-
-<!-- ★ 設定欄 ★ -->
 <script>
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHN9gczb9ynaiPe_yfZXXumYbHj_5jZQMQ0sAIXq_O_jPlTcuxUE1xHC6jLbkYuBX1sZk34y-8ots4/pub?gid=0&single=true&output=csv";
-
 const CONFIG = {
-  clubName:      "土淵中ソフトテニス部",
-  schoolName:    "部活動予定",
-  absentFormUrl: "https://forms.gle/6E1xasgJGUYhdnDa7",
-  carFormUrl:    "https://forms.gle/JTFdHq1Ct47sanJ96",};
-
+  clubName:   "土淵中ソフトテニス部",
+  schoolName: "部活動予定"
+};
 const COL = { target:1, date:2, startTime:3, endTime:4, type:5, location:6, detail:8 };
 </script>
 
@@ -183,16 +171,9 @@ const COL = { target:1, date:2, startTime:3, endTime:4, type:5, location:6, deta
 </div>
 
 <div class="main">
-  <!-- 準備中ボタン -->
-  <div class="btn-wrap" style="margin-top:20px">
-    <span style="display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border-radius:10px;font-size:.88rem;font-weight:700;flex:1;min-width:160px;justify-content:center;background:#c8cdd6;color:#fff;cursor:not-allowed;opacity:.75;pointer-events:none">
-      📝 欠席・遅刻連絡
-      <span style="font-size:.68rem;background:rgba(255,255,255,.3);padding:2px 7px;border-radius:4px">準備中</span>
-    </span>
-    <span style="display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border-radius:10px;font-size:.88rem;font-weight:700;flex:1;min-width:160px;justify-content:center;background:#c8cdd6;color:#fff;cursor:not-allowed;opacity:.75;pointer-events:none">
-      🚗 配車連絡
-      <span style="font-size:.68rem;background:rgba(255,255,255,.3);padding:2px 7px;border-radius:4px">準備中</span>
-    </span>
+  <div class="btn-wrap">
+    <span class="btn-disabled">📝 欠席・遅刻連絡<span class="btn-disabled-tag">準備中</span></span>
+    <span class="btn-disabled">🚗 配車連絡<span class="btn-disabled-tag">準備中</span></span>
   </div>
 
   <div class="sec-head">
@@ -200,7 +181,6 @@ const COL = { target:1, date:2, startTime:3, endTime:4, type:5, location:6, deta
     <div class="sec-title">SCHEDULE — 今月の予定</div>
   </div>
 
-  <!-- 凡例（スマホのみ表示） -->
   <div class="legend">
     <span class="legend-item"><span class="legend-dot" style="background:#3a9e6a"></span>部活動</span>
     <span class="legend-item"><span class="legend-dot" style="background:#e05252"></span>大会</span>
@@ -209,7 +189,6 @@ const COL = { target:1, date:2, startTime:3, endTime:4, type:5, location:6, deta
     <span class="legend-item"><span class="legend-dot" style="background:#8a96a8"></span>休養</span>
   </div>
 
-  <!-- スマホ：カレンダー -->
   <div class="cal-wrap">
     <div class="cal-dow-row">
       <div class="cal-dow sun">日</div><div class="cal-dow">月</div><div class="cal-dow">火</div>
@@ -222,49 +201,39 @@ const COL = { target:1, date:2, startTime:3, endTime:4, type:5, location:6, deta
       </div>
     </div>
   </div>
+
   <div class="cal-detail" id="calDetail">
     <div class="cal-detail-date" id="calDetailDate">
       <button class="cal-detail-close" onclick="closeDetail()">✕</button>
     </div>
     <div class="detail-cards" id="detailCards"></div>
   </div>
+
+  <div class="list-view" id="listView">
+    <div class="status-box" style="border-radius:14px"><div class="spinner"></div><div>データを読み込んでいます…</div></div>
+  </div>
 </div>
-<footer style="text-align:center;padding:16px;font-size:.7rem;color:var(--gray);border-top:1px solid var(--border)">© 土淵中ソフトテニス部</footer>
+
+<footer>© 土淵中ソフトテニス部</footer>
 
 <script>
 const DOW_JP  = ["日","月","火","水","木","金","土"];
 const DOW_CLS = ["dow-sun","dow-wk","dow-wk","dow-wk","dow-wk","dow-wk","dow-sat"];
-
-const TYPE_MAP = {
-  "部活動":"practice","大会":"match","練習試合":"scrimmage",
-  "保護者会練習":"event","部活動休養日":"rest"
-};
-const TYPE_LABEL = {
-  practice:"部活動", match:"大会", scrimmage:"練習試合",
-  event:"保護者会練習", rest:"休養", other:"その他"
-};
-const TYPE_BADGE = {
-  practice:"badge-practice", match:"badge-match", scrimmage:"badge-scrimmage",
-  event:"badge-event", rest:"badge-rest", other:"badge-other"
-};
-const TARGET_CLS = {
-  "全員":"target-all","女子のみ":"target-female","男子のみ":"target-male","限定対象":"target-limit"
-};
+const TYPE_MAP = {"部活動":"practice","大会":"match","練習試合":"scrimmage","保護者会練習":"event","部活動休養日":"rest"};
+const TYPE_LABEL = {practice:"部活動",match:"大会",scrimmage:"練習試合",event:"保護者会練習",rest:"休養",other:"その他"};
+const TYPE_BADGE = {practice:"badge-practice",match:"badge-match",scrimmage:"badge-scrimmage",event:"badge-event",rest:"badge-rest",other:"badge-other"};
+const TARGET_CLS = {"全員":"target-all","女子のみ":"target-female","男子のみ":"target-male","限定対象":"target-limit"};
 
 function detectType(val) {
-  // 全角スペース・改行・タブも除去して完全一致を試みる
   const t = (val || "").replace(/[\s　]/g, "").trim();
   if (TYPE_MAP[t]) return TYPE_MAP[t];
-  // 元の値でも完全一致を試みる（念のため）
   const t2 = (val || "").trim();
   if (TYPE_MAP[t2]) return TYPE_MAP[t2];
-  // 部分一致フォールバック
-  const s = t2;
-  if (/大会|選手権|地区大|春季|秋季|新人戦/.test(s)) return "match";
-  if (/練習試合/.test(s)) return "scrimmage";
-  if (/保護者|合同|交流/.test(s)) return "event";
-  if (/休養|休み|オフ/.test(s)) return "rest";
-  if (/部活|練習/.test(s)) return "practice";
+  if (/大会|選手権|地区大|春季|秋季|新人戦/.test(t2)) return "match";
+  if (/練習試合/.test(t2)) return "scrimmage";
+  if (/保護者|合同|交流/.test(t2)) return "event";
+  if (/休養|休み|オフ/.test(t2)) return "rest";
+  if (/部活|練習/.test(t2)) return "practice";
   return "other";
 }
 
@@ -277,23 +246,21 @@ function parseDate(str) {
 }
 
 function esc(s) {
-  return String(s || "")
-    .replace(/&/g, "&amp;").replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
 
 function parseCSV(text) {
   const rows = [];
-  const lines = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n");
+  const lines = text.replace(/\r\n/g,"\n").replace(/\r/g,"\n").split("\n");
   for (const line of lines) {
     if (!line.trim()) continue;
     const cols = []; let cur = "", inQ = false;
     for (let i = 0; i < line.length; i++) {
       const c = line[i];
-      if (c === '"' && !inQ) { inQ = true; }
-      else if (c === '"' && inQ) { if (line[i+1] === '"') { cur += '"'; i++; } else inQ = false; }
-      else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ""; }
-      else { cur += c; }
+      if (c==='"'&&!inQ){inQ=true;}
+      else if(c==='"'&&inQ){if(line[i+1]==='"'){cur+='"';i++;}else inQ=false;}
+      else if(c===','&&!inQ){cols.push(cur.trim());cur="";}
+      else{cur+=c;}
     }
     cols.push(cur.trim());
     rows.push(cols);
@@ -308,39 +275,33 @@ function buildBadgesHtml(item) {
     + (item.target ? '<span class="target-badge ' + tcls + '">' + esc(item.target) + '</span>' : "");
 }
 
-function buildMetaHtml(item) {
+function buildMetaHtml(item, cls) {
+  const c = cls || "card-meta";
   const parts = [];
   if (item.startTime) parts.push('<span class="meta-pill"><span class="meta-label">【集合時間】</span>' + esc(item.startTime) + '</span>');
   if (item.endTime)   parts.push('<span class="meta-pill"><span class="meta-label">【解散時間】</span>' + esc(item.endTime) + '</span>');
   if (item.location)  parts.push('<span class="meta-pill"><span class="meta-label">【場所】</span>' + esc(item.location) + '</span>');
-  return parts.length ? '<div class="card-meta">' + parts.join("") + '</div>' : "";
+  return parts.length ? '<div class="' + c + '">' + parts.join("") + '</div>' : "";
 }
 
 function buildCardHtml(item) {
   const type = detectType(item.type);
-  const detail = item.detail
-    ? '<div class="card-detail">' + esc(item.detail).replace(/\n/g, "<br>") + '</div>' : "";
-  return '<div class="card ' + type + '">'
-    + '<div class="card-top">' + buildBadgesHtml(item) + '</div>'
-    + buildMetaHtml(item)
-    + detail
-    + '</div>';
+  const detail = item.detail ? '<div class="card-detail">' + esc(item.detail).replace(/\n/g,"<br>") + '</div>' : "";
+  return '<div class="card ' + type + '"><div class="card-top">' + buildBadgesHtml(item) + '</div>' + buildMetaHtml(item,"card-meta") + detail + '</div>';
 }
 
 async function fetchWithTimeout(url, ms) {
   const ctrl = new AbortController();
-  const tid  = setTimeout(function() { ctrl.abort(); }, ms);
-  try {
-    const r = await fetch(url, { signal: ctrl.signal });
-    clearTimeout(tid); return r;
-  } catch(e) { clearTimeout(tid); throw e; }
+  const tid = setTimeout(function(){ctrl.abort();}, ms);
+  try { const r = await fetch(url,{signal:ctrl.signal}); clearTimeout(tid); return r; }
+  catch(e) { clearTimeout(tid); throw e; }
 }
 
 async function getCSV() {
   try {
     const r = await fetchWithTimeout(SHEET_CSV_URL, 8000);
-    if (r.ok) { const t = await r.text(); if (t && t.includes(",")) return t; }
-  } catch(e) { console.warn("direct:", e.message); }
+    if (r.ok) { const t = await r.text(); if (t&&t.includes(",")) return t; }
+  } catch(e) { console.warn("direct:",e.message); }
   const proxies = [
     "https://corsproxy.io/?" + encodeURIComponent(SHEET_CSV_URL),
     "https://api.allorigins.win/get?url=" + encodeURIComponent(SHEET_CSV_URL),
@@ -350,193 +311,134 @@ async function getCSV() {
       const r = await fetchWithTimeout(url, 8000);
       if (!r.ok) continue;
       const t = await r.text();
-      try { const j = JSON.parse(t); if (j.contents && j.contents.includes(",")) return j.contents; } catch(e) {}
-      if (t && t.includes(",")) return t;
-    } catch(e) { console.warn("proxy:", e.message); }
+      try { const j=JSON.parse(t); if(j.contents&&j.contents.includes(",")) return j.contents; } catch(e){}
+      if (t&&t.includes(",")) return t;
+    } catch(e) { console.warn("proxy:",e.message); }
   }
   throw new Error("データを取得できませんでした");
 }
 
 function renderMonth(monthKey) {
   const parts = monthKey.split("-");
-  const y  = parseInt(parts[0]);
-  const mo = parseInt(parts[1]);
-  const today = new Date(); today.setHours(0, 0, 0, 0);
-
-  const items = (window._allItems || []).filter(function(item) {
+  const y = parseInt(parts[0]), mo = parseInt(parts[1]);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const items = (window._allItems||[]).filter(function(item){
     const d = parseDate(item.date);
-    return d && d.getFullYear() === y && (d.getMonth() + 1) === mo;
+    return d && d.getFullYear()===y && (d.getMonth()+1)===mo;
   });
-
   document.getElementById("heroMon").textContent = mo;
-  document.getElementById("statPractice").textContent  = items.filter(function(i){ return detectType(i.type) === "practice"; }).length;
-  document.getElementById("statMatch").textContent     = items.filter(function(i){ return detectType(i.type) === "match"; }).length;
-  document.getElementById("statScrimmage").textContent = items.filter(function(i){ return detectType(i.type) === "scrimmage"; }).length;
-  document.getElementById("statParents").textContent   = items.filter(function(i){ return detectType(i.type) === "event"; }).length;
-
-  const events = items.filter(function(i) {
-    return detectType(i.type) === "match" || detectType(i.type) === "scrimmage";
-  }).sort(function(a, b) { return (parseDate(a.date) || 0) - (parseDate(b.date) || 0); });
-  if (events.length > 0) {
-    const ne = events[0];
-    const d  = parseDate(ne.date);
-    const ds = d ? (d.getMonth()+1) + "月" + d.getDate() + "日（" + DOW_JP[d.getDay()] + "）" : ne.date;
-    document.getElementById("noticeText").textContent =
-      "📅 " + TYPE_LABEL[detectType(ne.type)] + "：" + ds + (ne.startTime ? " 集合 " + ne.startTime : "");
+  document.getElementById("statPractice").textContent  = items.filter(function(i){return detectType(i.type)==="practice";}).length;
+  document.getElementById("statMatch").textContent     = items.filter(function(i){return detectType(i.type)==="match";}).length;
+  document.getElementById("statScrimmage").textContent = items.filter(function(i){return detectType(i.type)==="scrimmage";}).length;
+  document.getElementById("statParents").textContent   = items.filter(function(i){return detectType(i.type)==="event";}).length;
+  const evts = items.filter(function(i){return detectType(i.type)==="match"||detectType(i.type)==="scrimmage";})
+    .sort(function(a,b){return (parseDate(a.date)||0)-(parseDate(b.date)||0);});
+  if (evts.length>0) {
+    const ne=evts[0], d=parseDate(ne.date);
+    const ds = d ? (d.getMonth()+1)+"月"+d.getDate()+"日（"+DOW_JP[d.getDay()]+"）" : ne.date;
+    document.getElementById("noticeText").textContent = "📅 "+TYPE_LABEL[detectType(ne.type)]+"："+ds+(ne.startTime?" 集合 "+ne.startTime:"");
     document.getElementById("noticeWrap").style.display = "block";
   } else {
     document.getElementById("noticeWrap").style.display = "none";
   }
-
-  renderCalendar(y, mo, items, today);
+  renderCalendar(y,mo,items,today);
+  renderList(items,today);
   closeDetail();
 }
 
-function renderCalendar(y, mo, items, today) {
+function renderCalendar(y,mo,items,today) {
   const dayMap = {};
-  items.forEach(function(item) {
-    const d = parseDate(item.date);
-    if (!d) return;
-    const k = d.getDate();
-    if (!dayMap[k]) dayMap[k] = [];
+  items.forEach(function(item){
+    const d=parseDate(item.date); if(!d) return;
+    const k=d.getDate(); if(!dayMap[k]) dayMap[k]=[];
     dayMap[k].push(item);
   });
-
-  const firstDow = new Date(y, mo - 1, 1).getDay();
-  const lastDate = new Date(y, mo, 0).getDate();
-  let html = "";
-
-  for (let i = 0; i < firstDow; i++) {
-    html += '<div class="cal-cell empty"></div>';
+  const firstDow=new Date(y,mo-1,1).getDay(), lastDate=new Date(y,mo,0).getDate();
+  let html="";
+  for(let i=0;i<firstDow;i++) html+='<div class="cal-cell empty"></div>';
+  for(let d=1;d<=lastDate;d++){
+    const date=new Date(y,mo-1,d), dow=date.getDay();
+    const isT=date.getTime()===today.getTime(), evs=dayMap[d]||[], hasEv=evs.length>0;
+    const dowCls=dow===0?" sun":dow===6?" sat":"";
+    const todCls=isT?" today":"", evCls=hasEv?" has-event":"";
+    const click=hasEv?' onclick="selectDay('+y+','+mo+','+d+',this)"':'';
+    const badges=evs.map(function(ev){return '<div class="cal-badge '+detectType(ev.type)+'"></div>';}).join("");
+    html+='<div class="cal-cell'+dowCls+todCls+evCls+'"'+click+'><div class="cal-dn">'+d+'</div><div class="cal-badges">'+badges+'</div></div>';
   }
-  for (let d = 1; d <= lastDate; d++) {
-    const date   = new Date(y, mo - 1, d);
-    const dow    = date.getDay();
-    const isT    = date.getTime() === today.getTime();
-    const evs    = dayMap[d] || [];
-    const hasEv  = evs.length > 0;
-    const dowCls = dow === 0 ? " sun" : dow === 6 ? " sat" : "";
-    const todCls = isT ? " today" : "";
-    const evCls  = hasEv ? " has-event" : "";
-    const click  = hasEv ? ' onclick="selectDay(' + y + ',' + mo + ',' + d + ',this)"' : '';
-    const badges = evs.map(function(ev) {
-      return '<div class="cal-badge ' + detectType(ev.type) + '"></div>';
-    }).join("");
-    html += '<div class="cal-cell' + dowCls + todCls + evCls + '"' + click + '>'
-      + '<div class="cal-dn">' + d + '</div>'
-      + '<div class="cal-badges">' + badges + '</div>'
-      + '</div>';
-  }
-  const rem = (firstDow + lastDate) % 7;
-  if (rem > 0) {
-    for (let i = 0; i < 7 - rem; i++) {
-      html += '<div class="cal-cell empty"></div>';
-    }
-  }
-  document.getElementById("calGrid").innerHTML = html;
+  const rem=(firstDow+lastDate)%7;
+  if(rem>0) for(let i=0;i<7-rem;i++) html+='<div class="cal-cell empty"></div>';
+  document.getElementById("calGrid").innerHTML=html;
 }
 
-function selectDay(y, mo, d, el) {
-  document.querySelectorAll(".cal-cell.selected").forEach(function(c) { c.classList.remove("selected"); });
+function selectDay(y,mo,d,el) {
+  document.querySelectorAll(".cal-cell.selected").forEach(function(c){c.classList.remove("selected");});
   el.classList.add("selected");
-
-  const key = y + "-" + mo + "-" + d;
-  const evs = (window._allItems || []).filter(function(item) {
-    const dd = parseDate(item.date);
-    if (!dd) return false;
-    return (dd.getFullYear() + "-" + (dd.getMonth()+1) + "-" + dd.getDate()) === key;
+  const key=y+"-"+mo+"-"+d;
+  const evs=(window._allItems||[]).filter(function(item){
+    const dd=parseDate(item.date); if(!dd) return false;
+    return (dd.getFullYear()+"-"+(dd.getMonth()+1)+"-"+dd.getDate())===key;
   });
-
-  const dow = DOW_JP[new Date(y, mo - 1, d).getDay()];
-  const dateLabel = document.getElementById("calDetailDate");
-  dateLabel.innerHTML = mo + "月" + d + "日（" + dow + "）の予定"
-    + '<button class="cal-detail-close" onclick="closeDetail()">✕</button>';
-
-  document.getElementById("detailCards").innerHTML = evs.length
+  const dow=DOW_JP[new Date(y,mo-1,d).getDay()];
+  document.getElementById("calDetailDate").innerHTML=mo+"月"+d+"日（"+dow+"）の予定"+'<button class="cal-detail-close" onclick="closeDetail()">✕</button>';
+  document.getElementById("detailCards").innerHTML=evs.length
     ? evs.map(buildCardHtml).join("")
     : '<div style="font-size:.84rem;color:var(--gray);padding:8px 0">この日の予定はありません</div>';
-
-  const det = document.getElementById("calDetail");
+  const det=document.getElementById("calDetail");
   det.classList.add("show");
-  setTimeout(function() { det.scrollIntoView({ behavior: "smooth", block: "nearest" }); }, 50);
+  setTimeout(function(){det.scrollIntoView({behavior:"smooth",block:"nearest"});},50);
 }
 
 function closeDetail() {
   document.getElementById("calDetail").classList.remove("show");
-  document.querySelectorAll(".cal-cell.selected").forEach(function(c) { c.classList.remove("selected"); });
+  document.querySelectorAll(".cal-cell.selected").forEach(function(c){c.classList.remove("selected");});
+}
+
+function renderList(items,today) {
+  const listView=document.getElementById("listView");
+  if(items.length===0){listView.innerHTML='<div class="status-box" style="border-radius:14px">この月の予定はありません</div>';return;}
+  const sorted=items.slice().sort(function(a,b){return (parseDate(a.date)||0)-(parseDate(b.date)||0);});
+  listView.innerHTML=sorted.map(function(item){
+    const date=parseDate(item.date), day=date?date.getDate():"?";
+    const dow=date?DOW_JP[date.getDay()]:"?", dcls=date?DOW_CLS[date.getDay()]:"dow-wk";
+    const type=detectType(item.type), isT=date&&date.getTime()===today.getTime();
+    const detail=item.detail?'<div class="card-detail">'+esc(item.detail).replace(/\n/g,"<br>")+'</div>':"";
+    return '<div class="list-row'+(isT?" list-today":"")+'"><div class="list-date-col '+type+'"><div class="list-day">'+day+'</div><div class="list-dow '+dcls+'">'+dow+'</div></div><div class="list-content"><div class="list-top">'+buildBadgesHtml(item)+'</div>'+buildMetaHtml(item,"list-meta")+detail+'</div></div>';
+  }).join("");
 }
 
 function init() {
   document.getElementById("clubNameHeader").textContent = CONFIG.clubName;
   document.getElementById("schoolNameSub").textContent  = CONFIG.schoolName;
-  if (CONFIG.absentFormUrl || CONFIG.carFormUrl) {
-    document.getElementById("btnWrap").style.display = "flex";
-    if (CONFIG.absentFormUrl) document.getElementById("btnAbsent").href = CONFIG.absentFormUrl;
-    if (CONFIG.carFormUrl)    document.getElementById("btnCar").href    = CONFIG.carFormUrl;
-  }
   fetchData();
 }
 
 async function fetchData() {
   try {
-    const csv  = await getCSV();
-    const rows = parseCSV(csv);
-    if (rows.length < 2) throw new Error("シートにデータがありません");
-
-    const allItems = rows.slice(1)
-      .filter(function(r) { return r.length > COL.date && r[COL.date]; })
-      .map(function(r) {
-        return {
-          target:    r[COL.target]    || "",
-          date:      r[COL.date]      || "",
-          startTime: r[COL.startTime] || "",
-          endTime:   r[COL.endTime]   || "",
-          type:      r[COL.type]      || "",
-          location:  r[COL.location]  || "",
-          detail:    r[COL.detail]    || "",
-        };
-      });
-
-    if (allItems.length === 0) throw new Error("データが空です");
-
-    const monthSet = {};
-    allItems.forEach(function(i) {
-      const d = parseDate(i.date);
-      if (d) monthSet[d.getFullYear() + "-" + (d.getMonth()+1)] = true;
-    });
-    const months = Object.keys(monthSet).sort();
-
-    const sel = document.getElementById("monthSelector");
-    sel.innerHTML = months.map(function(m) {
-      const p = m.split("-");
-      return '<option value="' + m + '">' + p[0] + '年' + p[1] + '月</option>';
-    }).join("");
-
-    const today  = new Date(); today.setHours(0, 0, 0, 0);
-    const todayM = today.getFullYear() + "-" + (today.getMonth() + 1);
-    sel.value = months.indexOf(todayM) >= 0 ? todayM : months[0];
-
-    window._allItems = allItems;
+    const csv=await getCSV(), rows=parseCSV(csv);
+    if(rows.length<2) throw new Error("シートにデータがありません");
+    const allItems=rows.slice(1).filter(function(r){return r.length>COL.date&&r[COL.date];})
+      .map(function(r){return {target:r[COL.target]||"",date:r[COL.date]||"",startTime:r[COL.startTime]||"",endTime:r[COL.endTime]||"",type:r[COL.type]||"",location:r[COL.location]||"",detail:r[COL.detail]||""};});
+    if(allItems.length===0) throw new Error("データが空です");
+    const monthSet={};
+    allItems.forEach(function(i){const d=parseDate(i.date);if(d) monthSet[d.getFullYear()+"-"+(d.getMonth()+1)]=true;});
+    const months=Object.keys(monthSet).sort();
+    const sel=document.getElementById("monthSelector");
+    sel.innerHTML=months.map(function(m){const p=m.split("-");return '<option value="'+m+'">'+p[0]+'年'+p[1]+'月</option>';}).join("");
+    const today=new Date();today.setHours(0,0,0,0);
+    const todayM=today.getFullYear()+"-"+(today.getMonth()+1);
+    sel.value=months.indexOf(todayM)>=0?todayM:months[0];
+    window._allItems=allItems;
     renderMonth(sel.value);
-
   } catch(e) {
     console.error(e);
-    const errHtml = '<div class="status-box" style="border-radius:14px">'
-      + '<div style="font-size:1.4rem;margin-bottom:8px">⚠️</div>'
-      + '<div style="margin-bottom:4px">データの取得に失敗しました</div>'
-      + '<div style="font-size:.75rem;margin-bottom:12px;color:#e05252">' + esc(e.message) + '</div>'
-      + '<button onclick="fetchData()" style="padding:8px 20px;border-radius:8px;border:none;background:var(--accent);color:var(--navy);font-weight:700;cursor:pointer">再試行</button>'
-      + '</div>';
-    document.getElementById("calGrid").innerHTML = '<div style="grid-column:1/-1">' + errHtml + '</div>';
+    const errHtml='<div class="status-box" style="border-radius:14px"><div style="font-size:1.4rem;margin-bottom:8px">⚠️</div><div style="margin-bottom:4px">データの取得に失敗しました</div><div style="font-size:.75rem;margin-bottom:12px;color:#e05252">'+esc(e.message)+'</div><button onclick="fetchData()" style="padding:8px 20px;border-radius:8px;border:none;background:var(--accent);color:var(--navy);font-weight:700;cursor:pointer">再試行</button></div>';
+    document.getElementById("calGrid").innerHTML='<div style="grid-column:1/-1">'+errHtml+'</div>';
+    document.getElementById("listView").innerHTML=errHtml;
   }
 }
 
-function onMonthChange() {
-  const sel = document.getElementById("monthSelector");
-  if (sel.value) renderMonth(sel.value);
-}
-
-window.addEventListener("DOMContentLoaded", init);
+function onMonthChange(){const sel=document.getElementById("monthSelector");if(sel.value) renderMonth(sel.value);}
+window.addEventListener("DOMContentLoaded",init);
 </script>
 </body>
 </html>
