@@ -13,40 +13,39 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--light);color:var(--t
 
 /* HEADER */
 header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.4)}
-.header-inner{max-width:960px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:14px}
-.header-icon{width:36px;height:36px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.header-inner{max-width:960px;margin:0 auto;padding:0 16px;height:56px;display:flex;align-items:center;gap:12px}
+.header-icon{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
 .header-text{flex:1;min-width:0}
-.header-title{font-family:'Oswald',sans-serif;font-size:1.1rem;color:var(--white);letter-spacing:.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.header-sub{font-size:.7rem;color:var(--gray);display:block;margin-top:1px}
-#monthSelector{background:var(--accent);color:var(--navy);font-size:.75rem;font-weight:700;padding:5px 12px;border-radius:20px;border:none;cursor:pointer;outline:none;flex-shrink:0}
+.header-title{font-family:'Oswald',sans-serif;font-size:1.05rem;color:var(--white);letter-spacing:.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.header-sub{font-size:.68rem;color:var(--gray);display:block;margin-top:1px}
+#monthSelector{background:var(--accent);color:var(--navy);font-size:.75rem;font-weight:700;padding:6px 14px;border-radius:20px;border:none;cursor:pointer;outline:none;flex-shrink:0;min-width:110px;text-align:center}
 #monthSelector option{background:var(--navy);color:var(--white)}
 
 /* HERO */
-.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);padding:32px 20px 40px;text-align:center;position:relative;overflow:hidden}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);padding:28px 20px 36px;text-align:center;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(60deg,transparent,transparent 28px,rgba(255,255,255,.025) 28px,rgba(255,255,255,.025) 29px)}
 .hero-title{font-family:'Oswald',sans-serif;font-size:clamp(1.8rem,7vw,3rem);font-weight:700;color:var(--white);line-height:1.1;position:relative}
 .hero-title span{color:var(--accent)}
-.hero-label{font-size:.75rem;color:rgba(255,255,255,.5);letter-spacing:.1em;margin-top:5px;position:relative}
-.hero-stats{display:flex;justify-content:center;margin-top:22px;position:relative}
-.stat{text-align:center;padding:0 14px;border-right:1px solid rgba(255,255,255,.15)}
+.hero-label{font-size:.72rem;color:rgba(255,255,255,.5);letter-spacing:.1em;margin-top:4px;position:relative}
+.hero-stats{display:flex;justify-content:center;margin-top:20px;position:relative}
+.stat{text-align:center;padding:0 12px;border-right:1px solid rgba(255,255,255,.15)}
 .stat:last-child{border-right:none}
-.stat-num{font-family:'Oswald',sans-serif;font-size:1.7rem;font-weight:600;color:var(--accent);line-height:1}
-.stat-label{font-size:.62rem;color:rgba(255,255,255,.5);margin-top:2px;letter-spacing:.04em}
+.stat-num{font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:600;color:var(--accent);line-height:1}
+.stat-label{font-size:.6rem;color:rgba(255,255,255,.5);margin-top:2px;letter-spacing:.04em}
 
 /* NOTICE */
-.notice-wrap{max-width:960px;margin:-16px auto 0;padding:0 20px;position:relative;z-index:10}
-.notice-card{background:var(--accent);color:var(--navy);border-radius:10px;padding:11px 16px;font-size:.82rem;font-weight:700;display:flex;align-items:flex-start;gap:10px;box-shadow:0 6px 20px rgba(232,160,32,.35)}
+.notice-wrap{max-width:960px;margin:-14px auto 0;padding:0 16px;position:relative;z-index:10}
+.notice-card{background:var(--accent);color:var(--navy);border-radius:10px;padding:10px 16px;font-size:.82rem;font-weight:700;display:flex;align-items:flex-start;gap:10px;box-shadow:0 6px 20px rgba(232,160,32,.35)}
 
 /* MAIN */
-.main{max-width:960px;margin:0 auto;padding:24px 20px 60px}
-.sec-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:28px}
+.main{max-width:960px;margin:0 auto;padding:20px 16px 60px}
+.sec-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;margin-top:24px}
 .sec-line{width:4px;height:20px;background:var(--accent);border-radius:2px}
 .sec-title{font-family:'Oswald',sans-serif;font-size:.95rem;letter-spacing:.08em;color:var(--navy)}
-.updated{font-size:.7rem;color:var(--gray);text-align:right;margin-bottom:8px}
 
 /* BUTTONS */
-.btn-wrap{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;font-size:.85rem;font-weight:700;text-decoration:none;transition:opacity .15s;flex:1;min-width:160px;justify-content:center}
+.btn-wrap{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border-radius:10px;font-size:.88rem;font-weight:700;text-decoration:none;transition:opacity .15s;flex:1;min-width:160px;justify-content:center}
 .btn:hover{opacity:.85}
 .btn-absent{background:#e05252;color:#fff}
 .btn-car{background:#4a7fd4;color:#fff}
@@ -58,52 +57,65 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 /* BADGES */
-.type-badge{font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0}
+.type-badge{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:5px;white-space:nowrap;flex-shrink:0}
 .badge-match    {background:#fdeaea;color:#b33030}
 .badge-scrimmage{background:#fff8dc;color:#8a6000}
 .badge-practice {background:#e6f7ee;color:#227a4a}
 .badge-event    {background:#e5eeff;color:#2555a0}
 .badge-rest     {background:#f0f0f0;color:#666}
 .badge-other    {background:#f5e8ee;color:#8a3055}
-.target-badge{font-size:.67rem;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0}
+.target-badge{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:5px;white-space:nowrap;flex-shrink:0}
 .target-all   {background:#e8f5e9;color:#2e7d32}
 .target-female{background:#fce4ec;color:#ad1457}
 .target-male  {background:#e3f2fd;color:#1565c0}
 .target-limit {background:#fff3e0;color:#e65100}
 .meta-label{font-weight:700;color:var(--navy);margin-right:2px;font-size:.72rem}
 .meta-pill{font-size:.73rem;color:var(--gray);display:inline-flex;align-items:center}
-.card-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:5px}
-.card-detail{margin-top:7px;padding:7px 10px;background:var(--light);border-radius:7px;font-size:.78rem;color:#4a5a6a;line-height:1.6}
+.card-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.card-detail{margin-top:8px;padding:8px 11px;background:var(--white);border-radius:7px;font-size:.79rem;color:#4a5a6a;line-height:1.65;border:1px solid var(--border)}
 .dow-sun{background:#ffe5e5;color:#c0392b}
 .dow-sat{background:#e5eeff;color:#2563b0}
 .dow-wk {background:var(--light);color:var(--gray)}
 
+/* 凡例 */
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:.72rem;font-weight:700;color:var(--text)}
+.legend-dot{width:14px;height:6px;border-radius:3px;flex-shrink:0}
+
 /* CALENDAR */
 .cal-wrap{background:var(--white);border-radius:14px;box-shadow:0 2px 10px rgba(10,22,40,.07);overflow:hidden}
 .cal-dow-row{display:grid;grid-template-columns:repeat(7,1fr);background:var(--navy)}
-.cal-dow{text-align:center;font-size:.68rem;font-weight:700;color:rgba(255,255,255,.6);padding:8px 0}
+.cal-dow{text-align:center;font-size:.68rem;font-weight:700;color:rgba(255,255,255,.6);padding:9px 0}
 .cal-dow.sun{color:#ff8a8a}.cal-dow.sat{color:#8ab4ff}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--border)}
-.cal-cell{background:var(--white);min-height:54px;padding:5px 4px 4px;cursor:pointer;position:relative;transition:background .12s}
-.cal-cell:hover{background:#f8f9ff}
-.cal-cell.empty{background:var(--light);cursor:default;pointer-events:none}
-.cal-cell.today .cal-dn{background:var(--accent);color:var(--navy);border-radius:50%;font-weight:700}
-.cal-cell.selected{background:#fffbf0}
+.cal-cell{background:var(--white);min-height:58px;padding:6px 4px 4px;cursor:default;position:relative;transition:background .12s}
+.cal-cell.empty{background:#f8f9fb;pointer-events:none}
+.cal-cell.has-event{cursor:pointer}
+.cal-cell.has-event:hover{background:#f0f4ff}
+.cal-cell.today{background:#fff8e6}
+.cal-cell.today .cal-dn{color:#8a5a00;font-weight:700}
+.cal-cell.selected{background:#fff3d0}
 .cal-cell.selected::after{content:'';position:absolute;inset:0;border:2px solid var(--accent);pointer-events:none}
 .cal-cell.sun .cal-dn{color:#c0392b}
 .cal-cell.sat .cal-dn{color:#2563b0}
-.cal-dn{font-family:'Oswald',sans-serif;font-size:.85rem;font-weight:600;color:var(--navy);width:22px;height:22px;display:flex;align-items:center;justify-content:center}
-.cal-badges{display:flex;flex-wrap:wrap;gap:2px;margin-top:2px}
-.cal-badge{height:5px;border-radius:3px;flex:1;min-width:4px}
+.cal-cell.today.sun .cal-dn{color:#8a5a00}
+.cal-cell.today.sat .cal-dn{color:#8a5a00}
+.cal-dn{font-family:'Oswald',sans-serif;font-size:.88rem;font-weight:600;color:var(--navy);width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.cal-badges{display:flex;flex-wrap:wrap;gap:2px;margin-top:3px}
+.cal-badge{height:6px;border-radius:3px;flex:1;min-width:5px}
 .cal-badge.match    {background:#e05252}
 .cal-badge.scrimmage{background:#d4a017}
 .cal-badge.practice {background:#3a9e6a}
 .cal-badge.event    {background:#4a7fd4}
 .cal-badge.rest     {background:var(--gray)}
 .cal-badge.other    {background:#b0768a}
-.cal-detail{background:var(--white);border-radius:12px;margin-top:12px;display:none;box-shadow:0 2px 10px rgba(10,22,40,.07);overflow:hidden}
-.cal-detail.show{display:block;animation:fadeUp .25s ease both}
-.cal-detail-date{font-family:'Oswald',sans-serif;font-size:.95rem;color:var(--navy);padding:14px 16px 8px;font-weight:600;border-bottom:1px solid var(--border)}
+
+/* 詳細パネル */
+.cal-detail{background:var(--white);border-radius:12px;margin-top:10px;display:none;box-shadow:0 2px 10px rgba(10,22,40,.07);overflow:hidden}
+.cal-detail.show{display:block;animation:fadeUp .22s ease both}
+.cal-detail-date{font-family:'Oswald',sans-serif;font-size:.95rem;color:var(--navy);padding:13px 16px 8px;font-weight:600;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.cal-detail-close{margin-left:auto;background:none;border:none;color:var(--gray);font-size:1.1rem;cursor:pointer;line-height:1;padding:2px 4px}
+.cal-detail-close:hover{color:var(--text)}
 .detail-cards{padding:8px 12px 12px;display:flex;flex-direction:column;gap:8px}
 .card{background:var(--light);border-radius:10px;padding:12px 14px;border-left:4px solid var(--border)}
 .card.match    {border-left-color:#e05252}
@@ -116,10 +128,10 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 
 /* LIST VIEW（PC） */
 .list-view{display:none;flex-direction:column;background:var(--white);border-radius:14px;overflow:hidden;box-shadow:0 2px 10px rgba(10,22,40,.07)}
-.list-row{display:flex;align-items:stretch;border-bottom:1px solid var(--border)}
+.list-row{display:flex;align-items:stretch;border-bottom:1px solid var(--border);transition:background .12s}
 .list-row:last-child{border-bottom:none}
 .list-row:hover{background:#fafbff}
-.list-date-col{min-width:70px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:3px solid var(--border);flex-shrink:0}
+.list-date-col{min-width:72px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:3px solid var(--border);flex-shrink:0}
 .list-date-col.match    {border-right-color:#e05252}
 .list-date-col.scrimmage{border-right-color:#d4a017}
 .list-date-col.practice {border-right-color:#3a9e6a}
@@ -130,8 +142,8 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 .list-dow{font-size:.67rem;font-weight:700;padding:2px 5px;border-radius:4px;margin-top:3px;display:inline-block}
 .list-content{flex:1;padding:14px 16px;min-width:0}
 .list-top{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;margin-bottom:5px}
-.list-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-.list-today .list-date-col{background:#fffbf0}
+.list-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:5px}
+.list-today .list-date-col{background:#fff8e6}
 .list-today .list-day{color:var(--accent)}
 
 /* NOTES / CONTACT */
@@ -145,7 +157,7 @@ footer{text-align:center;padding:20px;font-size:.7rem;color:var(--gray);border-t
 
 /* RESPONSIVE */
 @media(min-width:769px){
-  .cal-wrap{display:none}.cal-detail{display:none!important}
+  .cal-wrap{display:none}.cal-detail{display:none!important}.legend{display:none}
   .list-view{display:flex}
 }
 @media(max-width:768px){
@@ -165,8 +177,8 @@ const CONFIG = {
   clubName:      "土淵中ソフトテニス部",
   schoolName:    "部活動予定",
   coachName:     "○○ ○○ 先生",
-  lineGroup:     "ソフトテニス部2026",
-  email:         "softtennis@○○-jh.ed.jp",
+  lineGroup:     "土淵中ソフトテニス部",
+  email:         "（メールアドレスを入力）",
   absentFormUrl: "https://forms.gle/6E1xasgJGUYhdnDa7",
   carFormUrl:    "https://forms.gle/JTFdHq1Ct47sanJ96",
   notes: [
@@ -194,7 +206,7 @@ const COL = { target:1, date:2, startTime:3, endTime:4, type:5, location:6, deta
 </header>
 
 <div class="hero">
-  <div class="hero-title" id="heroTitle"><span id="heroMon">…</span>月予定</div>
+  <div class="hero-title"><span id="heroMon">…</span>月予定</div>
   <div class="hero-label">UPCOMING SCHEDULE</div>
   <div class="hero-stats">
     <div class="stat"><div class="stat-num" id="statPractice">-</div><div class="stat-label">練習日</div></div>
@@ -218,7 +230,15 @@ const COL = { target:1, date:2, startTime:3, endTime:4, type:5, location:6, deta
     <div class="sec-line"></div>
     <div class="sec-title">SCHEDULE — 今月の予定</div>
   </div>
-  <div class="updated" id="updated"></div>
+
+  <!-- 凡例（スマホのみ表示） -->
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot" style="background:#3a9e6a"></span>部活動</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#e05252"></span>大会</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#d4a017"></span>練習試合</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#4a7fd4"></span>保護者会練習</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#8a96a8"></span>休養</span>
+  </div>
 
   <!-- スマホ：カレンダー -->
   <div class="cal-wrap">
@@ -234,7 +254,9 @@ const COL = { target:1, date:2, startTime:3, endTime:4, type:5, location:6, deta
     </div>
   </div>
   <div class="cal-detail" id="calDetail">
-    <div class="cal-detail-date" id="calDetailDate"></div>
+    <div class="cal-detail-date" id="calDetailDate">
+      <button class="cal-detail-close" onclick="closeDetail()">✕</button>
+    </div>
     <div class="detail-cards" id="detailCards"></div>
   </div>
 
@@ -257,7 +279,6 @@ const COL = { target:1, date:2, startTime:3, endTime:4, type:5, location:6, deta
 <footer id="footer"></footer>
 
 <script>
-/* ── 定数 ── */
 const DOW_JP  = ["日","月","火","水","木","金","土"];
 const DOW_CLS = ["dow-sun","dow-wk","dow-wk","dow-wk","dow-wk","dow-wk","dow-sat"];
 
@@ -277,7 +298,6 @@ const TARGET_CLS = {
   "全員":"target-all","女子のみ":"target-female","男子のみ":"target-male","限定対象":"target-limit"
 };
 
-/* ── ユーティリティ ── */
 function detectType(val) {
   const t = (val || "").trim();
   if (TYPE_MAP[t]) return TYPE_MAP[t];
@@ -291,7 +311,6 @@ function detectType(val) {
 
 function parseDate(str) {
   if (!str) return null;
-  // 2026/04/05, 2026-04-05, 2026年4月5日 に対応
   const m = str.match(/(\d{4}).(\d{1,2}).(\d{1,2})/);
   if (!m) return null;
   const d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]));
@@ -323,37 +342,36 @@ function parseCSV(text) {
   return rows;
 }
 
-/* ── HTML生成 ── */
 function buildBadgesHtml(item) {
   const type = detectType(item.type);
   const tcls = TARGET_CLS[item.target] || "target-all";
-  return `<span class="type-badge ${TYPE_BADGE[type]}">${TYPE_LABEL[type]}</span>`
-    + (item.target ? `<span class="target-badge ${tcls}">${esc(item.target)}</span>` : "");
+  return '<span class="type-badge ' + TYPE_BADGE[type] + '">' + TYPE_LABEL[type] + '</span>'
+    + (item.target ? '<span class="target-badge ' + tcls + '">' + esc(item.target) + '</span>' : "");
 }
 
-function buildMetaHtml(item) {
+function buildMetaHtml(item, cls) {
+  const c = cls || "card-meta";
   const parts = [];
-  if (item.startTime) parts.push(`<span class="meta-pill"><span class="meta-label">【集合時間】</span>${esc(item.startTime)}</span>`);
-  if (item.endTime)   parts.push(`<span class="meta-pill"><span class="meta-label">【解散時間】</span>${esc(item.endTime)}</span>`);
-  if (item.location)  parts.push(`<span class="meta-pill"><span class="meta-label">【場所】</span>${esc(item.location)}</span>`);
-  return parts.length ? `<div class="card-meta">${parts.join("")}</div>` : "";
+  if (item.startTime) parts.push('<span class="meta-pill"><span class="meta-label">【集合時間】</span>' + esc(item.startTime) + '</span>');
+  if (item.endTime)   parts.push('<span class="meta-pill"><span class="meta-label">【解散時間】</span>' + esc(item.endTime) + '</span>');
+  if (item.location)  parts.push('<span class="meta-pill"><span class="meta-label">【場所】</span>' + esc(item.location) + '</span>');
+  return parts.length ? '<div class="' + c + '">' + parts.join("") + '</div>' : "";
 }
 
 function buildCardHtml(item) {
-  const type   = detectType(item.type);
+  const type = detectType(item.type);
   const detail = item.detail
-    ? `<div class="card-detail">${esc(item.detail).replace(/\n/g, "<br>")}</div>` : "";
-  return `<div class="card ${type}">
-    <div class="card-top">${buildBadgesHtml(item)}</div>
-    ${buildMetaHtml(item)}
-    ${detail}
-  </div>`;
+    ? '<div class="card-detail">' + esc(item.detail).replace(/\n/g, "<br>") + '</div>' : "";
+  return '<div class="card ' + type + '">'
+    + '<div class="card-top">' + buildBadgesHtml(item) + '</div>'
+    + buildMetaHtml(item, "card-meta")
+    + detail
+    + '</div>';
 }
 
-/* ── FETCH ── */
 async function fetchWithTimeout(url, ms) {
   const ctrl = new AbortController();
-  const tid  = setTimeout(() => ctrl.abort(), ms);
+  const tid  = setTimeout(function() { ctrl.abort(); }, ms);
   try {
     const r = await fetch(url, { signal: ctrl.signal });
     clearTimeout(tid); return r;
@@ -361,12 +379,10 @@ async function fetchWithTimeout(url, ms) {
 }
 
 async function getCSV() {
-  // 1. 直接取得
   try {
     const r = await fetchWithTimeout(SHEET_CSV_URL, 8000);
     if (r.ok) { const t = await r.text(); if (t && t.includes(",")) return t; }
-  } catch(e) { console.warn("direct fetch:", e.message); }
-  // 2. プロキシ
+  } catch(e) { console.warn("direct:", e.message); }
   const proxies = [
     "https://corsproxy.io/?" + encodeURIComponent(SHEET_CSV_URL),
     "https://api.allorigins.win/get?url=" + encodeURIComponent(SHEET_CSV_URL),
@@ -376,17 +392,13 @@ async function getCSV() {
       const r = await fetchWithTimeout(url, 8000);
       if (!r.ok) continue;
       const t = await r.text();
-      try {
-        const j = JSON.parse(t);
-        if (j.contents && j.contents.includes(",")) return j.contents;
-      } catch(e) { /* not JSON */ }
+      try { const j = JSON.parse(t); if (j.contents && j.contents.includes(",")) return j.contents; } catch(e) {}
       if (t && t.includes(",")) return t;
     } catch(e) { console.warn("proxy:", e.message); }
   }
   throw new Error("データを取得できませんでした");
 }
 
-/* ── レンダリング ── */
 function renderMonth(monthKey) {
   const parts = monthKey.split("-");
   const y  = parseInt(parts[0]);
@@ -398,16 +410,12 @@ function renderMonth(monthKey) {
     return d && d.getFullYear() === y && (d.getMonth() + 1) === mo;
   });
 
-  // ヒーロー
   document.getElementById("heroMon").textContent = mo;
-
-  // 統計
   document.getElementById("statPractice").textContent  = items.filter(function(i){ return detectType(i.type) === "practice"; }).length;
   document.getElementById("statMatch").textContent     = items.filter(function(i){ return detectType(i.type) === "match"; }).length;
   document.getElementById("statScrimmage").textContent = items.filter(function(i){ return detectType(i.type) === "scrimmage"; }).length;
   document.getElementById("statParents").textContent   = items.filter(function(i){ return detectType(i.type) === "event"; }).length;
 
-  // お知らせ
   const events = items.filter(function(i) {
     return detectType(i.type) === "match" || detectType(i.type) === "scrimmage";
   }).sort(function(a, b) { return (parseDate(a.date) || 0) - (parseDate(b.date) || 0); });
@@ -424,9 +432,7 @@ function renderMonth(monthKey) {
 
   renderCalendar(y, mo, items, today);
   renderList(items, today);
-
-  // 詳細パネルを閉じる
-  document.getElementById("calDetail").classList.remove("show");
+  closeDetail();
 }
 
 function renderCalendar(y, mo, items, today) {
@@ -451,12 +457,15 @@ function renderCalendar(y, mo, items, today) {
     const dow    = date.getDay();
     const isT    = date.getTime() === today.getTime();
     const evs    = dayMap[d] || [];
-    const dowCls = dow === 0 ? "sun" : dow === 6 ? "sat" : "";
+    const hasEv  = evs.length > 0;
+    const dowCls = dow === 0 ? " sun" : dow === 6 ? " sat" : "";
     const todCls = isT ? " today" : "";
+    const evCls  = hasEv ? " has-event" : "";
+    const click  = hasEv ? ' onclick="selectDay(' + y + ',' + mo + ',' + d + ',this)"' : '';
     const badges = evs.map(function(ev) {
       return '<div class="cal-badge ' + detectType(ev.type) + '"></div>';
     }).join("");
-    html += '<div class="cal-cell ' + dowCls + todCls + '" onclick="selectDay(' + y + ',' + mo + ',' + d + ',this)">'
+    html += '<div class="cal-cell' + dowCls + todCls + evCls + '"' + click + '>'
       + '<div class="cal-dn">' + d + '</div>'
       + '<div class="cal-badges">' + badges + '</div>'
       + '</div>';
@@ -482,7 +491,10 @@ function selectDay(y, mo, d, el) {
   });
 
   const dow = DOW_JP[new Date(y, mo - 1, d).getDay()];
-  document.getElementById("calDetailDate").textContent = mo + "月" + d + "日（" + dow + "）の予定";
+  const dateLabel = document.getElementById("calDetailDate");
+  dateLabel.innerHTML = mo + "月" + d + "日（" + dow + "）の予定"
+    + '<button class="cal-detail-close" onclick="closeDetail()">✕</button>';
+
   document.getElementById("detailCards").innerHTML = evs.length
     ? evs.map(buildCardHtml).join("")
     : '<div style="font-size:.84rem;color:var(--gray);padding:8px 0">この日の予定はありません</div>';
@@ -490,6 +502,11 @@ function selectDay(y, mo, d, el) {
   const det = document.getElementById("calDetail");
   det.classList.add("show");
   setTimeout(function() { det.scrollIntoView({ behavior: "smooth", block: "nearest" }); }, 50);
+}
+
+function closeDetail() {
+  document.getElementById("calDetail").classList.remove("show");
+  document.querySelectorAll(".cal-cell.selected").forEach(function(c) { c.classList.remove("selected"); });
 }
 
 function renderList(items, today) {
@@ -517,13 +534,12 @@ function renderList(items, today) {
       + '</div>'
       + '<div class="list-content">'
       + '<div class="list-top">' + buildBadgesHtml(item) + '</div>'
-      + buildMetaHtml(item).replace("card-meta", "list-meta")
+      + buildMetaHtml(item, "list-meta")
       + detail
       + '</div></div>';
   }).join("");
 }
 
-/* ── 初期化 ── */
 function init() {
   document.getElementById("clubNameHeader").textContent = CONFIG.clubName;
   document.getElementById("schoolNameSub").textContent  = CONFIG.schoolName;
@@ -566,7 +582,6 @@ async function fetchData() {
 
     if (allItems.length === 0) throw new Error("データが空です");
 
-    // 月リストを生成
     const monthSet = {};
     allItems.forEach(function(i) {
       const d = parseDate(i.date);
@@ -586,7 +601,6 @@ async function fetchData() {
 
     window._allItems = allItems;
     renderMonth(sel.value);
-    document.getElementById("updated").textContent = "最終取得：" + new Date().toLocaleString("ja-JP");
 
   } catch(e) {
     console.error(e);
