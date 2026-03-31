@@ -196,7 +196,7 @@ function renderDetail(row) {
   if (meetTime)  html += '<div class="info-row"><div class="info-label">集合時間</div><div class="info-value accent">' + esc(meetTime) + '</div></div>';
   html += '<div class="info-row"><div class="info-label">解散時間</div><div class="info-value notice">終了次第、保護者LINEにてご連絡します</div></div>';
   if (schedule) {
-    var schedItems = schedule.split("\n").map(function(s){return s.trim();}).filter(Boolean);
+    var schedItems = schedule.split(/[\n/、,，]/).map(function(s){return s.trim();}).filter(Boolean);
     html += '<div class="info-row"><div class="info-label">日程</div><div class="info-value"><div class="timeline">';
     schedItems.forEach(function(item) {
       var parts = item.match(/^(\d{1,2}[：:.]\d{2})\s*(.*)/);
