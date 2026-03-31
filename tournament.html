@@ -164,18 +164,22 @@ function buildChecklist(text) {
 }
 
 function renderDetail(row) {
-  const date      = parseDate(row[DCOL.date]);
-  const dateStr   = date ? date.getFullYear() + "年" + (date.getMonth()+1) + "月" + date.getDate() + "日（" + DOW_JP[date.getDay()] + "）" : row[DCOL.date];
-  const name      = row[DCOL.name]          || "大会詳細";
-  const venue     = row[DCOL.venue]         || "";
-  const meetPlace = row[DCOL.meetPlace]     || "";
-  const meetTime  = row[DCOL.meetTime]      || "";
-  const itemsP    = row[DCOL.itemsPersonal] || "";
-  const itemsT    = row[DCOL.itemsTeam]     || "";
-  const car       = row[DCOL.car]           || "";
-  const fee       = row[DCOL.fee]           || "";
-  const emergency = row[DCOL.emergency]     || "";
-  const mapUrl    = row[DCOL.mapUrl]        || "";
+  var date      = parseDate(row[DCOL.date]);
+  var dateStr   = date ? date.getFullYear() + "年" + (date.getMonth()+1) + "月" + date.getDate() + "日（" + DOW_JP[date.getDay()] + "）" : row[DCOL.date];
+  var name      = row[DCOL.name]          || "大会詳細";
+  var venue     = row[DCOL.venue]         || "";
+  var meetPlace = row[DCOL.meetPlace]     || "";
+  var meetTime  = row[DCOL.meetTime]      || "";
+  var itemsP    = row[DCOL.itemsPersonal] || "";
+  var itemsT    = row[DCOL.itemsTeam]     || "";
+  var car       = row[DCOL.car]           || "";
+  var fee       = row[DCOL.fee]           || "";
+  var emergency = row[DCOL.emergency]     || "";
+  var mapUrl    = row[DCOL.mapUrl]        || "";
+  var schedule  = row[DCOL.schedule]      || "";
+  var members3  = row[DCOL.members3]      || "";
+  var members2  = row[DCOL.members2]      || "";
+  var members1  = row[DCOL.members1]      || "";
 
   document.getElementById("heroArea").innerHTML =
     '<div class="hero">'
@@ -184,46 +188,18 @@ function renderDetail(row) {
     + '<div class="hero-date">📅 ' + esc(dateStr) + '</div>'
     + '</div>';
 
-  let html = "";
+  var html = "";
 
-  // 集合・会場
-  html += '<div class="section"><div class="section-header"><span class="section-icon">📍</span><span class="section-title">集合・会場</span></div><div class="section-body">';
-  if (venue)     html += '<div class="info-row"><div class="info-label">会場</div><div class="info-value">' + esc(venue) + '</div></div>';
+  // ① 日程カード（集合場所・集合時間・日程タイムライン）
+  html += '<div class="section"><div class="section-header"><span class="section-icon">🕗</span><span class="section-title">日程</span></div><div class="section-body">';
   if (meetPlace) html += '<div class="info-row"><div class="info-label">集合場所</div><div class="info-value">' + esc(meetPlace) + '</div></div>';
   if (meetTime)  html += '<div class="info-row"><div class="info-label">集合時間</div><div class="info-value accent">' + esc(meetTime) + '</div></div>';
   html += '<div class="info-row"><div class="info-label">解散時間</div><div class="info-value notice">終了次第、保護者LINEにてご連絡します</div></div>';
-  if (mapUrl)    html += '<a class="map-btn" href="' + esc(mapUrl) + '" target="_blank">🗺️ Googleマップで開く</a>';
-  html += '</div></div>';
-
-  // 持ち物
-  if (itemsP || itemsT) {
-    html += '<div class="section"><div class="section-header"><span class="section-icon">🎒</span><span class="section-title">持ち物</span></div><div class="section-body">';
-    if (itemsP) html += '<div class="info-row"><div class="info-label">個人</div><div class="info-value">' + buildChecklist(itemsP) + '</div></div>';
-    if (itemsT) html += '<div class="info-row"><div class="info-label">チーム</div><div class="info-value">' + buildChecklist(itemsT) + '</div></div>';
-    html += '</div></div>';
-  }
-
-  // 配車・費用
-  if (car || fee) {
-    html += '<div class="section"><div class="section-header"><span class="section-icon">🚗</span><span class="section-title">配車・費用</span></div><div class="section-body">';
-    if (car) html += '<div class="info-row"><div class="info-label">配車</div><div class="info-value">' + esc(car).replace(/\n/g,"<br>") + '</div></div>';
-    if (fee) html += '<div class="info-row"><div class="info-label">集金額</div><div class="info-value accent">' + esc(fee) + '</div></div>';
-    html += '</div></div>';
-  }
-
-  // 緊急連絡先
-  if (emergency) {
-    html += '<div class="section"><div class="section-header"><span class="section-icon">📞</span><span class="section-title">緊急連絡先</span></div><div class="section-body"><div class="emergency-card"><div class="emergency-title">⚠️ 緊急時のみ</div><div class="emergency-value">' + esc(emergency).replace(/\n/g,"<br>") + '</div></div></div></div>';
-  }
-
-  // 日程
-  var schedule  = row[DCOL.schedule]  || "";
   if (schedule) {
     var schedItems = schedule.split("\n").map(function(s){return s.trim();}).filter(Boolean);
-    html += '<div class="section"><div class="section-header"><span class="section-icon">🕗</span><span class="section-title">日程</span></div><div class="section-body">';
-    html += '<div class="timeline">';
+    html += '<div class="info-row"><div class="info-label">日程</div><div class="info-value"><div class="timeline">';
     schedItems.forEach(function(item) {
-      var parts = item.match(/^(\d{1,2}:\d{2})\s*(.*)$/);
+      var parts = item.match(/^(\d{1,2}[：:.]\d{2})\s*(.*)/);
       if (parts) {
         html += '<div class="tl-row"><div class="tl-time">' + esc(parts[1]) + '</div><div class="tl-label">' + esc(parts[2]) + '</div></div>';
       } else {
@@ -232,26 +208,47 @@ function renderDetail(row) {
     });
     html += '</div></div></div>';
   }
+  html += '</div></div>';
 
-  // 参加生徒
-  var members3 = row[DCOL.members3] || "";
-  var members2 = row[DCOL.members2] || "";
-  var members1 = row[DCOL.members1] || "";
+  // ② 参加生徒カード
   if (members3 || members2 || members1) {
     html += '<div class="section"><div class="section-header"><span class="section-icon">👥</span><span class="section-title">参加生徒</span></div><div class="section-body">';
-    if (members3) html += '<div class="info-row"><div class="info-label">3年</div><div class="info-value">' + esc(members3).replace(/[、,，]/g,"　") + '</div></div>';
-    if (members2) html += '<div class="info-row"><div class="info-label">2年</div><div class="info-value">' + esc(members2).replace(/[、,，]/g,"　") + '</div></div>';
-    if (members1) html += '<div class="info-row"><div class="info-label">1年</div><div class="info-value">' + esc(members1).replace(/[、,，]/g,"　") + '</div></div>';
+    if (members3) html += '<div class="info-row"><div class="info-label">3年</div><div class="info-value">' + esc(members3) + '</div></div>';
+    if (members2) html += '<div class="info-row"><div class="info-label">2年</div><div class="info-value">' + esc(members2) + '</div></div>';
+    if (members1) html += '<div class="info-row"><div class="info-label">1年</div><div class="info-value">' + esc(members1) + '</div></div>';
     html += '</div></div>';
   }
 
-  document.getElementById("mainArea").innerHTML = html;
-}
+  // ③ 持ち物カード
+  if (itemsP || itemsT) {
+    html += '<div class="section"><div class="section-header"><span class="section-icon">🎒</span><span class="section-title">持ち物</span></div><div class="section-body">';
+    if (itemsP) html += '<div class="info-row"><div class="info-label">個人</div><div class="info-value">' + buildChecklist(itemsP) + '</div></div>';
+    if (itemsT) html += '<div class="info-row"><div class="info-label">チーム</div><div class="info-value">' + buildChecklist(itemsT) + '</div></div>';
+    html += '</div></div>';
+  }
 
-function showNotFound(dateStr) {
-  document.getElementById("heroArea").innerHTML = "";
-  document.getElementById("mainArea").innerHTML =
-    '<div class="not-found"><div class="not-found-icon">📋</div><div class="not-found-title">詳細情報がまだ登録されていません</div><div class="not-found-text">' + esc(dateStr) + ' の大会詳細は準備中です。<br>しばらくお待ちください。</div></div>';
+  // ④ 配車・費用カード
+  if (car || fee) {
+    html += '<div class="section"><div class="section-header"><span class="section-icon">🚗</span><span class="section-title">配車・費用</span></div><div class="section-body">';
+    if (car) html += '<div class="info-row"><div class="info-label">配車当番</div><div class="info-value">' + esc(car).replace(/\n/g,"<br>") + '</div></div>';
+    if (fee) html += '<div class="info-row"><div class="info-label">集金額</div><div class="info-value accent">' + esc(fee) + '</div></div>';
+    html += '</div></div>';
+  }
+
+  // ⑤ 会場カード（会場名・マップボタンのみ）
+  if (venue || mapUrl) {
+    html += '<div class="section"><div class="section-header"><span class="section-icon">📍</span><span class="section-title">会場</span></div><div class="section-body">';
+    if (venue) html += '<div class="info-row"><div class="info-label">会場名</div><div class="info-value">' + esc(venue) + '</div></div>';
+    if (mapUrl) html += '<a class="map-btn" href="' + esc(mapUrl) + '" target="_blank">🗺️ Googleマップで開く</a>';
+    html += '</div></div>';
+  }
+
+  // ⑥ 緊急連絡先カード
+  if (emergency) {
+    html += '<div class="section"><div class="section-header"><span class="section-icon">📞</span><span class="section-title">緊急連絡先</span></div><div class="section-body"><div class="emergency-card"><div class="emergency-title">⚠️ 緊急時のみ</div><div class="emergency-value">' + esc(emergency).replace(/\n/g,"<br>") + '</div></div></div></div>';
+  }
+
+  document.getElementById("mainArea").innerHTML = html;
 }
 
 async function init() {
