@@ -198,7 +198,7 @@ function renderDetail(row) {
   if (schedule) {
     // 時刻(HH:MM or HH:MM)で文字列を分割してタイムライン生成
     var tlParts = schedule.split(/(\d{1,2}[：:]\d{2})/);
-    html += '<div class="info-row"><div class="info-label">日程</div><div class="info-value"><div class="timeline">';
+    html += '<div style="padding:8px 0 4px;font-size:.75rem;font-weight:700;color:var(--gray)">日程</div><div class="timeline">';
     if (tlParts.length <= 1) {
       html += '<div class="tl-row"><div class="tl-time"></div><div class="tl-label">' + esc(schedule) + '</div></div>';
     } else {
@@ -212,7 +212,7 @@ function renderDetail(row) {
         }
       }
     }
-    html += '</div></div></div>';
+    html += '</div>';
   }
   html += '</div></div>';
 
