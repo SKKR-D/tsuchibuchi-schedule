@@ -196,16 +196,22 @@ function renderDetail(row) {
   if (meetTime)  html += '<div class="info-row"><div class="info-label">集合時間</div><div class="info-value accent">' + esc(meetTime) + '</div></div>';
   html += '<div class="info-row"><div class="info-label">解散時間</div><div class="info-value notice">終了次第、保護者LINEにてご連絡します</div></div>';
   if (schedule) {
-    var schedItems = schedule.split(/[\n/、,，]/).map(function(s){return s.trim();}).filter(Boolean);
+    // 時刻(HH:MM or HH:MM)で文字列を分割してタイムライン生成
+    var tlParts = schedule.split(/(\d{1,2}[：:]\d{2})/);
     html += '<div class="info-row"><div class="info-label">日程</div><div class="info-value"><div class="timeline">';
-    schedItems.forEach(function(item) {
-      var parts = item.match(/^(\d{1,2}[：:.]\d{2})\s*(.*)/);
-      if (parts) {
-        html += '<div class="tl-row"><div class="tl-time">' + esc(parts[1]) + '</div><div class="tl-label">' + esc(parts[2]) + '</div></div>';
-      } else {
-        html += '<div class="tl-row"><div class="tl-time"></div><div class="tl-label">' + esc(item) + '</div></div>';
+    if (tlParts.length <= 1) {
+      html += '<div class="tl-row"><div class="tl-time"></div><div class="tl-label">' + esc(schedule) + '</div></div>';
+    } else {
+      for (var ti = 0; ti < tlParts.length; ti++) {
+        var tp = tlParts[ti].trim();
+        if (!tp) continue;
+        if (/^\d{1,2}[：:]\d{2}$/.test(tp)) {
+          var tlLabel = (tlParts[ti+1] || '').replace(/^[、,，\s]+/, '').replace(/[、,，\s]+$/, '').trim();
+          html += '<div class="tl-row"><div class="tl-time">' + esc(tp) + '</div><div class="tl-label">' + esc(tlLabel) + '</div></div>';
+          ti++;
+        }
       }
-    });
+    }
     html += '</div></div></div>';
   }
   html += '</div></div>';
