@@ -215,10 +215,11 @@ const DETAIL_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHN9gcz
 const DCOL = {
   date:0, name:1, venue:2, meetPlace:3, meetTime:4,
   itemsPersonal:5, itemsTeam:6,
-  escort:7,      // 引率（新規）
+  escort:7,      // 引率
   car:8, fee:9,
   emergency:10, mapUrl:11, schedule:12,
-  members3:13, members2:14, members1:15
+  members3:13, members2:14, members1:15,
+  pdfUrl:16,     // PDF URL（Q列）
 };
 </script>
 
@@ -338,6 +339,9 @@ function renderDetail(row) {
   var members3 =row[DCOL.members3]||"";
   var members2 =row[DCOL.members2]||"";
   var members1 =row[DCOL.members1]||"";
+  var pdfUrl   =row[DCOL.pdfUrl]||"";
+  // GoogleドライブのURLを埋め込み用に変換（/view→/preview）
+  if(pdfUrl) pdfUrl=pdfUrl.replace(/\/view(\?.*)?$/, "/preview");
   var tlItems  =schedule?buildTlParts(schedule):[];
 
   // ── ヒーロー（画面用）
@@ -345,6 +349,18 @@ function renderDetail(row) {
     '<div class="hero"><div class="hero-badge">🏆 大会</div>'
     +'<div class="hero-name">'+esc(name)+'</div>'
     +'<div class="hero-date">📅 '+esc(dateStr)+'</div></div>';
+
+  // ── PDF URLがある場合はiframeで全画面表示
+  if(pdfUrl) {
+    document.getElementById("mainArea").innerHTML=
+      '<div style="width:100%;height:calc(100vh - 120px);">'
+      +'<iframe src="'+pdfUrl+'" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>'
+      +'<div style="text-align:center;padding:12px;">'
+      +'<a href="'+pdfUrl+'" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:var(--navy);color:#fff;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none;">📄 PDFを別タブで開く</a>'
+      +'</div></div>';
+    document.getElementById("pdfBtnWrap").style.display="none";
+    return;
+  }
 
   // ── 画面用カード
   var html="";
