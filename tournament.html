@@ -202,9 +202,11 @@ const DETAIL_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHN9gcz
 
 const DCOL = {
   date:0, name:1, venue:2, meetPlace:3, meetTime:4,
-  itemsPersonal:5, itemsTeam:6, car:7, fee:8,
-  emergency:9, mapUrl:10, schedule:11,
-  members3:12, members2:13, members1:14
+  itemsPersonal:5, itemsTeam:6,
+  escort:7,      // 引率（新規）
+  car:8, fee:9,
+  emergency:10, mapUrl:11, schedule:12,
+  members3:13, members2:14, members1:15
 };
 </script>
 
@@ -315,6 +317,7 @@ function renderDetail(row) {
   var meetTime =row[DCOL.meetTime]||"";
   var itemsP   =row[DCOL.itemsPersonal]||"";
   var itemsT   =row[DCOL.itemsTeam]||"";
+  var escort   =row[DCOL.escort]||"";
   var car      =row[DCOL.car]||"";
   var fee      =row[DCOL.fee]||"";
   var emergency=row[DCOL.emergency]||"";
@@ -359,6 +362,11 @@ function renderDetail(row) {
     if(itemsT) html+='<div class="info-row"><div class="info-label">チーム</div><div class="info-value">'+buildChecklist(itemsT)+'</div></div>';
     html+='</div></div>';
   }
+  if(escort){
+    html+='<div class="section"><div class="section-header"><span class="section-icon">👨‍🏫</span><span class="section-title">引率</span></div><div class="section-body">';
+    html+='<div class="info-row"><div class="info-label">引率者</div><div class="info-value">'+esc(escort).replace(/\n/g,"<br>")+'</div></div>';
+    html+='</div></div>';
+  }
   if(car||fee){
     html+='<div class="section"><div class="section-header"><span class="section-icon">🚗</span><span class="section-title">配車・費用</span></div><div class="section-body">';
     if(car) html+='<div class="info-row"><div class="info-label">配車当番</div><div class="info-value">'+esc(car).replace(/\n/g,"<br>")+'</div></div>';
@@ -382,7 +390,7 @@ function renderDetail(row) {
   pd+='<div class="pd-title">大会参加計画</div>';
   pd+='<div class="pd-subtitle">'+esc(name)+'　'+esc(dateStr)+'</div>';
   pd+='</div>';
-  pd+='<div class="pd-meta"><span>土淵中学校ソフトテニス部</span><span>配布先：保護者各位</span></div>';
+  pd+='<div class="pd-meta"><span>土淵中学校ソフトテニス部</span><span>保護者各位</span></div>';
 
   // 日程
   pd+='<div class="pd-section"><div class="pd-section-title">■ 日程・集合</div>';
@@ -431,6 +439,12 @@ function renderDetail(row) {
       pd+='</div>';
     }
     pd+='</div>';
+  }
+
+  // 引率
+  if(escort){
+    pd+='<div class="pd-section"><div class="pd-section-title">■ 引率</div>';
+    pd+='<table class="pd-table"><tr><td class="label">引率者</td><td>'+esc(escort).replace(/\n/g,"<br>")+'</td></tr></table></div>';
   }
 
   // 配車・費用
