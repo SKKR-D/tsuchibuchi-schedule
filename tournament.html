@@ -189,6 +189,18 @@ footer{text-align:center;padding:16px;font-size:.7rem;color:var(--gray);border-t
     padding-top: 5pt;
   }
 
+  /* A4 1ページに自動フィット */
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+  #printDoc {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 8mm 12mm;
+    transform-origin: top left;
+  }
+
   /* 画面表示用のsectionは非表示 */
   .section { display: none !important; }
   #printDoc { display: block !important; }
@@ -390,7 +402,8 @@ function renderDetail(row) {
   pd+='<div class="pd-title">大会参加計画</div>';
   pd+='<div class="pd-subtitle">'+esc(name)+'　'+esc(dateStr)+'</div>';
   pd+='</div>';
-  pd+='<div class="pd-meta"><span>土淵中学校ソフトテニス部</span><span>保護者各位</span></div>';
+  pd+='<div style="text-align:right;font-size:9pt;margin-bottom:4pt;">保護者各位</div>';
+  pd+='<div class="pd-meta"><span>土淵中学校ソフトテニス部</span></div>';
 
   // 日程
   pd+='<div class="pd-section"><div class="pd-section-title">■ 日程・集合</div>';
@@ -469,7 +482,33 @@ function renderDetail(row) {
 }
 
 function printPDF() {
+  // A4の印刷可能高さ(mm)を基準にスケール計算
+  var doc = document.getElementById("printDoc");
+  if (doc) {
+    // スケールをリセット
+    doc.style.transform = "";
+    doc.style.fontSize  = "";
+
+    // コンテンツの実際の高さを取得
+    var contentH = doc.scrollHeight;
+    // A4 = 297mm → 96dpi換算で約1122px、余白込みで約1050px
+    var a4H = 1050;
+
+    if (contentH > a4H) {
+      var scale = a4H / contentH;
+      doc.style.transform = "scale(" + scale.toFixed(3) + ")";
+      doc.style.transformOrigin = "top left";
+      doc.style.width = (100 / scale).toFixed(1) + "%";
+    }
+  }
   window.print();
+  // 印刷後にスタイルをリセット
+  setTimeout(function() {
+    if (doc) {
+      doc.style.transform = "";
+      doc.style.width = "";
+    }
+  }, 1000);
 }
 
 function showNotFound(dateStr) {
