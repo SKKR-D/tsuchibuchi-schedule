@@ -52,45 +52,183 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 .tl-row:last-child{border-bottom:none}
 .tl-time{font-family:'Oswald',sans-serif;font-size:.9rem;font-weight:600;color:var(--accent);min-width:52px;flex-shrink:0;padding-top:1px}
 .tl-label{font-size:.86rem;color:var(--text);line-height:1.5}
+
+/* PDF出力ボタン */
+.pdf-btn-wrap{max-width:760px;margin:0 auto;padding:0 16px 16px;display:none}
+.pdf-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:var(--navy);color:var(--white);border:none;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:opacity .15s}
+.pdf-btn:hover{opacity:.85}
+
 footer{text-align:center;padding:16px;font-size:.7rem;color:var(--gray);border-top:1px solid var(--border)}
+
+/* ══════════════════════════════════
+   印刷・PDF用スタイル
+   ══════════════════════════════════ */
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+  /* 画面用UI要素を非表示 */
+  header, .hero, .pdf-btn-wrap, footer { display: none !important; }
+
+  body { background: #fff; font-family: 'Noto Sans JP', serif; color: #000; font-size: 9.5pt; }
+  .main { max-width: 100%; padding: 0; margin: 0; }
+  .section { box-shadow: none; border-radius: 0; margin-bottom: 0; border: none; page-break-inside: avoid; }
+
+  /* 行政文書スタイルの本体 */
+  #printDoc {
+    display: block !important;
+    width: 100%;
+    padding: 10mm 15mm;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+
+  .pd-title-wrap {
+    text-align: center;
+    border-bottom: 2.5pt solid #000;
+    padding-bottom: 6pt;
+    margin-bottom: 10pt;
+  }
+  .pd-title {
+    font-size: 16pt;
+    font-weight: 700;
+    letter-spacing: .1em;
+  }
+  .pd-subtitle {
+    font-size: 10pt;
+    margin-top: 3pt;
+    color: #333;
+  }
+  .pd-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9pt;
+    margin-bottom: 10pt;
+    color: #444;
+  }
+  .pd-section {
+    margin-bottom: 8pt;
+    page-break-inside: avoid;
+  }
+  .pd-section-title {
+    font-size: 10pt;
+    font-weight: 700;
+    background: #1e2a3a;
+    color: #fff;
+    padding: 3pt 8pt;
+    margin-bottom: 0;
+  }
+  .pd-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+  }
+  .pd-table td {
+    border: 0.5pt solid #aaa;
+    padding: 4pt 6pt;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .pd-table td.label {
+    background: #f4f4f4;
+    font-weight: 700;
+    width: 22%;
+    white-space: nowrap;
+  }
+  .pd-table td.accent {
+    color: #c00;
+    font-weight: 700;
+  }
+  .pd-table td.notice {
+    color: #666;
+    font-style: italic;
+    font-size: 8.5pt;
+  }
+  .pd-tl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+  }
+  .pd-tl td {
+    border: 0.5pt solid #aaa;
+    padding: 3pt 6pt;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .pd-tl td.time {
+    font-weight: 700;
+    width: 14%;
+    background: #f9f4e8;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .pd-check {
+    columns: 2;
+    column-gap: 12pt;
+    font-size: 9pt;
+    line-height: 1.8;
+    padding: 4pt 6pt;
+    border: 0.5pt solid #aaa;
+  }
+  .pd-check-item::before { content: "□　"; }
+  .pd-emergency {
+    border: 1.5pt solid #c00;
+    padding: 5pt 8pt;
+    font-size: 9pt;
+  }
+  .pd-emergency-label {
+    font-weight: 700;
+    color: #c00;
+    margin-bottom: 3pt;
+    font-size: 8.5pt;
+  }
+  .pd-footer {
+    text-align: center;
+    font-size: 8pt;
+    color: #666;
+    border-top: 0.5pt solid #aaa;
+    margin-top: 10pt;
+    padding-top: 5pt;
+  }
+
+  /* 画面表示用のsectionは非表示 */
+  .section { display: none !important; }
+  #printDoc { display: block !important; }
+}
 </style>
 </head>
 <body>
 
 <script>
-// ★ 大会詳細シートのCSV公開URL（スプレッドシートの「大会詳細」シートのgidで公開してください）
 const DETAIL_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHN9gczb9ynaiPe_yfZXXumYbHj_5jZQMQ0sAIXq_O_jPlTcuxUE1xHC6jLbkYuBX1sZk34y-8ots4/pub?gid=2871714&single=true&output=csv";
 
 const DCOL = {
-  date:          0,
-  name:          1,
-  venue:         2,
-  meetPlace:     3,
-  meetTime:      4,
-  itemsPersonal: 5,
-  itemsTeam:     6,
-  car:           7,  // 配車当番
-  fee:           8,
-  emergency:     9,
-  mapUrl:        10,
-  schedule:      11, // 日程（改行区切り）
-  members3:      12, // 参加生徒（3年）
-  members2:      13, // 参加生徒（2年）
-  members1:      14, // 参加生徒（1年）
+  date:0, name:1, venue:2, meetPlace:3, meetTime:4,
+  itemsPersonal:5, itemsTeam:6, car:7, fee:8,
+  emergency:9, mapUrl:10, schedule:11,
+  members3:12, members2:13, members1:14
 };
 </script>
 
 <header>
   <div class="header-inner">
     <a class="header-back" href="index.html">← 予定表</a>
-    <div class="header-title">大会詳細</div>
+    <div class="header-title">参加計画</div>
   </div>
 </header>
 
 <div id="heroArea"></div>
+
+<!-- PDF出力ボタン（データ読み込み後に表示） -->
+<div class="pdf-btn-wrap" id="pdfBtnWrap">
+  <button class="pdf-btn" onclick="printPDF()">🖨️ 参加計画をPDFで出力する</button>
+</div>
+
 <div class="main" id="mainArea">
   <div class="status-box"><div class="spinner"></div><div>読み込んでいます…</div></div>
 </div>
+
+<!-- 印刷専用ドキュメント（画面では非表示・印刷時のみ表示） -->
+<div id="printDoc" style="display:none"></div>
+
 <footer>© 土淵中ソフトテニス部</footer>
 
 <script>
@@ -100,12 +238,12 @@ function parseDate(str) {
   if (!str) return null;
   const m = str.match(/(\d{4}).(\d{1,2}).(\d{1,2})/);
   if (!m) return null;
-  const d = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]));
+  const d = new Date(parseInt(m[1]), parseInt(m[2])-1, parseInt(m[3]));
   return isNaN(d.getTime()) ? null : d;
 }
 
 function esc(s) {
-  return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
 function parseCSV(text) {
@@ -113,189 +251,246 @@ function parseCSV(text) {
   const lines = text.replace(/\r\n/g,"\n").replace(/\r/g,"\n").split("\n");
   for (const line of lines) {
     if (!line.trim()) continue;
-    const cols = []; let cur = "", inQ = false;
-    for (let i = 0; i < line.length; i++) {
-      const c = line[i];
-      if (c==='"'&&!inQ){inQ=true;}
+    const cols=[]; let cur="", inQ=false;
+    for (let i=0; i<line.length; i++) {
+      const c=line[i];
+      if(c==='"'&&!inQ){inQ=true;}
       else if(c==='"'&&inQ){if(line[i+1]==='"'){cur+='"';i++;}else inQ=false;}
       else if(c===','&&!inQ){cols.push(cur.trim());cur="";}
       else{cur+=c;}
     }
-    cols.push(cur.trim());
-    rows.push(cols);
+    cols.push(cur.trim()); rows.push(cols);
   }
   return rows;
 }
 
 async function fetchWithTimeout(url, ms) {
-  const ctrl = new AbortController();
-  const tid = setTimeout(function(){ctrl.abort();}, ms);
-  try { const r = await fetch(url,{signal:ctrl.signal}); clearTimeout(tid); return r; }
-  catch(e) { clearTimeout(tid); throw e; }
+  const ctrl=new AbortController();
+  const tid=setTimeout(function(){ctrl.abort();},ms);
+  try{const r=await fetch(url,{signal:ctrl.signal});clearTimeout(tid);return r;}
+  catch(e){clearTimeout(tid);throw e;}
 }
 
 async function getCSV(url) {
-  try {
-    const r = await fetchWithTimeout(url, 8000);
-    if (r.ok) { const t = await r.text(); if (t&&t.includes(",")) return t; }
-  } catch(e) { console.warn("direct:",e.message); }
-  const proxies = [
-    "https://corsproxy.io/?" + encodeURIComponent(url),
-    "https://api.allorigins.win/get?url=" + encodeURIComponent(url),
-  ];
-  for (const pu of proxies) {
-    try {
-      const r = await fetchWithTimeout(pu, 8000);
-      if (!r.ok) continue;
-      const t = await r.text();
-      try { const j=JSON.parse(t); if(j.contents&&j.contents.includes(",")) return j.contents; } catch(e){}
-      if (t&&t.includes(",")) return t;
-    } catch(e) { console.warn("proxy:",e.message); }
+  try{const r=await fetchWithTimeout(url,8000);if(r.ok){const t=await r.text();if(t&&t.includes(","))return t;}}catch(e){console.warn("direct:",e.message);}
+  const proxies=["https://corsproxy.io/?"+encodeURIComponent(url),"https://api.allorigins.win/get?url="+encodeURIComponent(url)];
+  for(const pu of proxies){
+    try{const r=await fetchWithTimeout(pu,8000);if(!r.ok)continue;const t=await r.text();
+    try{const j=JSON.parse(t);if(j.contents&&j.contents.includes(","))return j.contents;}catch(e){}
+    if(t&&t.includes(","))return t;}catch(e){console.warn("proxy:",e.message);}
   }
   throw new Error("データを取得できませんでした");
 }
 
 function buildChecklist(text) {
-  if (!text) return "";
-  const items = text.split(/[、,，\n]/).map(function(s){return s.trim();}).filter(Boolean);
-  return '<div class="checklist">' + items.map(function(item){
-    return '<div class="check-item">' + esc(item) + '</div>';
-  }).join("") + '</div>';
+  if(!text) return "";
+  const items=text.split(/[、,，\n]/).map(function(s){return s.trim();}).filter(Boolean);
+  return '<div class="checklist">'+items.map(function(item){return '<div class="check-item">'+esc(item)+'</div>';}).join("")+'</div>';
+}
+
+function buildTlParts(schedule) {
+  var parts=schedule.split(/(\d{1,2}[：:]\d{2})/);
+  var result=[];
+  if(parts.length<=1){result.push({time:"",label:schedule});}
+  else{
+    for(var ti=0;ti<parts.length;ti++){
+      var tp=parts[ti].trim();
+      if(!tp) continue;
+      if(/^\d{1,2}[：:]\d{2}$/.test(tp)){
+        var lbl=(parts[ti+1]||'').replace(/^[、,，\s]+/,'').replace(/[、,，\s]+$/,'').trim();
+        result.push({time:tp,label:lbl});
+        ti++;
+      }
+    }
+  }
+  return result;
 }
 
 function renderDetail(row) {
-  var date      = parseDate(row[DCOL.date]);
-  var dateStr   = date ? date.getFullYear() + "年" + (date.getMonth()+1) + "月" + date.getDate() + "日（" + DOW_JP[date.getDay()] + "）" : row[DCOL.date];
-  var name      = row[DCOL.name]          || "大会詳細";
-  var venue     = row[DCOL.venue]         || "";
-  var meetPlace = row[DCOL.meetPlace]     || "";
-  var meetTime  = row[DCOL.meetTime]      || "";
-  var itemsP    = row[DCOL.itemsPersonal] || "";
-  var itemsT    = row[DCOL.itemsTeam]     || "";
-  var car       = row[DCOL.car]           || "";
-  var fee       = row[DCOL.fee]           || "";
-  var emergency = row[DCOL.emergency]     || "";
-  var mapUrl    = row[DCOL.mapUrl]        || "";
-  var schedule  = row[DCOL.schedule]      || "";
-  var members3  = row[DCOL.members3]      || "";
-  var members2  = row[DCOL.members2]      || "";
-  var members1  = row[DCOL.members1]      || "";
+  var date     =parseDate(row[DCOL.date]);
+  var dateStr  =date?date.getFullYear()+"年"+(date.getMonth()+1)+"月"+date.getDate()+"日（"+DOW_JP[date.getDay()]+"）":row[DCOL.date];
+  var name     =row[DCOL.name]||"大会詳細";
+  var venue    =row[DCOL.venue]||"";
+  var meetPlace=row[DCOL.meetPlace]||"";
+  var meetTime =row[DCOL.meetTime]||"";
+  var itemsP   =row[DCOL.itemsPersonal]||"";
+  var itemsT   =row[DCOL.itemsTeam]||"";
+  var car      =row[DCOL.car]||"";
+  var fee      =row[DCOL.fee]||"";
+  var emergency=row[DCOL.emergency]||"";
+  var mapUrl   =row[DCOL.mapUrl]||"";
+  var schedule =row[DCOL.schedule]||"";
+  var members3 =row[DCOL.members3]||"";
+  var members2 =row[DCOL.members2]||"";
+  var members1 =row[DCOL.members1]||"";
+  var tlItems  =schedule?buildTlParts(schedule):[];
 
-  document.getElementById("heroArea").innerHTML =
-    '<div class="hero">'
-    + '<div class="hero-badge">🏆 大会</div>'
-    + '<div class="hero-name">' + esc(name) + '</div>'
-    + '<div class="hero-date">📅 ' + esc(dateStr) + '</div>'
-    + '</div>';
+  // ── ヒーロー（画面用）
+  document.getElementById("heroArea").innerHTML=
+    '<div class="hero"><div class="hero-badge">🏆 大会</div>'
+    +'<div class="hero-name">'+esc(name)+'</div>'
+    +'<div class="hero-date">📅 '+esc(dateStr)+'</div></div>';
 
-  var html = "";
+  // ── 画面用カード
+  var html="";
 
-  // ① 日程カード（集合場所・集合時間・日程タイムライン）
-  html += '<div class="section"><div class="section-header"><span class="section-icon">🕗</span><span class="section-title">日程</span></div><div class="section-body">';
-  if (meetPlace) html += '<div class="info-row"><div class="info-label">集合場所</div><div class="info-value">' + esc(meetPlace) + '</div></div>';
-  if (meetTime)  html += '<div class="info-row"><div class="info-label">集合時間</div><div class="info-value accent">' + esc(meetTime) + '</div></div>';
-  html += '<div class="info-row"><div class="info-label">解散時間</div><div class="info-value notice">終了次第、保護者LINEにてご連絡します</div></div>';
-  if (schedule) {
-    // 時刻(HH:MM or HH:MM)で文字列を分割してタイムライン生成
-    var tlParts = schedule.split(/(\d{1,2}[：:]\d{2})/);
-    html += '<div style="padding:8px 0 4px;font-size:.75rem;font-weight:700;color:var(--gray)">日程</div><div class="timeline">';
-    if (tlParts.length <= 1) {
-      html += '<div class="tl-row"><div class="tl-time"></div><div class="tl-label">' + esc(schedule) + '</div></div>';
-    } else {
-      for (var ti = 0; ti < tlParts.length; ti++) {
-        var tp = tlParts[ti].trim();
-        if (!tp) continue;
-        if (/^\d{1,2}[：:]\d{2}$/.test(tp)) {
-          var tlLabel = (tlParts[ti+1] || '').replace(/^[、,，\s]+/, '').replace(/[、,，\s]+$/, '').trim();
-          html += '<div class="tl-row"><div class="tl-time">' + esc(tp) + '</div><div class="tl-label">' + esc(tlLabel) + '</div></div>';
-          ti++;
-        }
-      }
+  // 日程カード
+  html+='<div class="section"><div class="section-header"><span class="section-icon">🕗</span><span class="section-title">日程</span></div><div class="section-body">';
+  if(meetPlace) html+='<div class="info-row"><div class="info-label">集合場所</div><div class="info-value">'+esc(meetPlace)+'</div></div>';
+  if(meetTime)  html+='<div class="info-row"><div class="info-label">集合時間</div><div class="info-value accent">'+esc(meetTime)+'</div></div>';
+  html+='<div class="info-row"><div class="info-label">解散時間</div><div class="info-value notice">終了次第、保護者LINEにてご連絡します</div></div>';
+  if(tlItems.length){
+    html+='<div style="padding:12px 0 4px;font-size:.75rem;font-weight:700;color:var(--gray);border-top:1px solid var(--border);margin-top:4px">日程</div><div class="timeline">';
+    tlItems.forEach(function(it){html+='<div class="tl-row"><div class="tl-time">'+esc(it.time)+'</div><div class="tl-label">'+esc(it.label)+'</div></div>';});
+    html+='</div>';
+  }
+  html+='</div></div>';
+
+  if(members3||members2||members1){
+    html+='<div class="section"><div class="section-header"><span class="section-icon">👥</span><span class="section-title">参加生徒</span></div><div class="section-body">';
+    if(members3) html+='<div class="info-row"><div class="info-label">3年</div><div class="info-value">'+esc(members3)+'</div></div>';
+    if(members2) html+='<div class="info-row"><div class="info-label">2年</div><div class="info-value">'+esc(members2)+'</div></div>';
+    if(members1) html+='<div class="info-row"><div class="info-label">1年</div><div class="info-value">'+esc(members1)+'</div></div>';
+    html+='</div></div>';
+  }
+  if(itemsP||itemsT){
+    html+='<div class="section"><div class="section-header"><span class="section-icon">🎒</span><span class="section-title">持ち物</span></div><div class="section-body">';
+    if(itemsP) html+='<div class="info-row"><div class="info-label">個人</div><div class="info-value">'+buildChecklist(itemsP)+'</div></div>';
+    if(itemsT) html+='<div class="info-row"><div class="info-label">チーム</div><div class="info-value">'+buildChecklist(itemsT)+'</div></div>';
+    html+='</div></div>';
+  }
+  if(car||fee){
+    html+='<div class="section"><div class="section-header"><span class="section-icon">🚗</span><span class="section-title">配車・費用</span></div><div class="section-body">';
+    if(car) html+='<div class="info-row"><div class="info-label">配車当番</div><div class="info-value">'+esc(car).replace(/\n/g,"<br>")+'</div></div>';
+    if(fee) html+='<div class="info-row"><div class="info-label">集金額</div><div class="info-value accent">'+esc(fee)+'</div></div>';
+    html+='</div></div>';
+  }
+  if(venue||mapUrl){
+    html+='<div class="section"><div class="section-header"><span class="section-icon">📍</span><span class="section-title">会場</span></div><div class="section-body">';
+    if(venue) html+='<div class="info-row"><div class="info-label">会場名</div><div class="info-value">'+esc(venue)+'</div></div>';
+    if(mapUrl) html+='<a class="map-btn" href="'+esc(mapUrl)+'" target="_blank">🗺️ Googleマップで開く</a>';
+    html+='</div></div>';
+  }
+  if(emergency){
+    html+='<div class="section"><div class="section-header"><span class="section-icon">📞</span><span class="section-title">緊急連絡先</span></div><div class="section-body"><div class="emergency-card"><div class="emergency-title">⚠️ 緊急時のみ</div><div class="emergency-value">'+esc(emergency).replace(/\n/g,"<br>")+'</div></div></div></div>';
+  }
+  document.getElementById("mainArea").innerHTML=html;
+
+  // ── 印刷用ドキュメント生成
+  var pd="";
+  pd+='<div class="pd-title-wrap">';
+  pd+='<div class="pd-title">大会参加計画</div>';
+  pd+='<div class="pd-subtitle">'+esc(name)+'　'+esc(dateStr)+'</div>';
+  pd+='</div>';
+  pd+='<div class="pd-meta"><span>土淵中学校ソフトテニス部</span><span>配布先：保護者各位</span></div>';
+
+  // 日程
+  pd+='<div class="pd-section"><div class="pd-section-title">■ 日程・集合</div>';
+  pd+='<table class="pd-table">';
+  if(meetPlace) pd+='<tr><td class="label">集合場所</td><td>'+esc(meetPlace)+'</td></tr>';
+  if(meetTime)  pd+='<tr><td class="label">集合時間</td><td class="accent">'+esc(meetTime)+'</td></tr>';
+  pd+='<tr><td class="label">解散時間</td><td class="notice">終了次第、保護者LINEにてご連絡します</td></tr>';
+  if(venue)     pd+='<tr><td class="label">会場</td><td>'+esc(venue)+'</td></tr>';
+  pd+='</table></div>';
+
+  // タイムライン
+  if(tlItems.length){
+    pd+='<div class="pd-section"><div class="pd-section-title">■ 当日日程</div>';
+    pd+='<table class="pd-tl">';
+    tlItems.forEach(function(it){
+      pd+='<tr><td class="time">'+esc(it.time)+'</td><td>'+esc(it.label)+'</td></tr>';
+    });
+    pd+='</table></div>';
+  }
+
+  // 参加生徒
+  if(members3||members2||members1){
+    pd+='<div class="pd-section"><div class="pd-section-title">■ 参加生徒</div>';
+    pd+='<table class="pd-table">';
+    if(members3) pd+='<tr><td class="label">3年</td><td>'+esc(members3)+'</td></tr>';
+    if(members2) pd+='<tr><td class="label">2年</td><td>'+esc(members2)+'</td></tr>';
+    if(members1) pd+='<tr><td class="label">1年</td><td>'+esc(members1)+'</td></tr>';
+    pd+='</table></div>';
+  }
+
+  // 持ち物
+  if(itemsP||itemsT){
+    pd+='<div class="pd-section"><div class="pd-section-title">■ 持ち物</div>';
+    if(itemsP){
+      var pItems=itemsP.split(/[、,，\n]/).map(function(s){return s.trim();}).filter(Boolean);
+      pd+='<div style="font-size:8.5pt;font-weight:700;padding:3pt 0 2pt;color:#444">【個人】</div>';
+      pd+='<div class="pd-check">';
+      pItems.forEach(function(it){pd+='<div class="pd-check-item">'+esc(it)+'</div>';});
+      pd+='</div>';
     }
-    html += '</div>';
-  }
-  html += '</div></div>';
-
-  // ② 参加生徒カード
-  if (members3 || members2 || members1) {
-    html += '<div class="section"><div class="section-header"><span class="section-icon">👥</span><span class="section-title">参加生徒</span></div><div class="section-body">';
-    if (members3) html += '<div class="info-row"><div class="info-label">3年</div><div class="info-value">' + esc(members3) + '</div></div>';
-    if (members2) html += '<div class="info-row"><div class="info-label">2年</div><div class="info-value">' + esc(members2) + '</div></div>';
-    if (members1) html += '<div class="info-row"><div class="info-label">1年</div><div class="info-value">' + esc(members1) + '</div></div>';
-    html += '</div></div>';
+    if(itemsT){
+      var tItems=itemsT.split(/[、,，\n]/).map(function(s){return s.trim();}).filter(Boolean);
+      pd+='<div style="font-size:8.5pt;font-weight:700;padding:4pt 0 2pt;color:#444">【チーム】</div>';
+      pd+='<div class="pd-check">';
+      tItems.forEach(function(it){pd+='<div class="pd-check-item">'+esc(it)+'</div>';});
+      pd+='</div>';
+    }
+    pd+='</div>';
   }
 
-  // ③ 持ち物カード
-  if (itemsP || itemsT) {
-    html += '<div class="section"><div class="section-header"><span class="section-icon">🎒</span><span class="section-title">持ち物</span></div><div class="section-body">';
-    if (itemsP) html += '<div class="info-row"><div class="info-label">個人</div><div class="info-value">' + buildChecklist(itemsP) + '</div></div>';
-    if (itemsT) html += '<div class="info-row"><div class="info-label">チーム</div><div class="info-value">' + buildChecklist(itemsT) + '</div></div>';
-    html += '</div></div>';
+  // 配車・費用
+  if(car||fee){
+    pd+='<div class="pd-section"><div class="pd-section-title">■ 配車・費用</div>';
+    pd+='<table class="pd-table">';
+    if(car) pd+='<tr><td class="label">配車当番</td><td>'+esc(car).replace(/\n/g,"<br>")+'</td></tr>';
+    if(fee) pd+='<tr><td class="label">集金額</td><td class="accent">'+esc(fee)+'</td></tr>';
+    pd+='</table></div>';
   }
 
-  // ④ 配車・費用カード
-  if (car || fee) {
-    html += '<div class="section"><div class="section-header"><span class="section-icon">🚗</span><span class="section-title">配車・費用</span></div><div class="section-body">';
-    if (car) html += '<div class="info-row"><div class="info-label">配車当番</div><div class="info-value">' + esc(car).replace(/\n/g,"<br>") + '</div></div>';
-    if (fee) html += '<div class="info-row"><div class="info-label">集金額</div><div class="info-value accent">' + esc(fee) + '</div></div>';
-    html += '</div></div>';
+  // 緊急連絡先
+  if(emergency){
+    pd+='<div class="pd-section"><div class="pd-section-title">■ 緊急連絡先</div>';
+    pd+='<div class="pd-emergency"><div class="pd-emergency-label">⚠️ 緊急時のみご使用ください</div>'+esc(emergency).replace(/\n/g,"<br>")+'</div></div>';
   }
 
-  // ⑤ 会場カード（会場名・マップボタンのみ）
-  if (venue || mapUrl) {
-    html += '<div class="section"><div class="section-header"><span class="section-icon">📍</span><span class="section-title">会場</span></div><div class="section-body">';
-    if (venue) html += '<div class="info-row"><div class="info-label">会場名</div><div class="info-value">' + esc(venue) + '</div></div>';
-    if (mapUrl) html += '<a class="map-btn" href="' + esc(mapUrl) + '" target="_blank">🗺️ Googleマップで開く</a>';
-    html += '</div></div>';
-  }
+  pd+='<div class="pd-footer">土淵中学校ソフトテニス部　保護者配布資料　印刷日：'+new Date().toLocaleDateString("ja-JP")+'</div>';
 
-  // ⑥ 緊急連絡先カード
-  if (emergency) {
-    html += '<div class="section"><div class="section-header"><span class="section-icon">📞</span><span class="section-title">緊急連絡先</span></div><div class="section-body"><div class="emergency-card"><div class="emergency-title">⚠️ 緊急時のみ</div><div class="emergency-value">' + esc(emergency).replace(/\n/g,"<br>") + '</div></div></div></div>';
-  }
+  document.getElementById("printDoc").innerHTML=pd;
+  document.getElementById("pdfBtnWrap").style.display="block";
+}
 
-  document.getElementById("mainArea").innerHTML = html;
+function printPDF() {
+  window.print();
+}
+
+function showNotFound(dateStr) {
+  document.getElementById("heroArea").innerHTML="";
+  document.getElementById("mainArea").innerHTML=
+    '<div class="not-found"><div class="not-found-icon">📋</div><div class="not-found-title">詳細情報がまだ登録されていません</div><div class="not-found-text">'+esc(dateStr)+' の参加計画は準備中です。</div></div>';
 }
 
 async function init() {
-  const params  = new URLSearchParams(window.location.search);
-  const dateKey = params.get("date") || "";
-
-  if (!dateKey) {
-    document.getElementById("mainArea").innerHTML =
-      '<div class="not-found"><div class="not-found-icon">❓</div><div class="not-found-title">大会が指定されていません</div><div class="not-found-text"><a href="index.html" style="color:var(--accent)">予定表に戻る</a></div></div>';
+  const params =new URLSearchParams(window.location.search);
+  const dateKey=params.get("date")||"";
+  if(!dateKey){
+    document.getElementById("mainArea").innerHTML='<div class="not-found"><div class="not-found-icon">❓</div><div class="not-found-title">大会が指定されていません</div><div class="not-found-text"><a href="index.html" style="color:var(--accent)">予定表に戻る</a></div></div>';
     return;
   }
-
-  if (!DETAIL_CSV_URL || DETAIL_CSV_URL.includes("ここに")) {
-    document.getElementById("mainArea").innerHTML =
-      '<div class="not-found"><div class="not-found-icon">⚙️</div><div class="not-found-title">DETAIL_CSV_URLを設定してください</div></div>';
-    return;
-  }
-
-  try {
-    const csv  = await getCSV(DETAIL_CSV_URL);
-    const rows = parseCSV(csv);
-    if (rows.length < 2) { showNotFound(dateKey); return; }
-
-    const found = rows.slice(1).find(function(r) {
-      const d = parseDate(r[DCOL.date]);
-      if (!d) return false;
-      const key = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
-      return key === dateKey;
+  try{
+    const csv=await getCSV(DETAIL_CSV_URL);
+    const rows=parseCSV(csv);
+    if(rows.length<2){showNotFound(dateKey);return;}
+    const found=rows.slice(1).find(function(r){
+      const d=parseDate(r[DCOL.date]);
+      if(!d) return false;
+      const key=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+      return key===dateKey;
     });
-
-    if (found) { renderDetail(found); }
-    else { showNotFound(dateKey); }
-
-  } catch(e) {
+    if(found){renderDetail(found);}
+    else{showNotFound(dateKey);}
+  }catch(e){
     console.error(e);
-    document.getElementById("mainArea").innerHTML =
-      '<div class="status-box"><div style="font-size:1.4rem;margin-bottom:8px">⚠️</div><div>データの取得に失敗しました</div><div style="font-size:.75rem;margin-top:8px;color:#e05252">' + esc(e.message) + '</div></div>';
+    document.getElementById("mainArea").innerHTML=
+      '<div class="status-box"><div style="font-size:1.4rem;margin-bottom:8px">⚠️</div><div>データの取得に失敗しました</div><div style="font-size:.75rem;margin-top:8px;color:#e05252">'+esc(e.message)+'</div></div>';
   }
 }
 
-window.addEventListener("DOMContentLoaded", init);
+window.addEventListener("DOMContentLoaded",init);
 </script>
 </body>
 </html>
