@@ -56,7 +56,6 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 .pdf-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:var(--navy);color:var(--white);border:none;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:opacity .15s}
 .pdf-btn:hover{opacity:.85}
 footer{text-align:center;padding:16px;font-size:.7rem;color:var(--gray);border-top:1px solid var(--border)}
-
 @media print {
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   header, .hero, .pdf-btn-wrap, footer { display: none !important; }
@@ -92,25 +91,42 @@ footer{text-align:center;padding:16px;font-size:.7rem;color:var(--gray);border-t
 <body>
 
 <script>
+// 大会詳細シートのCSV公開URL
 const DETAIL_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHN9gczb9ynaiPe_yfZXXumYbHj_5jZQMQ0sAIXq_O_jPlTcuxUE1xHC6jLbkYuBX1sZk34y-8ots4/pub?gid=2871714&single=true&output=csv";
 
-// ★ 修正1: A列に「id」を追加し、以降の列番号を+1ずつズラしました
-const DCOL = {
-  id:0,          // ★ A列: 予定ID
-  date:1,        // B列: 日付
-  pdfUrl:2,      // C列: PDF URL
-  name:3, venue:4, meetPlace:5, meetTime:6,
-  itemsPersonal:7, itemsTeam:8,
-  escort:9,      // J列: 引率
-  car:10, fee:11,
-  emergency:12, mapUrl:13, schedule:14,
-  members3:15, members2:16, members1:17,
-};
+// ヘッダー行の名前から自動で列を探す仕組みです
+let DCOL = {};
+function mapColumns(headerRow) {
+  const mapping = {
+    "予定ID": "id",
+    "日付": "date",
+    "PDF": "pdfUrl",
+    "大会名": "name",
+    "会場名": "venue",
+    "集合場所": "meetPlace",
+    "集合時間": "meetTime",
+    "個人持ち物": "itemsPersonal",
+    "チーム持ち物": "itemsTeam",
+    "引率": "escort",
+    "配車": "car",
+    "費用": "fee",
+    "緊急連絡先": "emergency",
+    "マップURL": "mapUrl",
+    "当日日程": "schedule",
+    "3年参加者": "members3",
+    "2年参加者": "members2",
+    "1年参加者": "members1"
+  };
+  headerRow.forEach((val, idx) => {
+    const key = mapping[val.trim()];
+    if (key) DCOL[key] = idx;
+  });
+}
 </script>
 
 <header>
   <div class="header-inner">
-    <a class="header-back" href="index.html">← 予定表</a>
+    <a class="header-back" href="?page=index">← 予定表</a>
     <div class="header-title">参加計画</div>
   </div>
 </header>
@@ -399,11 +415,10 @@ function showNotFound() {
 
 async function init() {
   const params = new URLSearchParams(window.location.search);
-  // ★ 修正2: URLから "date" ではなく "id" を取得
   const targetId = params.get("id") || "";
   
   if(!targetId){
-    document.getElementById("mainArea").innerHTML='<div class="not-found"><div class="not-found-icon">❓</div><div class="not-found-title">大会が指定されていません</div><div class="not-found-text"><a href="index.html" style="color:var(--accent)">予定表に戻る</a></div></div>';
+    document.getElementById("mainArea").innerHTML='<div class="not-found"><div class="not-found-icon">❓</div><div class="not-found-title">大会が指定されていません</div><div class="not-found-text"><a href="?page=index" style="color:var(--accent)">予定表に戻る</a></div></div>';
     return;
   }
   
@@ -412,7 +427,9 @@ async function init() {
     const rows=parseCSV(csv);
     if(rows.length<2){showNotFound();return;}
     
-    // ★ 修正3: 日付ではなく、A列(id)の完全一致でデータを検索
+    // ヘッダー行を見て列の場所を特定
+    mapColumns(rows[0]);
+    
     const found = rows.slice(1).find(function(r){
       return r[DCOL.id] === targetId; 
     });
