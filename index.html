@@ -136,11 +136,10 @@ footer{text-align:center;padding:16px;font-size:.7rem;color:var(--gray);border-t
 </head>
 <body>
 <script>
-// ★ 完全なURLをGASから受け取る
-const APP_URL = "<?= appUrl ?>";
-
+// スケジュールシートのCSV公開URL
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHN9gczb9ynaiPe_yfZXXumYbHj_5jZQMQ0sAIXq_O_jPlTcuxUE1xHC6jLbkYuBX1sZk34y-8ots4/pub?gid=0&single=true&output=csv";
 const CONFIG = { clubName: "土淵中ソフトテニス部", schoolName: "部活動予定" };
+// スケジュールシートの列番号（A列=0）
 const COL = { id:0, target:1, date:2, startTime:3, endTime:4, type:5, location:6, detail:8 };
 </script>
 
@@ -292,8 +291,8 @@ function buildCardHtml(item) {
   let detailBtn = "";
   if (type === "match" || type === "scrimmage") {
     if (item.id) {
-      // ★ APP_URL を使った完全なリンク
-      detailBtn = '<a href="' + APP_URL + '?page=tournament&id=' + encodeURIComponent(item.id) + '" target="_top" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:var(--red);color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 参加計画を見る</a>';
+      // ★ GitHub Pages用の直接リンク（純粋なファイル指定）
+      detailBtn = '<a href="tournament.html?id=' + encodeURIComponent(item.id) + '" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:var(--red);color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 参加計画を見る</a>';
     }
   }
   return '<div class="card ' + type + '"><div class="card-top">' + buildBadgesHtml(item) + '</div>' + buildMetaHtml(item,"card-meta") + detail + detailBtn + '</div>';
@@ -439,8 +438,8 @@ function renderList(items,today) {
     let listBtn = "";
     if(type==="match"||type==="scrimmage"){
       if(item.id){
-        // ★ APP_URL を使った完全なリンク
-        listBtn='<a href="' + APP_URL + '?page=tournament&id='+encodeURIComponent(item.id)+'" target="_top" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:#e05252;color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 参加計画を見る</a>';
+        // ★ GitHub Pages用の直接リンク
+        listBtn='<a href="tournament.html?id='+encodeURIComponent(item.id)+'" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:#e05252;color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 参加計画を見る</a>';
       }
     }
     
