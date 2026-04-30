@@ -112,8 +112,8 @@ function mapColumns(headerRow) {
 
 <header>
   <div class="header-inner">
-    <!-- ★ 完全なURLを使ってトップレベルで遷移 -->
-    <a class="header-back" href="<?= appUrl ?>?page=index" target="_top">← 予定表</a>
+    <!-- ★ GitHub Pages用の直接リンク -->
+    <a class="header-back" href="index.html">← 予定表</a>
     <div class="header-title">参加計画</div>
   </div>
 </header>
@@ -372,19 +372,19 @@ function printPDF() {
 function showNotFound() {
   document.getElementById("heroArea").innerHTML="";
   document.getElementById("mainArea").innerHTML=
-    '<div class="not-found"><div class="not-found-icon">📋</div><div class="not-found-title">詳細情報がまだ登録されていません</div><div class="not-found-text">この大会の参加計画は準備中です。</div><br><a href="<?= appUrl ?>?page=index" target="_top" style="color:var(--accent); font-weight:bold;">← 予定表に戻る</a></div>';
+    '<div class="not-found"><div class="not-found-icon">📋</div><div class="not-found-title">詳細情報がまだ登録されていません</div><div class="not-found-text">この大会の参加計画は準備中です。</div><br><a href="index.html" style="color:var(--accent); font-weight:bold;">← 予定表に戻る</a></div>';
 }
 
 function init() {
+  // ★ シンプルなURLパラメータの取得に戻しました
   const params = new URLSearchParams(window.location.search);
   const targetId = params.get("id") || "";
   
   if(!targetId){
-    document.getElementById("mainArea").innerHTML='<div class="not-found"><div class="not-found-icon">❓</div><div class="not-found-title">大会が指定されていません</div><div class="not-found-text"><a href="<?= appUrl ?>?page=index" target="_top" style="color:var(--accent)">予定表に戻る</a></div></div>';
+    document.getElementById("mainArea").innerHTML='<div class="not-found"><div class="not-found-icon">❓</div><div class="not-found-title">大会が指定されていません</div><div class="not-found-text"><a href="index.html" style="color:var(--accent)">予定表に戻る</a></div></div>';
     return;
   }
   
-  // getCSV自体はそのまま非同期で呼び出す
   getCSV(DETAIL_CSV_URL).then(function(csv) {
     const rows=parseCSV(csv);
     if(rows.length<2){showNotFound();return;}
