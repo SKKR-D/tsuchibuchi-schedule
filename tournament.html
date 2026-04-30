@@ -56,6 +56,7 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 .pdf-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:var(--navy);color:var(--white);border:none;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:opacity .15s}
 .pdf-btn:hover{opacity:.85}
 footer{text-align:center;padding:16px;font-size:.7rem;color:var(--gray);border-top:1px solid var(--border)}
+
 @media print {
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   header, .hero, .pdf-btn-wrap, footer { display: none !important; }
@@ -91,31 +92,16 @@ footer{text-align:center;padding:16px;font-size:.7rem;color:var(--gray);border-t
 <body>
 
 <script>
-// 大会詳細シートのCSV公開URL
 const DETAIL_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHN9gczb9ynaiPe_yfZXXumYbHj_5jZQMQ0sAIXq_O_jPlTcuxUE1xHC6jLbkYuBX1sZk34y-8ots4/pub?gid=2871714&single=true&output=csv";
 
-// ヘッダー行の名前から自動で列を探す仕組みです
 let DCOL = {};
 function mapColumns(headerRow) {
   const mapping = {
-    "予定ID": "id",
-    "日付": "date",
-    "PDF": "pdfUrl",
-    "大会名": "name",
-    "会場名": "venue",
-    "集合場所": "meetPlace",
-    "集合時間": "meetTime",
-    "個人持ち物": "itemsPersonal",
-    "チーム持ち物": "itemsTeam",
-    "引率": "escort",
-    "配車": "car",
-    "費用": "fee",
-    "緊急連絡先": "emergency",
-    "マップURL": "mapUrl",
-    "当日日程": "schedule",
-    "3年参加者": "members3",
-    "2年参加者": "members2",
-    "1年参加者": "members1"
+    "予定ID": "id", "日付": "date", "PDF": "pdfUrl", "大会名": "name", "会場名": "venue",
+    "集合場所": "meetPlace", "集合時間": "meetTime", "個人持ち物": "itemsPersonal",
+    "チーム持ち物": "itemsTeam", "引率": "escort", "配車": "car", "費用": "fee",
+    "緊急連絡先": "emergency", "マップURL": "mapUrl", "当日日程": "schedule",
+    "3年参加者": "members3", "2年参加者": "members2", "1年参加者": "members1"
   };
   headerRow.forEach((val, idx) => {
     const key = mapping[val.trim()];
@@ -126,7 +112,8 @@ function mapColumns(headerRow) {
 
 <header>
   <div class="header-inner">
-    <a class="header-back" href="?page=index">← 予定表</a>
+    <!-- ★ 完全なURLを使ってトップレベルで遷移 -->
+    <a class="header-back" href="<?= appUrl ?>?page=index" target="_top">← 予定表</a>
     <div class="header-title">参加計画</div>
   </div>
 </header>
@@ -156,9 +143,7 @@ function parseDate(str) {
   return isNaN(d.getTime()) ? null : d;
 }
 
-function esc(s) {
-  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-}
+function esc(s) { return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
 function parseCSV(text) {
   const rows = [];
@@ -310,13 +295,9 @@ function renderDetail(row) {
   var pd="";
   pd+='<div style="font-size:9pt;margin-bottom:1pt;">保護者各位</div>';
   pd+='<div style="font-size:9pt;text-align:right;margin-bottom:6pt;">土淵中学校ソフトテニス部</div>';
-  pd+='<div class="pd-title-wrap">';
-  pd+='<div class="pd-title">大会参加計画</div>';
-  pd+='<div class="pd-subtitle">'+esc(name)+'　'+esc(dateStr)+'</div>';
-  pd+='</div>';
-
-  pd+='<div class="pd-section"><div class="pd-section-title">■ 日程・集合</div>';
-  pd+='<table class="pd-table">';
+  pd+='<div class="pd-title-wrap"><div class="pd-title">大会参加計画</div><div class="pd-subtitle">'+esc(name)+'　'+esc(dateStr)+'</div></div>';
+  
+  pd+='<div class="pd-section"><div class="pd-section-title">■ 日程・集合</div><table class="pd-table">';
   if(meetPlace) pd+='<tr><td class="label">集合場所</td><td>'+esc(meetPlace)+'</td></tr>';
   if(meetTime)  pd+='<tr><td class="label">集合時間</td><td class="accent">'+esc(meetTime)+'</td></tr>';
   pd+='<tr><td class="label">解散時間</td><td class="notice">終了次第、保護者LINEにてご連絡します</td></tr>';
@@ -324,17 +305,13 @@ function renderDetail(row) {
   pd+='</table></div>';
 
   if(tlItems.length){
-    pd+='<div class="pd-section"><div class="pd-section-title">■ 当日日程</div>';
-    pd+='<table class="pd-tl">';
-    tlItems.forEach(function(it){
-      pd+='<tr><td class="time">'+esc(it.time)+'</td><td>'+esc(it.label)+'</td></tr>';
-    });
+    pd+='<div class="pd-section"><div class="pd-section-title">■ 当日日程</div><table class="pd-tl">';
+    tlItems.forEach(function(it){ pd+='<tr><td class="time">'+esc(it.time)+'</td><td>'+esc(it.label)+'</td></tr>'; });
     pd+='</table></div>';
   }
 
   if(members3||members2||members1){
-    pd+='<div class="pd-section"><div class="pd-section-title">■ 参加生徒</div>';
-    pd+='<table class="pd-table">';
+    pd+='<div class="pd-section"><div class="pd-section-title">■ 参加生徒</div><table class="pd-table">';
     if(members3) pd+='<tr><td class="label">3年</td><td>'+esc(members3)+'</td></tr>';
     if(members2) pd+='<tr><td class="label">2年</td><td>'+esc(members2)+'</td></tr>';
     if(members1) pd+='<tr><td class="label">1年</td><td>'+esc(members1)+'</td></tr>';
@@ -345,41 +322,33 @@ function renderDetail(row) {
     pd+='<div class="pd-section"><div class="pd-section-title">■ 持ち物</div>';
     if(itemsP){
       var pItems=itemsP.split(/[、,，\n]/).map(function(s){return s.trim();}).filter(Boolean);
-      pd+='<div style="font-size:8.5pt;font-weight:700;padding:3pt 0 2pt;color:#444">【個人】</div>';
-      pd+='<div class="pd-check">';
-      pItems.forEach(function(it){pd+='<div class="pd-check-item">'+esc(it)+'</div>';});
-      pd+='</div>';
+      pd+='<div style="font-size:8.5pt;font-weight:700;padding:3pt 0 2pt;color:#444">【個人】</div><div class="pd-check">';
+      pItems.forEach(function(it){pd+='<div class="pd-check-item">'+esc(it)+'</div>';}); pd+='</div>';
     }
     if(itemsT){
       var tItems=itemsT.split(/[、,，\n]/).map(function(s){return s.trim();}).filter(Boolean);
-      pd+='<div style="font-size:8.5pt;font-weight:700;padding:4pt 0 2pt;color:#444">【チーム】</div>';
-      pd+='<div class="pd-check">';
-      tItems.forEach(function(it){pd+='<div class="pd-check-item">'+esc(it)+'</div>';});
-      pd+='</div>';
+      pd+='<div style="font-size:8.5pt;font-weight:700;padding:4pt 0 2pt;color:#444">【チーム】</div><div class="pd-check">';
+      tItems.forEach(function(it){pd+='<div class="pd-check-item">'+esc(it)+'</div>';}); pd+='</div>';
     }
     pd+='</div>';
   }
 
   if(escort){
-    pd+='<div class="pd-section"><div class="pd-section-title">■ 引率</div>';
-    pd+='<table class="pd-table"><tr><td class="label">引率者</td><td>'+esc(escort).replace(/\n/g,"<br>")+'</td></tr></table></div>';
+    pd+='<div class="pd-section"><div class="pd-section-title">■ 引率</div><table class="pd-table"><tr><td class="label">引率者</td><td>'+esc(escort).replace(/\n/g,"<br>")+'</td></tr></table></div>';
   }
 
   if(car||fee){
-    pd+='<div class="pd-section"><div class="pd-section-title">■ 配車・費用</div>';
-    pd+='<table class="pd-table">';
+    pd+='<div class="pd-section"><div class="pd-section-title">■ 配車・費用</div><table class="pd-table">';
     if(car) pd+='<tr><td class="label">配車当番</td><td>'+esc(car).replace(/\n/g,"<br>")+'</td></tr>';
     if(fee) pd+='<tr><td class="label">集金額</td><td class="accent">'+esc(fee)+'</td></tr>';
     pd+='</table></div>';
   }
 
   if(emergency){
-    pd+='<div class="pd-section"><div class="pd-section-title">■ 緊急連絡先</div>';
-    pd+='<div class="pd-emergency"><div class="pd-emergency-label">⚠️ 緊急時のみご使用ください</div>'+esc(emergency).replace(/\n/g,"<br>")+'</div></div>';
+    pd+='<div class="pd-section"><div class="pd-section-title">■ 緊急連絡先</div><div class="pd-emergency"><div class="pd-emergency-label">⚠️ 緊急時のみご使用ください</div>'+esc(emergency).replace(/\n/g,"<br>")+'</div></div>';
   }
 
   pd+='<div class="pd-footer">土淵中学校ソフトテニス部　保護者配布資料　印刷日：'+new Date().toLocaleDateString("ja-JP")+'</div>';
-
   document.getElementById("printDoc").innerHTML=pd;
   document.getElementById("pdfBtnWrap").style.display="block";
 }
@@ -387,10 +356,8 @@ function renderDetail(row) {
 function printPDF() {
   var doc = document.getElementById("printDoc");
   if (doc) {
-    doc.style.transform = "";
-    doc.style.fontSize  = "";
-    var contentH = doc.scrollHeight;
-    var a4H = 1050;
+    doc.style.transform = ""; doc.style.fontSize  = "";
+    var contentH = doc.scrollHeight, a4H = 1050;
     if (contentH > a4H) {
       var scale = a4H / contentH;
       doc.style.transform = "scale(" + scale.toFixed(3) + ")";
@@ -399,35 +366,29 @@ function printPDF() {
     }
   }
   window.print();
-  setTimeout(function() {
-    if (doc) {
-      doc.style.transform = "";
-      doc.style.width = "";
-    }
-  }, 1000);
+  setTimeout(function() { if(doc){ doc.style.transform = ""; doc.style.width = ""; } }, 1000);
 }
 
 function showNotFound() {
   document.getElementById("heroArea").innerHTML="";
   document.getElementById("mainArea").innerHTML=
-    '<div class="not-found"><div class="not-found-icon">📋</div><div class="not-found-title">詳細情報がまだ登録されていません</div><div class="not-found-text">この大会の参加計画は準備中です。</div></div>';
+    '<div class="not-found"><div class="not-found-icon">📋</div><div class="not-found-title">詳細情報がまだ登録されていません</div><div class="not-found-text">この大会の参加計画は準備中です。</div><br><a href="<?= appUrl ?>?page=index" target="_top" style="color:var(--accent); font-weight:bold;">← 予定表に戻る</a></div>';
 }
 
-async function init() {
+function init() {
   const params = new URLSearchParams(window.location.search);
   const targetId = params.get("id") || "";
   
   if(!targetId){
-    document.getElementById("mainArea").innerHTML='<div class="not-found"><div class="not-found-icon">❓</div><div class="not-found-title">大会が指定されていません</div><div class="not-found-text"><a href="?page=index" style="color:var(--accent)">予定表に戻る</a></div></div>';
+    document.getElementById("mainArea").innerHTML='<div class="not-found"><div class="not-found-icon">❓</div><div class="not-found-title">大会が指定されていません</div><div class="not-found-text"><a href="<?= appUrl ?>?page=index" target="_top" style="color:var(--accent)">予定表に戻る</a></div></div>';
     return;
   }
   
-  try{
-    const csv=await getCSV(DETAIL_CSV_URL);
+  // getCSV自体はそのまま非同期で呼び出す
+  getCSV(DETAIL_CSV_URL).then(function(csv) {
     const rows=parseCSV(csv);
     if(rows.length<2){showNotFound();return;}
     
-    // ヘッダー行を見て列の場所を特定
     mapColumns(rows[0]);
     
     const found = rows.slice(1).find(function(r){
@@ -436,11 +397,11 @@ async function init() {
     
     if(found){renderDetail(found);}
     else{showNotFound();}
-  }catch(e){
+  }).catch(function(e) {
     console.error(e);
     document.getElementById("mainArea").innerHTML=
       '<div class="status-box"><div style="font-size:1.4rem;margin-bottom:8px">⚠️</div><div>データの取得に失敗しました</div><div style="font-size:.75rem;margin-top:8px;color:#e05252">'+esc(e.message)+'</div></div>';
-  }
+  });
 }
 
 window.addEventListener("DOMContentLoaded",init);
