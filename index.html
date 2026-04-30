@@ -35,7 +35,6 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 .sec-line{width:4px;height:20px;background:var(--accent);border-radius:2px}
 .sec-title{font-family:'Oswald',sans-serif;font-size:.95rem;letter-spacing:.08em;color:var(--navy)}
 
-/* ★復活：ボタンのスタイル */
 .btn-wrap{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
 .btn{flex:1;padding:12px;text-align:center;border-radius:8px;text-decoration:none;font-weight:bold;color:white;box-shadow:0 2px 4px rgba(0,0,0,0.1);min-width:140px;}
 .btn-absence{background-color:#e53935;}
@@ -137,10 +136,11 @@ footer{text-align:center;padding:16px;font-size:.7rem;color:var(--gray);border-t
 </head>
 <body>
 <script>
-// スケジュールシートのCSV公開URL
+// ★ 完全なURLをGASから受け取る
+const APP_URL = "<?= appUrl ?>";
+
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHN9gczb9ynaiPe_yfZXXumYbHj_5jZQMQ0sAIXq_O_jPlTcuxUE1xHC6jLbkYuBX1sZk34y-8ots4/pub?gid=0&single=true&output=csv";
 const CONFIG = { clubName: "土淵中ソフトテニス部", schoolName: "部活動予定" };
-// スケジュールシートの列番号（A列=0）
 const COL = { id:0, target:1, date:2, startTime:3, endTime:4, type:5, location:6, detail:8 };
 </script>
 
@@ -173,7 +173,7 @@ const COL = { id:0, target:1, date:2, startTime:3, endTime:4, type:5, location:6
 </div>
 
 <div class="main">
-  <!-- ★修正：準備中のボタン（押せない状態） -->
+  <!-- 準備中のボタン -->
   <div class="btn-wrap">
     <span class="btn-disabled">📝 欠席・遅刻連絡<span class="btn-disabled-tag">準備中</span></span>
     <span class="btn-disabled">🚗 配車連絡<span class="btn-disabled-tag">準備中</span></span>
@@ -292,7 +292,8 @@ function buildCardHtml(item) {
   let detailBtn = "";
   if (type === "match" || type === "scrimmage") {
     if (item.id) {
-      detailBtn = '<a href="?page=tournament&id=' + encodeURIComponent(item.id) + '" target="_top" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:var(--red);color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 参加計画を見る</a>';
+      // ★ APP_URL を使った完全なリンク
+      detailBtn = '<a href="' + APP_URL + '?page=tournament&id=' + encodeURIComponent(item.id) + '" target="_top" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:var(--red);color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 参加計画を見る</a>';
     }
   }
   return '<div class="card ' + type + '"><div class="card-top">' + buildBadgesHtml(item) + '</div>' + buildMetaHtml(item,"card-meta") + detail + detailBtn + '</div>';
@@ -438,8 +439,8 @@ function renderList(items,today) {
     let listBtn = "";
     if(type==="match"||type==="scrimmage"){
       if(item.id){
-        // ★修正：target="_top" を追加し、GASのフレーム内で正しく遷移させる
-        listBtn='<a href="?page=tournament&id='+encodeURIComponent(item.id)+'" target="_top" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:#e05252;color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 参加計画を見る</a>';
+        // ★ APP_URL を使った完全なリンク
+        listBtn='<a href="' + APP_URL + '?page=tournament&id='+encodeURIComponent(item.id)+'" target="_top" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:#e05252;color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 参加計画を見る</a>';
       }
     }
     
