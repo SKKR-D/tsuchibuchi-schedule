@@ -34,10 +34,15 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 .sec-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;margin-top:24px}
 .sec-line{width:4px;height:20px;background:var(--accent);border-radius:2px}
 .sec-title{font-family:'Oswald',sans-serif;font-size:.95rem;letter-spacing:.08em;color:var(--navy)}
+
+/* ★復活：ボタンのスタイル */
 .btn-wrap{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
 .btn{flex:1;padding:12px;text-align:center;border-radius:8px;text-decoration:none;font-weight:bold;color:white;box-shadow:0 2px 4px rgba(0,0,0,0.1);min-width:140px;}
 .btn-absence{background-color:#e53935;}
 .btn-car{background-color:#43a047;}
+.btn-disabled{display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border-radius:10px;font-size:.88rem;font-weight:700;flex:1;min-width:160px;justify-content:center;background:#c8cdd6;color:#fff;cursor:not-allowed;pointer-events:none}
+.btn-disabled-tag{font-size:.68rem;background:rgba(255,255,255,.3);padding:2px 7px;border-radius:4px}
+
 .status-box{background:var(--white);border-radius:12px;padding:40px 20px;text-align:center;color:var(--gray);font-size:.88rem;box-shadow:0 2px 10px rgba(10,22,40,.07)}
 .spinner{display:inline-block;width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:10px}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -168,9 +173,10 @@ const COL = { id:0, target:1, date:2, startTime:3, endTime:4, type:5, location:6
 </div>
 
 <div class="main">
+  <!-- ★修正：準備中のボタン（押せない状態） -->
   <div class="btn-wrap">
-    <a href="https://forms.gle/sULJ2UHrmPrkexod7" class="btn btn-absence">👉 欠席連絡</a>
-    <a href="https://forms.gle/bL6mk8GrcuC3Gyvg6" class="btn btn-car">👉 配車連絡</a>
+    <span class="btn-disabled">📝 欠席・遅刻連絡<span class="btn-disabled-tag">準備中</span></span>
+    <span class="btn-disabled">🚗 配車連絡<span class="btn-disabled-tag">準備中</span></span>
   </div>
 
   <div class="sec-head">
@@ -286,7 +292,7 @@ function buildCardHtml(item) {
   let detailBtn = "";
   if (type === "match" || type === "scrimmage") {
     if (item.id) {
-      detailBtn = '<a href="?page=tournament&id=' + encodeURIComponent(item.id) + '" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:var(--red);color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 参加計画を見る</a>';
+      detailBtn = '<a href="?page=tournament&id=' + encodeURIComponent(item.id) + '" target="_top" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:var(--red);color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 参加計画を見る</a>';
     }
   }
   return '<div class="card ' + type + '"><div class="card-top">' + buildBadgesHtml(item) + '</div>' + buildMetaHtml(item,"card-meta") + detail + detailBtn + '</div>';
@@ -432,7 +438,8 @@ function renderList(items,today) {
     let listBtn = "";
     if(type==="match"||type==="scrimmage"){
       if(item.id){
-        listBtn='<a href="?page=tournament&id='+encodeURIComponent(item.id)+'" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:#e05252;color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 参加計画を見る</a>';
+        // ★修正：target="_top" を追加し、GASのフレーム内で正しく遷移させる
+        listBtn='<a href="?page=tournament&id='+encodeURIComponent(item.id)+'" target="_top" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:9px 16px;background:#e05252;color:#fff;border-radius:8px;font-size:.82rem;font-weight:700;text-decoration:none;">🏆 参加計画を見る</a>';
       }
     }
     
