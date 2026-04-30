@@ -52,158 +52,40 @@ header{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px
 .tl-row:last-child{border-bottom:none}
 .tl-time{font-family:'Oswald',sans-serif;font-size:.9rem;font-weight:600;color:var(--accent);min-width:52px;flex-shrink:0;padding-top:1px}
 .tl-label{font-size:.86rem;color:var(--text);line-height:1.5}
-
-/* PDF出力ボタン */
 .pdf-btn-wrap{max-width:760px;margin:0 auto;padding:0 16px 16px;display:none}
 .pdf-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;background:var(--navy);color:var(--white);border:none;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:opacity .15s}
 .pdf-btn:hover{opacity:.85}
-
 footer{text-align:center;padding:16px;font-size:.7rem;color:var(--gray);border-top:1px solid var(--border)}
 
-/* ══════════════════════════════════
-   印刷・PDF用スタイル
-   ══════════════════════════════════ */
 @media print {
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-
-  /* 画面用UI要素を非表示 */
   header, .hero, .pdf-btn-wrap, footer { display: none !important; }
-
   body { background: #fff; font-family: 'Noto Sans JP', serif; color: #000; font-size: 9.5pt; }
   .main { max-width: 100%; padding: 0; margin: 0; }
   .section { box-shadow: none; border-radius: 0; margin-bottom: 0; border: none; page-break-inside: avoid; }
-
-  /* 行政文書スタイルの本体 */
-  #printDoc {
-    display: block !important;
-    width: 100%;
-    padding: 10mm 15mm;
-    font-family: 'Noto Sans JP', sans-serif;
-  }
-
-  .pd-title-wrap {
-    text-align: center;
-    border-bottom: 2.5pt solid #000;
-    padding-bottom: 6pt;
-    margin-bottom: 10pt;
-  }
-  .pd-title {
-    font-size: 16pt;
-    font-weight: 700;
-    letter-spacing: .1em;
-  }
-  .pd-subtitle {
-    font-size: 10pt;
-    margin-top: 3pt;
-    color: #333;
-  }
-  .pd-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 9pt;
-    margin-bottom: 10pt;
-    color: #444;
-  }
-  .pd-section {
-    margin-bottom: 8pt;
-    page-break-inside: avoid;
-  }
-  .pd-section-title {
-    font-size: 10pt;
-    font-weight: 700;
-    background: #1e2a3a;
-    color: #fff;
-    padding: 3pt 8pt;
-    margin-bottom: 0;
-  }
-  .pd-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 9pt;
-  }
-  .pd-table td {
-    border: 0.5pt solid #aaa;
-    padding: 4pt 6pt;
-    vertical-align: top;
-    line-height: 1.5;
-  }
-  .pd-table td.label {
-    background: #f4f4f4;
-    font-weight: 700;
-    width: 22%;
-    white-space: nowrap;
-  }
-  .pd-table td.accent {
-    color: #c00;
-    font-weight: 700;
-  }
-  .pd-table td.notice {
-    color: #666;
-    font-style: italic;
-    font-size: 8.5pt;
-  }
-  .pd-tl {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 9pt;
-  }
-  .pd-tl td {
-    border: 0.5pt solid #aaa;
-    padding: 3pt 6pt;
-    vertical-align: top;
-    line-height: 1.5;
-  }
-  .pd-tl td.time {
-    font-weight: 700;
-    width: 14%;
-    background: #f9f4e8;
-    text-align: center;
-    white-space: nowrap;
-  }
-  .pd-check {
-    columns: 2;
-    column-gap: 12pt;
-    font-size: 9pt;
-    line-height: 1.8;
-    padding: 4pt 6pt;
-    border: 0.5pt solid #aaa;
-  }
+  #printDoc { display: block !important; width: 100%; padding: 10mm 15mm; font-family: 'Noto Sans JP', sans-serif; }
+  .pd-title-wrap { text-align: center; border-bottom: 2.5pt solid #000; padding-bottom: 6pt; margin-bottom: 10pt; }
+  .pd-title { font-size: 16pt; font-weight: 700; letter-spacing: .1em; }
+  .pd-subtitle { font-size: 10pt; margin-top: 3pt; color: #333; }
+  .pd-meta { display: flex; justify-content: space-between; font-size: 9pt; margin-bottom: 10pt; color: #444; }
+  .pd-section { margin-bottom: 8pt; page-break-inside: avoid; }
+  .pd-section-title { font-size: 10pt; font-weight: 700; background: #1e2a3a; color: #fff; padding: 3pt 8pt; margin-bottom: 0; }
+  .pd-table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+  .pd-table td { border: 0.5pt solid #aaa; padding: 4pt 6pt; vertical-align: top; line-height: 1.5; }
+  .pd-table td.label { background: #f4f4f4; font-weight: 700; width: 22%; white-space: nowrap; }
+  .pd-table td.accent { color: #c00; font-weight: 700; }
+  .pd-table td.notice { color: #666; font-style: italic; font-size: 8.5pt; }
+  .pd-tl { width: 100%; border-collapse: collapse; font-size: 9pt; }
+  .pd-tl td { border: 0.5pt solid #aaa; padding: 3pt 6pt; vertical-align: top; line-height: 1.5; }
+  .pd-tl td.time { font-weight: 700; width: 14%; background: #f9f4e8; text-align: center; white-space: nowrap; }
+  .pd-check { columns: 2; column-gap: 12pt; font-size: 9pt; line-height: 1.8; padding: 4pt 6pt; border: 0.5pt solid #aaa; }
   .pd-check-item::before { content: "□　"; }
-  .pd-emergency {
-    border: 1.5pt solid #c00;
-    padding: 5pt 8pt;
-    font-size: 9pt;
-  }
-  .pd-emergency-label {
-    font-weight: 700;
-    color: #c00;
-    margin-bottom: 3pt;
-    font-size: 8.5pt;
-  }
-  .pd-footer {
-    text-align: center;
-    font-size: 8pt;
-    color: #666;
-    border-top: 0.5pt solid #aaa;
-    margin-top: 10pt;
-    padding-top: 5pt;
-  }
-
-  /* A4 1ページに自動フィット */
-  @page {
-    size: A4 portrait;
-    margin: 0;
-  }
-  #printDoc {
-    width: 210mm;
-    min-height: 297mm;
-    padding: 8mm 12mm;
-    transform-origin: top left;
-  }
-
-  /* 画面表示用のsectionは非表示 */
+  .pd-emergency { border: 1.5pt solid #c00; padding: 5pt 8pt; font-size: 9pt; }
+  .pd-emergency-label { font-weight: 700; color: #c00; margin-bottom: 3pt; font-size: 8.5pt; }
+  .pd-footer { text-align: center; font-size: 8pt; color: #666; border-top: 0.5pt solid #aaa; margin-top: 10pt; padding-top: 5pt; }
+  @page { size: A4 portrait; margin: 0; }
+  #printDoc { width: 210mm; min-height: 297mm; padding: 8mm 12mm; transform-origin: top left; }
   .section { display: none !important; }
-  #printDoc { display: block !important; }
 }
 </style>
 </head>
@@ -212,15 +94,17 @@ footer{text-align:center;padding:16px;font-size:.7rem;color:var(--gray);border-t
 <script>
 const DETAIL_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHN9gczb9ynaiPe_yfZXXumYbHj_5jZQMQ0sAIXq_O_jPlTcuxUE1xHC6jLbkYuBX1sZk34y-8ots4/pub?gid=2871714&single=true&output=csv";
 
+// ★ 修正1: A列に「id」を追加し、以降の列番号を+1ずつズラしました
 const DCOL = {
-  date:0,
-  pdfUrl:1,      // PDF URL（B列）
-  name:2, venue:3, meetPlace:4, meetTime:5,
-  itemsPersonal:6, itemsTeam:7,
-  escort:8,      // 引率
-  car:9, fee:10,
-  emergency:11, mapUrl:12, schedule:13,
-  members3:14, members2:15, members1:16,
+  id:0,          // ★ A列: 予定ID
+  date:1,        // B列: 日付
+  pdfUrl:2,      // C列: PDF URL
+  name:3, venue:4, meetPlace:5, meetTime:6,
+  itemsPersonal:7, itemsTeam:8,
+  escort:9,      // J列: 引率
+  car:10, fee:11,
+  emergency:12, mapUrl:13, schedule:14,
+  members3:15, members2:16, members1:17,
 };
 </script>
 
@@ -233,7 +117,6 @@ const DCOL = {
 
 <div id="heroArea"></div>
 
-<!-- PDF出力ボタン（データ読み込み後に表示） -->
 <div class="pdf-btn-wrap" id="pdfBtnWrap">
   <button class="pdf-btn" onclick="printPDF()">🖨️ 参加計画をPDFで出力する</button>
 </div>
@@ -242,7 +125,6 @@ const DCOL = {
   <div class="status-box"><div class="spinner"></div><div>読み込んでいます…</div></div>
 </div>
 
-<!-- 印刷専用ドキュメント（画面では非表示・印刷時のみ表示） -->
 <div id="printDoc" style="display:none"></div>
 
 <footer>© 土淵中ソフトテニス部</footer>
@@ -341,17 +223,15 @@ function renderDetail(row) {
   var members2 =row[DCOL.members2]||"";
   var members1 =row[DCOL.members1]||"";
   var pdfUrl   =row[DCOL.pdfUrl]||"";
-  // GoogleドライブのURLを埋め込み用に変換（/view→/preview）
+  
   if(pdfUrl) pdfUrl=pdfUrl.replace(/\/view(\?.*)?$/, "/preview");
   var tlItems  =schedule?buildTlParts(schedule):[];
 
-  // ── ヒーロー（画面用）
   document.getElementById("heroArea").innerHTML=
     '<div class="hero"><div class="hero-badge">🏆 大会</div>'
     +'<div class="hero-name">'+esc(name)+'</div>'
     +'<div class="hero-date">📅 '+esc(dateStr)+'</div></div>';
 
-  // ── PDF URLがある場合はiframeで全画面表示
   if(pdfUrl) {
     document.getElementById("mainArea").innerHTML=
       '<div style="width:100%;height:calc(100vh - 120px);">'
@@ -363,10 +243,8 @@ function renderDetail(row) {
     return;
   }
 
-  // ── 画面用カード
   var html="";
 
-  // 日程カード
   html+='<div class="section"><div class="section-header"><span class="section-icon">🕗</span><span class="section-title">日程</span></div><div class="section-body">';
   if(meetPlace) html+='<div class="info-row"><div class="info-label">集合場所</div><div class="info-value">'+esc(meetPlace)+'</div></div>';
   if(meetTime)  html+='<div class="info-row"><div class="info-label">集合時間</div><div class="info-value accent">'+esc(meetTime)+'</div></div>';
@@ -413,7 +291,6 @@ function renderDetail(row) {
   }
   document.getElementById("mainArea").innerHTML=html;
 
-  // ── 印刷用ドキュメント生成
   var pd="";
   pd+='<div style="font-size:9pt;margin-bottom:1pt;">保護者各位</div>';
   pd+='<div style="font-size:9pt;text-align:right;margin-bottom:6pt;">土淵中学校ソフトテニス部</div>';
@@ -422,7 +299,6 @@ function renderDetail(row) {
   pd+='<div class="pd-subtitle">'+esc(name)+'　'+esc(dateStr)+'</div>';
   pd+='</div>';
 
-  // 日程
   pd+='<div class="pd-section"><div class="pd-section-title">■ 日程・集合</div>';
   pd+='<table class="pd-table">';
   if(meetPlace) pd+='<tr><td class="label">集合場所</td><td>'+esc(meetPlace)+'</td></tr>';
@@ -431,7 +307,6 @@ function renderDetail(row) {
   if(venue)     pd+='<tr><td class="label">会場</td><td>'+esc(venue)+'</td></tr>';
   pd+='</table></div>';
 
-  // タイムライン
   if(tlItems.length){
     pd+='<div class="pd-section"><div class="pd-section-title">■ 当日日程</div>';
     pd+='<table class="pd-tl">';
@@ -441,7 +316,6 @@ function renderDetail(row) {
     pd+='</table></div>';
   }
 
-  // 参加生徒
   if(members3||members2||members1){
     pd+='<div class="pd-section"><div class="pd-section-title">■ 参加生徒</div>';
     pd+='<table class="pd-table">';
@@ -451,7 +325,6 @@ function renderDetail(row) {
     pd+='</table></div>';
   }
 
-  // 持ち物
   if(itemsP||itemsT){
     pd+='<div class="pd-section"><div class="pd-section-title">■ 持ち物</div>';
     if(itemsP){
@@ -471,13 +344,11 @@ function renderDetail(row) {
     pd+='</div>';
   }
 
-  // 引率
   if(escort){
     pd+='<div class="pd-section"><div class="pd-section-title">■ 引率</div>';
     pd+='<table class="pd-table"><tr><td class="label">引率者</td><td>'+esc(escort).replace(/\n/g,"<br>")+'</td></tr></table></div>';
   }
 
-  // 配車・費用
   if(car||fee){
     pd+='<div class="pd-section"><div class="pd-section-title">■ 配車・費用</div>';
     pd+='<table class="pd-table">';
@@ -486,7 +357,6 @@ function renderDetail(row) {
     pd+='</table></div>';
   }
 
-  // 緊急連絡先
   if(emergency){
     pd+='<div class="pd-section"><div class="pd-section-title">■ 緊急連絡先</div>';
     pd+='<div class="pd-emergency"><div class="pd-emergency-label">⚠️ 緊急時のみご使用ください</div>'+esc(emergency).replace(/\n/g,"<br>")+'</div></div>';
@@ -499,18 +369,12 @@ function renderDetail(row) {
 }
 
 function printPDF() {
-  // A4の印刷可能高さ(mm)を基準にスケール計算
   var doc = document.getElementById("printDoc");
   if (doc) {
-    // スケールをリセット
     doc.style.transform = "";
     doc.style.fontSize  = "";
-
-    // コンテンツの実際の高さを取得
     var contentH = doc.scrollHeight;
-    // A4 = 297mm → 96dpi換算で約1122px、余白込みで約1050px
     var a4H = 1050;
-
     if (contentH > a4H) {
       var scale = a4H / contentH;
       doc.style.transform = "scale(" + scale.toFixed(3) + ")";
@@ -519,7 +383,6 @@ function printPDF() {
     }
   }
   window.print();
-  // 印刷後にスタイルをリセット
   setTimeout(function() {
     if (doc) {
       doc.style.transform = "";
@@ -528,31 +391,34 @@ function printPDF() {
   }, 1000);
 }
 
-function showNotFound(dateStr) {
+function showNotFound() {
   document.getElementById("heroArea").innerHTML="";
   document.getElementById("mainArea").innerHTML=
-    '<div class="not-found"><div class="not-found-icon">📋</div><div class="not-found-title">詳細情報がまだ登録されていません</div><div class="not-found-text">'+esc(dateStr)+' の参加計画は準備中です。</div></div>';
+    '<div class="not-found"><div class="not-found-icon">📋</div><div class="not-found-title">詳細情報がまだ登録されていません</div><div class="not-found-text">この大会の参加計画は準備中です。</div></div>';
 }
 
 async function init() {
-  const params =new URLSearchParams(window.location.search);
-  const dateKey=params.get("date")||"";
-  if(!dateKey){
+  const params = new URLSearchParams(window.location.search);
+  // ★ 修正2: URLから "date" ではなく "id" を取得
+  const targetId = params.get("id") || "";
+  
+  if(!targetId){
     document.getElementById("mainArea").innerHTML='<div class="not-found"><div class="not-found-icon">❓</div><div class="not-found-title">大会が指定されていません</div><div class="not-found-text"><a href="index.html" style="color:var(--accent)">予定表に戻る</a></div></div>';
     return;
   }
+  
   try{
     const csv=await getCSV(DETAIL_CSV_URL);
     const rows=parseCSV(csv);
-    if(rows.length<2){showNotFound(dateKey);return;}
-    const found=rows.slice(1).find(function(r){
-      const d=parseDate(r[DCOL.date]);
-      if(!d) return false;
-      const key=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
-      return key===dateKey;
+    if(rows.length<2){showNotFound();return;}
+    
+    // ★ 修正3: 日付ではなく、A列(id)の完全一致でデータを検索
+    const found = rows.slice(1).find(function(r){
+      return r[DCOL.id] === targetId; 
     });
+    
     if(found){renderDetail(found);}
-    else{showNotFound(dateKey);}
+    else{showNotFound();}
   }catch(e){
     console.error(e);
     document.getElementById("mainArea").innerHTML=
